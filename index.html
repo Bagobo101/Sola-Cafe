@@ -1752,10 +1752,14 @@
       if (!fileRes.ok) throw new Error('Could not read ' + GITHUB_FILE_PATH + ' from the repo (status ' + fileRes.status + ').');
       const fileInfo = await fileRes.json();
       const currentHtml = base64ToUtf8(fileInfo.content);
-      const updatedHtml = injectAllData(currentHtml);
+      const { html: updatedHtml, missing } = injectAllData(currentHtml);
 
-      if (updatedHtml === currentHtml){
-        throw new Error('Could not find the data markers in the live file, so nothing was published.');
+      if (missing.length){
+        throw new Error(
+          'Could not find these markers in the live ' + GITHUB_FILE_PATH + ': ' + missing.join('; ') +
+          '. The live file on GitHub is missing (or has altered) these comment markers, so nothing was published. ' +
+          'Open index.html in your ' + GITHUB_OWNER + '/' + GITHUB_REPO + ' repo and check for them.'
+        );
       }
 
       const putRes = await fetch(apiBase + '/contents/' + GITHUB_FILE_PATH, {
@@ -1785,19 +1789,30 @@
 
   function injectAllData(html){
     let out = html;
-    out = out.replace(
-      /\/\*MENU_DATA_START\*\/[\s\S]*?\/\*MENU_DATA_END\*\//,
-      '/*MENU_DATA_START*/' + JSON.stringify(menuData, null, 2) + '/*MENU_DATA_END*/'
-    );
-    out = out.replace(
-      /\/\*GALLERY_DATA_START\*\/[\s\S]*?\/\*GALLERY_DATA_END\*\//,
-      '/*GALLERY_DATA_START*/' + JSON.stringify(galleryData, null, 2) + '/*GALLERY_DATA_END*/'
-    );
-    out = out.replace(
-      /\/\*CONTACT_DATA_START\*\/[\s\S]*?\/\*CONTACT_DATA_END\*\//,
-      '/*CONTACT_DATA_START*/' + JSON.stringify(contactData, null, 2) + '/*CONTACT_DATA_END*/'
-    );
-    return out;
+    const missing = [];
+
+    const menuRe = /\/\*MENU_DATA_START\*\/[\s\S]*?\/\*MENU_DATA_END\*\//;
+    if (menuRe.test(out)) {
+      out = out.replace(menuRe, '/*MENU_DATA_START*/' + JSON.stringify(menuData, null, 2) + '/*MENU_DATA_END*/');
+    } else {
+      missing.push('MENU_DATA_START / MENU_DATA_END');
+    }
+
+    const galleryRe = /\/\*GALLERY_DATA_START\*\/[\s\S]*?\/\*GALLERY_DATA_END\*\//;
+    if (galleryRe.test(out)) {
+      out = out.replace(galleryRe, '/*GALLERY_DATA_START*/' + JSON.stringify(galleryData, null, 2) + '/*GALLERY_DATA_END*/');
+    } else {
+      missing.push('GALLERY_DATA_START / GALLERY_DATA_END');
+    }
+
+    const contactRe = /\/\*CONTACT_DATA_START\*\/[\s\S]*?\/\*CONTACT_DATA_END\*\//;
+    if (contactRe.test(out)) {
+      out = out.replace(contactRe, '/*CONTACT_DATA_START*/' + JSON.stringify(contactData, null, 2) + '/*CONTACT_DATA_END*/');
+    } else {
+      missing.push('CONTACT_DATA_START / CONTACT_DATA_END');
+    }
+
+    return { html: out, missing };
   }
 
   document.getElementById('publishBtn').addEventListener('click', publishToGithub);
