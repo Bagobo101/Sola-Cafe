@@ -929,47 +929,216 @@
   // who hasn't made local admin edits. When you click "Download instead"
   // or "Publish live" in admin mode, this block gets updated.
   const DEFAULT_MENU = /*MENU_DATA_START*/[
-    { "title": "Snack", "desc": "Something quick between classes.", "items": [
-      { "name": "Burger & Fries", "desc": "", "price": "₱49" },
-      { "name": "Street Food Platter", "desc": "Hotdog, kikiam, lumpiang shanghai, siomai, fries, fishball", "price": "₱85" }
-    ]},
-    { "title": "Rice Meal", "desc": "Lunch, done properly.", "items": [
-      { "name": "Siomai Rice", "desc": "", "price": "₱35" },
-      { "name": "Chicken Pastil", "desc": "", "price": "₱29" },
-      { "name": "Gyoza w/ Rice", "desc": "", "price": "₱39" },
-      { "name": "Chicken Poppers", "desc": "", "price": "₱39" }
-    ]},
-    { "title": "Breakfast Meal", "desc": "Served all day, 6AM to 6PM.", "items": [
-      { "name": "Cornsilog", "desc": "", "price": "₱39" },
-      { "name": "Hotsilog", "desc": "", "price": "₱39" },
-      { "name": "Cantonsilog", "desc": "", "price": "₱35" },
-      { "name": "Batchoy", "desc": "Special / Ordinary", "price": "₱25 / ₱15" }
-    ]},
-    { "title": "Iced Coffee", "desc": "12oz / 16oz.", "items": [
-      { "name": "Caramel Macchiato", "desc": "", "price": "₱25 / ₱35" },
-      { "name": "Spanish Latte", "desc": "", "price": "₱25 / ₱35" },
-      { "name": "Mocha", "desc": "", "price": "₱25 / ₱35" },
-      { "name": "Americano", "desc": "", "price": "₱25 / ₱35" },
-      { "name": "Strawberry Iced Latte", "desc": "", "price": "₱25 / ₱35" },
-      { "name": "Dirty Matcha", "desc": "", "price": "₱25 / ₱35" },
-      { "name": "Oreo Coffee Latte", "desc": "", "price": "₱25 / ₱35" }
-    ]},
-    { "title": "Fruit Soda", "desc": "12oz / 16oz.", "items": [
-      { "name": "Strawberry", "desc": "", "price": "₱19 / ₱29" },
-      { "name": "Blueberry", "desc": "", "price": "₱19 / ₱29" },
-      { "name": "Lemonade", "desc": "", "price": "₱19 / ₱29" },
-      { "name": "Lychee", "desc": "", "price": "₱19 / ₱29" },
-      { "name": "Green Apple", "desc": "", "price": "₱25 / ₱39" },
-      { "name": "Lychee Blueberry", "desc": "", "price": "₱25 / ₱39" },
-      { "name": "Blueberry Dirty", "desc": "", "price": "₱25 / ₱39" }
-    ]},
-    { "title": "Non-Coffee", "desc": "12oz / 16oz.", "items": [
-      { "name": "Dark Chocolate", "desc": "", "price": "₱25 / ₱35" },
-      { "name": "Choco Berry", "desc": "", "price": "₱25 / ₱35" },
-      { "name": "Oreo Cream Latte", "desc": "", "price": "₱25 / ₱35" },
-      { "name": "Milo Dinosaur", "desc": "", "price": "₱25 / ₱35" }
-    ]}
-  ]/*MENU_DATA_END*/;
+  {
+    "title": "Snack",
+    "desc": "Something quick between classes.",
+    "items": [
+      {
+        "name": "Burger & Fries",
+        "desc": "",
+        "price": "₱49"
+      },
+      {
+        "name": "Street Food Platter",
+        "desc": "Hotdog, kikiam, lumpiang shanghai, siomai, fries, fishball",
+        "price": "₱85"
+      }
+    ]
+  },
+  {
+    "title": "Rice Meal",
+    "desc": "Lunch, done properly.",
+    "items": [
+      {
+        "name": "Siomai Rice",
+        "desc": "",
+        "price": "₱35"
+      },
+      {
+        "name": "Chicken Pastil",
+        "desc": "",
+        "price": "₱29"
+      },
+      {
+        "name": "Gyoza w/ Rice",
+        "desc": "",
+        "price": "₱39"
+      },
+      {
+        "name": "Chicken Poppers",
+        "desc": "",
+        "price": "₱39"
+      }
+    ]
+  },
+  {
+    "title": "Breakfast Meal",
+    "desc": "Served all day, 6AM to 6PM.",
+    "items": [
+      {
+        "name": "Cornsilog",
+        "desc": "",
+        "price": "₱39"
+      },
+      {
+        "name": "Hotsilog",
+        "desc": "",
+        "price": "₱39"
+      },
+      {
+        "name": "Cantonsilog",
+        "desc": "",
+        "price": "₱35"
+      },
+      {
+        "name": "Batchoy",
+        "desc": "Special / Ordinary",
+        "price": "₱25 / ₱15"
+      }
+    ]
+  },
+  {
+    "title": "Iced Coffee",
+    "desc": "12oz / 16oz.",
+    "items": [
+      {
+        "name": "Caramel Macchiato",
+        "desc": "",
+        "price": "₱25 / ₱35"
+      },
+      {
+        "name": "Spanish Latte",
+        "desc": "",
+        "price": "₱25 / ₱35"
+      },
+      {
+        "name": "Mocha",
+        "desc": "",
+        "price": "₱25 / ₱35"
+      },
+      {
+        "name": "Americano",
+        "desc": "",
+        "price": "₱25 / ₱35"
+      },
+      {
+        "name": "Strawberry Iced Latte",
+        "desc": "",
+        "price": "₱25 / ₱35"
+      },
+      {
+        "name": "Dirty Matcha",
+        "desc": "",
+        "price": "₱25 / ₱35"
+      },
+      {
+        "name": "Oreo Coffee Latte",
+        "desc": "",
+        "price": "₱25 / ₱35"
+      }
+    ]
+  },
+  {
+    "title": "Fruit Soda",
+    "desc": "12oz / 16oz.",
+    "items": [
+      {
+        "name": "Strawberry",
+        "desc": "",
+        "price": "₱19 / ₱29"
+      },
+      {
+        "name": "Blueberry",
+        "desc": "",
+        "price": "₱19 / ₱29"
+      },
+      {
+        "name": "Lemonade",
+        "desc": "",
+        "price": "₱19 / ₱29"
+      },
+      {
+        "name": "Lychee",
+        "desc": "",
+        "price": "₱19 / ₱29"
+      },
+      {
+        "name": "Green Apple",
+        "desc": "",
+        "price": "₱25 / ₱39"
+      },
+      {
+        "name": "Lychee Blueberry",
+        "desc": "",
+        "price": "₱25 / ₱39"
+      },
+      {
+        "name": "Blueberry Dirty",
+        "desc": "",
+        "price": "₱25 / ₱39"
+      }
+    ]
+  },
+  {
+    "title": "Non-Coffee",
+    "desc": "12oz / 16oz.",
+    "items": [
+      {
+        "name": "Dark Chocolate",
+        "desc": "",
+        "price": "₱25 / ₱35"
+      },
+      {
+        "name": "Choco Berry",
+        "desc": "",
+        "price": "₱25 / ₱35"
+      },
+      {
+        "name": "Oreo Cream Latte",
+        "desc": "",
+        "price": "₱25 / ₱35"
+      },
+      {
+        "name": "MiLo Dinosaur",
+        "desc": "",
+        "price": "₱25 / ₱35"
+      }
+    ]
+  },
+  {
+    "title": "New Group",
+    "desc": "",
+    "items": [
+      {
+        "name": "New item",
+        "desc": "",
+        "price": "₱0"
+      }
+    ]
+  },
+  {
+    "title": "New Group",
+    "desc": "",
+    "items": [
+      {
+        "name": "New item",
+        "desc": "",
+        "price": "₱0"
+      }
+    ]
+  },
+  {
+    "title": "New Group",
+    "desc": "",
+    "items": [
+      {
+        "name": "New item",
+        "desc": "",
+        "price": "₱0"
+      }
+    ]
+  }
+]/*MENU_DATA_END*/;
 
   function loadMenu(){
     try{
