@@ -762,41 +762,53 @@
     display:none;position:fixed;inset:0;z-index:10000;
     background:rgba(8,5,3,0.92);
     align-items:center;justify-content:center;padding:32px;
-    opacity:0;transition:opacity 0.25s ease;
+    opacity:0;transition:opacity 0.28s ease;
   }
-  .gallery-lightbox.open{display:flex;opacity:1;}
+  .gallery-lightbox.open{opacity:1;}
   .gallery-lightbox-figure{
     max-width:min(90vw,900px);max-height:85vh;display:flex;flex-direction:column;
-    align-items:center;gap:14px;transform:scale(0.96);transition:transform 0.25s ease;
+    align-items:center;gap:14px;transform:scale(0.9);transition:transform 0.28s cubic-bezier(.2,.9,.3,1.2);
+    position:relative;
   }
   .gallery-lightbox.open .gallery-lightbox-figure{transform:scale(1);}
   .gallery-lightbox img{
     max-width:100%;max-height:70vh;border-radius:12px;
     box-shadow:0 24px 70px -20px rgba(0,0,0,0.8);object-fit:contain;
+    opacity:1;transform:scale(1);
+    transition:opacity 0.18s ease, transform 0.18s ease;
   }
+  .gallery-lightbox img.switching{opacity:0;transform:scale(0.94);}
   .gallery-lightbox-caption{
     font-family:'IBM Plex Mono', monospace;font-size:12.5px;color:#FFF6E9;
     letter-spacing:0.04em;text-align:center;
+    opacity:1;transition:opacity 0.18s ease;
   }
+  .gallery-lightbox-caption.switching{opacity:0;}
   .gallery-lightbox-close{
-    position:absolute;top:24px;right:28px;background:none;border:none;
-    color:#FFF6E9;font-size:32px;line-height:1;cursor:pointer;opacity:0.8;
+    position:absolute;top:-16px;right:-16px;z-index:2;
+    width:38px;height:38px;border-radius:50%;
+    background:var(--caramel);border:2px solid #FFF6E9;
+    color:#FFF6E9;font-size:22px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 20px -6px rgba(0,0,0,0.6);
+    transition:transform 0.15s ease, background 0.18s ease;
   }
-  .gallery-lightbox-close:hover{opacity:1;color:var(--caramel-deep);}
+  .gallery-lightbox-close:hover{background:var(--caramel-deep);transform:scale(1.08);}
   .gallery-lightbox-nav{
     position:absolute;top:50%;transform:translateY(-50%);
     background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.25);
     color:#FFF6E9;font-size:22px;width:44px;height:44px;border-radius:50%;
     cursor:pointer;display:flex;align-items:center;justify-content:center;
-    transition:background 0.18s ease;
+    transition:background 0.18s ease, transform 0.15s ease;
   }
-  .gallery-lightbox-nav:hover{background:rgba(255,255,255,0.18);}
+  .gallery-lightbox-nav:hover{background:rgba(255,255,255,0.18);transform:translateY(-50%) scale(1.08);}
   .gallery-lightbox-prev{left:20px;}
   .gallery-lightbox-next{right:20px;}
   @media (max-width:640px){
     .gallery-lightbox-nav{width:38px;height:38px;font-size:18px;}
     .gallery-lightbox-prev{left:8px;}
     .gallery-lightbox-next{right:8px;}
+    .gallery-lightbox-close{top:-14px;right:4px;}
   }
 
   /* ---------- Print-friendly menu ---------- */
@@ -811,7 +823,7 @@
   @media print{
     header, .beans, .hero, .announcement-wrap, #gallery, #about, #visit, footer,
     .admin-toolbar, .smart-menu-tools, .dashboard-overlay, .print-menu-btn,
-    .favorite-heart, .admin-add-btn, .admin-del-group-btn, .status-pill { display:none !important; }
+    .admin-add-btn, .admin-del-group-btn, .status-pill { display:none !important; }
     body{ background:#fff !important; color:#111 !important; }
     #menu{ padding-top:0 !important; }
     .menu-item-name, h1, h2, h3 { color:#111 !important; }
@@ -984,14 +996,19 @@ body.admin-mode .announcement-admin{display:block}
 body:not(.admin-mode) .smart-menu-tools{display:block}
 .smart-menu-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .filter-toggle-btn{
-  flex-shrink:0;width:42px;height:42px;border-radius:8px;
-  border:1px solid var(--panel-line);background:var(--cream-deep);
-  color:var(--caramel-deep);font-size:16px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:transform 0.25s ease, border-color 0.2s ease, background 0.2s ease;
+  width:100%;display:flex;align-items:center;gap:10px;
+  padding:13px 18px;border-radius:10px;
+  border:1.5px solid var(--caramel);background:var(--caramel);
+  color:var(--cream-deep);font:inherit;font-weight:700;font-size:14.5px;
+  cursor:pointer;letter-spacing:.01em;
+  box-shadow:0 6px 18px -8px rgba(227,161,92,0.55);
+  transition:background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
 }
-.filter-toggle-btn:hover{border-color:var(--caramel)}
-.filter-toggle-btn.open{transform:rotate(90deg);background:var(--caramel);color:var(--cream-deep)}
+.filter-toggle-btn:hover{background:var(--caramel-deep);border-color:var(--caramel-deep);transform:translateY(-1px);}
+.filter-toggle-icon{font-size:17px;}
+.filter-toggle-text{flex:1;text-align:left;}
+.filter-toggle-chevron{font-size:13px;transition:transform 0.3s ease;}
+.filter-toggle-btn.open .filter-toggle-chevron{transform:rotate(180deg);}
 .smart-search{
   flex:1 1 240px;min-width:180px;padding:11px 13px;border-radius:8px;
   border:1px solid var(--panel-line);font:inherit;
@@ -999,16 +1016,15 @@ body:not(.admin-mode) .smart-menu-tools{display:block}
 }
 .smart-search::placeholder{color:var(--text-dim)}
 .smart-search:focus-visible{outline-color:var(--focus)}
-.smart-filter,.smart-budget,.student-toggle,.favorites-toggle{
+.smart-filter,.smart-budget,.student-toggle{
   padding:9px 14px;border-radius:999px;
   border:1px solid var(--panel-line);
   background:var(--cream-deep);color:var(--text-dim);
   font:inherit;font-size:13.5px;font-weight:500;cursor:pointer;
   transition:background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
-.smart-filter:hover,.smart-budget:hover,.student-toggle:hover,.favorites-toggle:hover{border-color:var(--caramel);color:var(--espresso-2)}
+.smart-filter:hover,.smart-budget:hover,.student-toggle:hover{border-color:var(--caramel);color:var(--espresso-2)}
 .smart-filter.active,.smart-budget.active,.student-toggle.active{background:var(--caramel);color:var(--cream-deep);border-color:var(--caramel);font-weight:600}
-.favorites-toggle.active{background:#D96E5E;color:#FFF6E9;border-color:#D96E5E;font-weight:600}
 .filter-collapse{
   display:grid;grid-template-rows:0fr;opacity:0;
   transition:grid-template-rows 0.35s ease, opacity 0.3s ease, margin-top 0.35s ease;
@@ -1016,7 +1032,7 @@ body:not(.admin-mode) .smart-menu-tools{display:block}
 }
 .filter-collapse > div{overflow:hidden;min-height:0;}
 .filter-collapse.open{grid-template-rows:1fr;opacity:1;margin-top:4px;}
-.smart-filter-bar{display:flex;gap:7px;flex-wrap:wrap}
+.smart-filter-bar{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
 .smart-budget-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:14px}
 .smart-budget-label{font-size:12px;font-weight:700;color:var(--caramel-deep)}
 .smart-results-note{margin-top:12px;font-size:12px;color:var(--text-dim)}
@@ -1025,13 +1041,6 @@ body:not(.admin-mode) .smart-menu-tools{display:block}
 .low-stock-badge{display:inline-flex;margin-left:6px;padding:3px 7px;border-radius:999px;background:rgba(227,161,92,0.16);color:var(--caramel-deep);font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
 .popular-badge{display:inline-flex;margin-left:6px;padding:3px 7px;border-radius:999px;background:rgba(217,110,94,0.16);color:#D96E5E;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
 .menu-item-stock{font-size:11px;color:var(--text-dim);margin-top:4px}
-.favorite-heart{
-  background:none;border:none;cursor:pointer;font-size:15px;line-height:1;
-  padding:0 2px;flex-shrink:0;color:var(--text-dim);vertical-align:middle;
-  transition:transform 0.15s ease;
-}
-.favorite-heart:hover{transform:scale(1.2)}
-.favorite-heart.is-fav{color:#D96E5E}
 body.admin-mode .smart-menu-tools{display:none}
 .dashboard-overlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(10,7,5,.72);padding:24px;overflow:auto}
 .dashboard-overlay.open{display:block}
@@ -1155,13 +1164,18 @@ body.admin-mode .smart-menu-tools{display:none}
 
     <div class="smart-menu-tools" id="smartMenuTools">
       <div class="smart-menu-row">
-        <button type="button" id="filterToggleBtn" class="filter-toggle-btn" aria-label="Show filters" aria-expanded="false">🔍</button>
-        <input id="menuSearch" class="smart-search" type="search" placeholder="Search menu..." aria-label="Search menu">
-        <button type="button" id="studentModeBtn" class="student-toggle">🎒 Student Mode</button>
-        <button type="button" id="favoritesModeBtn" class="favorites-toggle">❤ Favorites</button>
+        <button type="button" id="filterToggleBtn" class="filter-toggle-btn" aria-label="Show search and filters" aria-expanded="false">
+          <span class="filter-toggle-icon">🔍</span>
+          <span class="filter-toggle-text">Search &amp; Filter menu</span>
+          <span class="filter-toggle-chevron">▾</span>
+        </button>
       </div>
       <div class="filter-collapse" id="filterCollapse">
         <div>
+          <div class="smart-menu-row" style="margin-top:14px;">
+            <input id="menuSearch" class="smart-search" type="search" placeholder="Search menu..." aria-label="Search menu">
+            <button type="button" id="studentModeBtn" class="student-toggle">🎒 Student Mode</button>
+          </div>
           <div class="smart-filter-bar" id="categoryFilters"></div>
           <div class="smart-budget-row">
             <span class="smart-budget-label">💰 Budget:</span>
@@ -1350,9 +1364,9 @@ body.admin-mode .smart-menu-tools{display:none}
     <div class="gallery-grid" id="galleryGrid"></div>
 
     <div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
-      <button type="button" class="gallery-lightbox-close" id="galleryLightboxClose" aria-label="Close photo viewer">×</button>
       <button type="button" class="gallery-lightbox-nav gallery-lightbox-prev" id="galleryLightboxPrev" aria-label="Previous photo">‹</button>
       <div class="gallery-lightbox-figure">
+        <button type="button" class="gallery-lightbox-close" id="galleryLightboxClose" aria-label="Close photo viewer">×</button>
         <img id="galleryLightboxImg" src="" alt="">
         <div class="gallery-lightbox-caption" id="galleryLightboxCaption"></div>
       </div>
@@ -1809,18 +1823,6 @@ body.admin-mode .smart-menu-tools{display:none}
     return (group && group.title ? group.title : '') + '::' + (item && item.name ? item.name : '');
   }
 
-  function loadFavorites(){
-    try{
-      const saved = localStorage.getItem('solaFavorites');
-      if (saved) return new Set(JSON.parse(saved));
-    }catch(e){ /* ignore corrupt local data */ }
-    return new Set();
-  }
-
-  function saveFavoritesLocal(){
-    try{ localStorage.setItem('solaFavorites', JSON.stringify([...favoritesData])); }catch(e){}
-  }
-
   function loadPopularity(){
     try{
       const saved = localStorage.getItem('solaPopularity');
@@ -1859,7 +1861,6 @@ body.admin-mode .smart-menu-tools{display:none}
   let announcementData = loadAnnouncement();
   let galleryData = loadGallery();
   let contactData = loadContact();
-  let favoritesData = loadFavorites();
   let popularityData = loadPopularity();
   let isAdmin = sessionStorage.getItem('solaAdmin') === '1';
 
@@ -1887,7 +1888,7 @@ body.admin-mode .smart-menu-tools{display:none}
     return match ? Number(match[1]) : NaN;
   }
 
-  let smartFilters = { search:'', category:'All', budget:0, student:false, favorites:false };
+  let smartFilters = { search:'', category:'All', budget:0, student:false };
 
   function getCategories(){
     return ['All', ...Array.from(new Set(menuData.map(g => g.category || g.title).filter(Boolean)))];
@@ -1914,7 +1915,6 @@ body.admin-mode .smart-menu-tools{display:none}
     const price = getPriceNumber(item.price);
     if (smartFilters.budget > 0 && (!Number.isFinite(price) || price > smartFilters.budget)) return false;
     if (smartFilters.student && !item.studentPick) return false;
-    if (smartFilters.favorites && !favoritesData.has(getItemKey(group, item))) return false;
     return true;
   }
 
@@ -1926,8 +1926,7 @@ body.admin-mode .smart-menu-tools{display:none}
     if (smartFilters.category !== 'All') parts.push(smartFilters.category);
     if (smartFilters.budget > 0) parts.push('budget ≤ ₱'+smartFilters.budget);
     if (smartFilters.student) parts.push('student picks');
-    if (smartFilters.favorites) parts.push('favorites');
-    el.textContent = parts.length ? total+' item'+(total===1?'':'s')+' found · '+parts.join(' · ') : 'Browse the full menu, or use search, categories, budget, Student Mode, and Favorites.';
+    el.textContent = parts.length ? total+' item'+(total===1?'':'s')+' found · '+parts.join(' · ') : 'Browse the full menu, or use search, categories, budget, and Student Mode.';
   }
 
 
@@ -2031,7 +2030,6 @@ body.admin-mode .smart-menu-tools{display:none}
             '<button type="button" class="admin-del-btn" data-gi="'+gi+'" data-ii="'+ii+'" title="Remove item" aria-label="Remove '+escapeAttr(item.name)+'">×</button>';
         } else {
           const itemKey = getItemKey(group, item);
-          const isFav = favoritesData.has(itemKey);
           const badge = item.bestseller ? '<span class="badge-bestseller">⭐ Best Seller</span>' : '';
           const studentBadge = item.studentPick ? '<span class="student-pick-badge">🎒 Student Pick</span>' : '';
           const popularBadge = topPopularKeys.includes(itemKey) ? '<span class="popular-badge">🔥 Popular</span>' : '';
@@ -2041,14 +2039,11 @@ body.admin-mode .smart-menu-tools{display:none}
           const price = item.status === 'available' ? escapeHtml(item.price) : '<span class="menu-item-price is-status">'+meta.short+'</span>';
           itemEl.dataset.itemKey = itemKey;
           itemEl.innerHTML =
-            '<div><div class="menu-item-name-row"><button type="button" class="favorite-heart'+(isFav?' is-fav':'')+'" data-fav-key="'+escapeAttr(itemKey)+'" aria-label="'+(isFav?'Remove from favorites':'Add to favorites')+'">'+(isFav?'❤':'🤍')+'</button><span class="menu-item-name">'+escapeHtml(item.name)+'</span>'+badge+studentBadge+popularBadge+statusBadge+stockBadge+'</div>' +
+            '<div><div class="menu-item-name-row"><span class="menu-item-name">'+escapeHtml(item.name)+'</span>'+badge+studentBadge+popularBadge+statusBadge+stockBadge+'</div>' +
             (item.desc ? '<div class="menu-item-desc">'+escapeHtml(item.desc)+'</div>' : '') +
             (item.status === 'available' && item.stock !== null && item.stock > 0 && item.stock <= item.lowStockAt ? '<div class="menu-item-stock">Limited stock available</div>' : '') +
             '</div><div class="menu-item-price">'+price+'</div>';
-          itemEl.addEventListener('click', (e) => {
-            if (e.target.closest('.favorite-heart')) return;
-            bumpPopularity(itemKey);
-          });
+          itemEl.addEventListener('click', () => bumpPopularity(itemKey));
         }
         groupEl.appendChild(itemEl);
         visibleCount++;
@@ -2118,14 +2113,6 @@ body.admin-mode .smart-menu-tools{display:none}
       container.querySelectorAll('.admin-del-btn').forEach(el => el.addEventListener('click', () => {
         const gi=+el.dataset.gi, ii=+el.dataset.ii;
         if(confirm('Remove "'+menuData[gi].items[ii].name+'"?')){menuData[gi].items.splice(ii,1);saveMenuLocal();renderMenu();}
-      }));
-    } else {
-      container.querySelectorAll('.favorite-heart').forEach(el => el.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const key = el.dataset.favKey;
-        if (favoritesData.has(key)) favoritesData.delete(key); else favoritesData.add(key);
-        saveFavoritesLocal();
-        renderMenu();
       }));
     }
 
@@ -2217,34 +2204,57 @@ body.admin-mode .smart-menu-tools{display:none}
   // ---------- Gallery Lightbox ----------
   let lightboxIndices = [];
   let lightboxPos = 0;
+  const LIGHTBOX_SWITCH_MS = 160;
+  const LIGHTBOX_CLOSE_MS = 260;
 
   function openLightbox(galleryIndex){
     lightboxIndices = galleryData.map((it,i)=>it.image ? i : null).filter(i=>i!==null);
     lightboxPos = lightboxIndices.indexOf(galleryIndex);
     if (lightboxPos === -1) lightboxPos = 0;
-    showLightboxImage();
-    document.getElementById('galleryLightbox').classList.add('open');
+    showLightboxImage(false);
+    const box = document.getElementById('galleryLightbox');
+    box.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => requestAnimationFrame(() => box.classList.add('open')));
   }
 
   function closeLightbox(){
-    document.getElementById('galleryLightbox').classList.remove('open');
+    const box = document.getElementById('galleryLightbox');
+    box.classList.remove('open');
     document.body.style.overflow = '';
+    setTimeout(() => { box.style.display = 'none'; }, LIGHTBOX_CLOSE_MS);
   }
 
-  function showLightboxImage(){
+  function showLightboxImage(animate){
     if (!lightboxIndices.length) return;
     const item = galleryData[lightboxIndices[lightboxPos]];
     if (!item) return;
-    document.getElementById('galleryLightboxImg').src = item.image;
-    document.getElementById('galleryLightboxImg').alt = item.caption || 'Photo of Sola Café';
-    document.getElementById('galleryLightboxCaption').textContent = item.caption || '';
+    const imgEl = document.getElementById('galleryLightboxImg');
+    const capEl = document.getElementById('galleryLightboxCaption');
+    const applyContent = () => {
+      imgEl.src = item.image;
+      imgEl.alt = item.caption || 'Photo of Sola Café';
+      capEl.textContent = item.caption || '';
+    };
+    if (animate){
+      imgEl.classList.add('switching');
+      capEl.classList.add('switching');
+      setTimeout(() => {
+        applyContent();
+        requestAnimationFrame(() => {
+          imgEl.classList.remove('switching');
+          capEl.classList.remove('switching');
+        });
+      }, LIGHTBOX_SWITCH_MS);
+    } else {
+      applyContent();
+    }
   }
 
   function lightboxNav(delta){
     if (!lightboxIndices.length) return;
     lightboxPos = (lightboxPos + delta + lightboxIndices.length) % lightboxIndices.length;
-    showLightboxImage();
+    showLightboxImage(true);
   }
 
   document.getElementById('galleryLightboxClose').addEventListener('click', closeLightbox);
@@ -2336,11 +2346,6 @@ body.admin-mode .smart-menu-tools{display:none}
     document.getElementById('studentModeBtn').classList.toggle('active', smartFilters.student);
     renderMenu();
   });
-  document.getElementById('favoritesModeBtn').addEventListener('click', () => {
-    smartFilters.favorites = !smartFilters.favorites;
-    document.getElementById('favoritesModeBtn').classList.toggle('active', smartFilters.favorites);
-    renderMenu();
-  });
 
   const filterToggleBtn = document.getElementById('filterToggleBtn');
   const filterCollapse = document.getElementById('filterCollapse');
@@ -2348,16 +2353,16 @@ body.admin-mode .smart-menu-tools{display:none}
     const open = filterCollapse.classList.toggle('open');
     filterToggleBtn.classList.toggle('open', open);
     filterToggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    filterToggleBtn.setAttribute('aria-label', open ? 'Hide filters' : 'Show filters');
+    filterToggleBtn.setAttribute('aria-label', open ? 'Hide search and filters' : 'Show search and filters');
+    filterToggleBtn.querySelector('.filter-toggle-text').textContent = open ? 'Hide search & filters' : 'Search & Filter menu';
   });
 
   document.getElementById('printMenuBtn').addEventListener('click', () => {
     const savedFilters = { ...smartFilters };
-    smartFilters = { search:'', category:'All', budget:0, student:false, favorites:false };
+    smartFilters = { search:'', category:'All', budget:0, student:false };
     document.getElementById('menuSearch').value = '';
     document.querySelectorAll('.smart-budget').forEach(b => b.classList.toggle('active', b.dataset.budget==='0'));
     document.getElementById('studentModeBtn').classList.remove('active');
-    document.getElementById('favoritesModeBtn').classList.remove('active');
     renderCategoryFilters();
     renderMenu();
     const restore = () => {
@@ -2365,7 +2370,6 @@ body.admin-mode .smart-menu-tools{display:none}
       document.getElementById('menuSearch').value = smartFilters.search;
       document.querySelectorAll('.smart-budget').forEach(b => b.classList.toggle('active', Number(b.dataset.budget)===smartFilters.budget));
       document.getElementById('studentModeBtn').classList.toggle('active', smartFilters.student);
-      document.getElementById('favoritesModeBtn').classList.toggle('active', smartFilters.favorites);
       renderCategoryFilters();
       renderMenu();
       window.removeEventListener('afterprint', restore);
