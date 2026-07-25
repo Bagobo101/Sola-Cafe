@@ -4,29 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sola Cafe — Coffee for the early risers</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%98%95%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;1,9..144,450&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;0,9..144,700;1,9..144,450;1,9..144,600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #14192B;
-    --bg-deep: #0A0D18;
-    --panel: #1C2238;
-    --panel-line: #2C3350;
-    --text: #F1EAD8;
-    --text-dim: #9CA3BE;
-    --amber: #E8A659;
-    --amber-dim: #8A6836;
-    --ember: #C97B63;
-    --teal: #5C7A85;
-    --focus: #E8A659;
+    /* ---- Cozy café palette — night roast ---- */
+    --cream:        #15100B;   /* page background — near-black roast */
+    --cream-deep:   #0E0A06;   /* recessed groove — darker than panel for inset tracks */
+    --bg-deep:      #0A0705;   /* deepest black, used for footer */
+    --espresso:     #F4E7D3;   /* primary text — warm candlelight cream */
+    --espresso-2:   #E4D2B4;
+    --text:         var(--espresso);
+    --text-dim:     #AE9576;   /* soft warm taupe on dark */
+    --panel:        #211810;   /* card surface, lifted off the bg */
+    --panel-line:   #3C2C1C;   /* warm dark hairline */
+    --caramel:      #E3A15C;   /* primary accent — toasted caramel, brightened for dark */
+    --caramel-deep: #F0B979;   /* bright caramel — for text/icons on dark surfaces */
+    --caramel-btn-hover: #C97D3A; /* darker caramel — for solid-button hover backgrounds */
+    --moss:         #8FB37A;   /* secondary accent — plant green, brightened for dark */
+    --cream-shadow: rgba(0,0,0,0.55);
+    --focus:        #E3A15C;
   }
 
   *{ box-sizing: border-box; margin:0; padding:0; }
   html{ scroll-behavior: smooth; }
 
   body{
-    background: var(--bg);
+    background: var(--cream);
     color: var(--text);
     font-family: 'Public Sans', sans-serif;
     line-height: 1.5;
@@ -40,7 +46,7 @@
   a{ color: inherit; }
   img{ max-width:100%; display:block; }
 
-  ::selection{ background: var(--amber); color: var(--bg-deep); }
+  ::selection{ background: var(--caramel); color: var(--cream); }
 
   :focus-visible{
     outline: 2px solid var(--focus);
@@ -58,39 +64,40 @@
     font-size: 12px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--amber);
+    color: var(--caramel-deep);
   }
 
   h1,h2,h3{
     font-family: 'Fraunces', serif;
     font-weight: 450;
     letter-spacing: -0.01em;
+    color: var(--espresso);
   }
 
-  /* ---------- Background texture: faint starfield ---------- */
-  .stars{
+  /* ---------- Background texture: warm scattered beans + glow ---------- */
+  .beans{
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
     background-image:
-      radial-gradient(1px 1px at 20% 30%, rgba(241,234,216,0.35), transparent),
-      radial-gradient(1px 1px at 65% 15%, rgba(241,234,216,0.25), transparent),
-      radial-gradient(1.5px 1.5px at 82% 55%, rgba(241,234,216,0.3), transparent),
-      radial-gradient(1px 1px at 40% 70%, rgba(241,234,216,0.2), transparent),
-      radial-gradient(1px 1px at 92% 80%, rgba(241,234,216,0.25), transparent),
-      radial-gradient(1.5px 1.5px at 10% 85%, rgba(241,234,216,0.2), transparent),
-      radial-gradient(1px 1px at 55% 45%, rgba(241,234,216,0.3), transparent);
+      radial-gradient(560px 380px at 88% -8%, rgba(227,161,92,0.10), transparent 70%),
+      radial-gradient(480px 340px at 4% 14%, rgba(143,179,122,0.06), transparent 70%),
+      radial-gradient(2px 2px at 12% 22%, rgba(244,231,211,0.22), transparent 60%),
+      radial-gradient(2px 2px at 78% 12%, rgba(244,231,211,0.16), transparent 60%),
+      radial-gradient(2px 2px at 33% 62%, rgba(244,231,211,0.18), transparent 60%),
+      radial-gradient(2px 2px at 91% 48%, rgba(244,231,211,0.14), transparent 60%),
+      radial-gradient(2px 2px at 60% 85%, rgba(244,231,211,0.16), transparent 60%),
+      radial-gradient(2px 2px at 18% 92%, rgba(244,231,211,0.12), transparent 60%);
     background-size: 100% 100%;
-    opacity: 0.6;
   }
 
   /* ---------- Header ---------- */
   header{
     position: sticky;
     top: 0;
-    z-index: 10;
-    background: rgba(20,25,43,0.85);
+    z-index: 20;
+    background: rgba(21,16,11,0.85);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--panel-line);
   }
@@ -98,22 +105,26 @@
     display:flex;
     align-items:center;
     justify-content: space-between;
-    padding: 18px 32px;
+    padding: 16px 32px;
   }
   .logo{
     font-family: 'Fraunces', serif;
     font-size: 21px;
+    font-weight: 600;
     letter-spacing: 0.01em;
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:9px;
+    text-decoration: none;
   }
   .logo .mark{
-    color: var(--amber);
-    font-size: 18px;
+    color: var(--caramel);
+    width: 22px; height: 22px;
+    flex-shrink: 0;
   }
   .nav-links{
     display:flex;
+    align-items: center;
     gap: 32px;
     list-style:none;
     font-size: 14px;
@@ -124,7 +135,7 @@
     color: var(--text-dim);
     transition: color 0.2s ease;
   }
-  .nav-links a:hover{ color: var(--amber); }
+  .nav-links a:hover{ color: var(--caramel-deep); }
 
   .status-pill{
     font-family:'IBM Plex Mono', monospace;
@@ -137,24 +148,76 @@
     border: 1px solid var(--panel-line);
     border-radius: 999px;
     color: var(--text-dim);
+    background: var(--panel);
   }
   .status-dot{
     width:7px; height:7px;
     border-radius:50%;
-    background: var(--amber);
-    box-shadow: 0 0 8px 1px var(--amber);
+    background: var(--caramel);
+    box-shadow: 0 0 8px 1px rgba(190,106,52,0.7);
   }
-  .status-dot.closed{ background: var(--teal); box-shadow:none; }
+  .status-dot.closed{ background: var(--moss); box-shadow:none; }
+
+  .nav-toggle{
+    display:none;
+    background:none;
+    border: 1px solid var(--panel-line);
+    border-radius: 8px;
+    width: 38px; height: 34px;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .nav-toggle span{
+    display:block;
+    width: 18px; height: 2px;
+    background: var(--espresso);
+    border-radius: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  body.nav-open .nav-toggle span:nth-child(1){ transform: translateY(6px) rotate(45deg); }
+  body.nav-open .nav-toggle span:nth-child(2){ opacity: 0; }
+  body.nav-open .nav-toggle span:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
+
+  .nav-mobile-panel{ display:none; }
 
   @media (max-width: 760px){
     .nav-links{ display:none; }
+    .nav-toggle{ display:flex; }
+    .nav-mobile-panel{
+      display: block;
+      max-height: 0;
+      overflow: hidden;
+      border-top: 1px solid var(--panel-line);
+      transition: max-height 0.25s ease;
+    }
+    body.nav-open .nav-mobile-panel{ max-height: 260px; }
+    .nav-mobile-panel ul{
+      list-style:none;
+      padding: 6px 32px 18px;
+      display:flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .nav-mobile-panel a{
+      display:block;
+      padding: 10px 0;
+      text-decoration:none;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 500;
+      border-bottom: 1px solid var(--panel-line);
+    }
+    .nav-mobile-panel li:last-child a{ border-bottom: none; }
   }
 
   /* ---------- Hero ---------- */
   .hero{
     position: relative;
     z-index: 1;
-    padding: 110px 0 90px;
+    padding: 88px 0 84px;
   }
   .hero-grid{
     display:grid;
@@ -163,24 +226,24 @@
     align-items: center;
   }
   .hero h1{
-    font-size: clamp(40px, 5.4vw, 68px);
-    line-height: 1.04;
-    margin-top: 18px;
+    font-size: clamp(40px, 5.4vw, 66px);
+    line-height: 1.05;
+    margin-top: 16px;
     max-width: 12ch;
   }
   .hero h1 em{
     font-style: italic;
-    color: var(--amber);
+    color: var(--caramel);
     font-weight: 450;
   }
   .hero-sub{
-    margin-top: 24px;
+    margin-top: 22px;
     font-size: 17px;
     color: var(--text-dim);
     max-width: 46ch;
   }
   .hero-cta{
-    margin-top: 36px;
+    margin-top: 34px;
     display:flex;
     gap: 16px;
     flex-wrap: wrap;
@@ -190,62 +253,89 @@
     font-weight: 600;
     font-size: 14.5px;
     padding: 14px 26px;
-    border-radius: 3px;
+    border-radius: 8px;
     text-decoration:none;
     display:inline-block;
-    transition: transform 0.18s ease, background 0.18s ease;
+    transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
     cursor:pointer;
     border: none;
   }
   .btn-primary{
-    background: var(--amber);
-    color: var(--bg-deep);
+    background: var(--caramel);
+    color: #FFF6E9;
+    box-shadow: 0 10px 22px -10px rgba(140,74,31,0.65);
   }
-  .btn-primary:hover{ transform: translateY(-2px); background:#f0b476; }
+  .btn-primary:hover{ transform: translateY(-2px); background: var(--caramel-btn-hover); }
   .btn-ghost{
-    background: transparent;
+    background: var(--panel);
     color: var(--text);
     border: 1px solid var(--panel-line);
   }
-  .btn-ghost:hover{ border-color: var(--amber); color: var(--amber); }
+  .btn-ghost:hover{ border-color: var(--caramel); color: var(--caramel-deep); }
 
-  /* ---------- Signature: day timeline ---------- */
+  /* ---------- Signature: brew timeline ---------- */
   .timeline-card{
     background: var(--panel);
     border: 1px solid var(--panel-line);
-    border-radius: 6px;
-    padding: 28px 26px 24px;
+    border-radius: 16px;
+    padding: 26px 24px 22px;
+    box-shadow: 0 16px 36px -22px var(--cream-shadow);
+    position: relative;
+    overflow: hidden;
   }
-  .timeline-card .eyebrow{ margin-bottom: 4px; }
+  .timeline-card::before{
+    content:"";
+    position:absolute;
+    top:-40px; right:-40px;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, rgba(190,106,52,0.16), transparent 70%);
+    pointer-events:none;
+  }
+  .timeline-head{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .steam-cup{ width: 20px; height: 20px; color: var(--caramel); flex-shrink:0; }
+  .steam-cup .steam{ animation: steamRise 3.2s ease-in-out infinite; transform-origin: bottom center; }
+  .steam-cup .steam.s2{ animation-delay: 0.6s; }
+  @keyframes steamRise{
+    0%{ opacity:0; transform: translateY(0) scaleY(0.8); }
+    30%{ opacity:0.9; }
+    100%{ opacity:0; transform: translateY(-6px) scaleY(1.15); }
+  }
   .timeline-title{
     font-family:'IBM Plex Mono', monospace;
-    font-size: 13px;
+    font-size: 12.5px;
     color: var(--text-dim);
-    margin-bottom: 22px;
+    margin-bottom: 20px;
   }
   .timeline-track{
     position: relative;
-    height: 4px;
-    background: var(--panel-line);
-    border-radius: 4px;
+    height: 6px;
+    background: var(--cream-deep);
+    border-radius: 6px;
     margin: 0 6px;
   }
   .timeline-fill{
     position:absolute;
     left:0; top:0; bottom:0;
-    background: linear-gradient(90deg, var(--amber-dim), var(--amber));
-    border-radius: 4px;
+    background: linear-gradient(90deg, #E3A45E, var(--caramel));
+    border-radius: 6px;
     width: 0%;
+    transition: width 0.6s ease;
   }
   .timeline-now{
     position:absolute;
     top: 50%;
-    width: 11px; height: 11px;
+    width: 13px; height: 13px;
     border-radius:50%;
-    background: var(--amber);
-    box-shadow: 0 0 0 4px rgba(232,166,89,0.18), 0 0 10px 1px var(--amber);
+    background: var(--caramel);
+    box-shadow: 0 0 0 5px rgba(190,106,52,0.18), 0 0 10px 1px rgba(190,106,52,0.5);
     transform: translate(-50%,-50%);
     left: 0%;
+    transition: left 0.6s ease;
   }
   .timeline-labels{
     display:flex;
@@ -256,14 +346,14 @@
     color: var(--text-dim);
   }
   .timeline-readout{
-    margin-top: 22px;
-    padding-top: 18px;
+    margin-top: 20px;
+    padding-top: 16px;
     border-top: 1px dashed var(--panel-line);
     font-size: 14px;
     color: var(--text-dim);
   }
   .timeline-readout strong{
-    color: var(--text);
+    color: var(--espresso);
     font-weight: 600;
   }
 
@@ -271,7 +361,7 @@
   section{
     position: relative;
     z-index: 1;
-    padding: 84px 0;
+    padding: 78px 0;
     border-top: 1px solid var(--panel-line);
   }
   .section-head{
@@ -279,12 +369,12 @@
     justify-content: space-between;
     align-items: flex-end;
     gap: 24px;
-    margin-bottom: 46px;
+    margin-bottom: 44px;
     flex-wrap: wrap;
   }
   .section-head h2{
     font-size: clamp(28px, 3.4vw, 38px);
-    margin-top: 10px;
+    margin-top: 8px;
   }
   .section-note{
     font-size: 14.5px;
@@ -296,25 +386,32 @@
   .menu-groups{
     display:grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 44px;
+    gap: 30px;
+  }
+  .menu-group{
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 14px;
+    padding: 24px 24px 18px;
+    box-shadow: 0 12px 28px -22px var(--cream-shadow);
   }
   .menu-group h3{
     font-size: 19px;
-    color: var(--amber);
+    color: var(--caramel-deep);
     font-style: italic;
     margin-bottom: 6px;
   }
   .menu-group .group-desc{
     font-size: 13px;
     color: var(--text-dim);
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
   .menu-item{
     display:flex;
     justify-content: space-between;
     gap: 14px;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--panel-line);
+    padding: 13px 0;
+    border-bottom: 1px dashed var(--panel-line);
   }
   .menu-item:last-child{ border-bottom: none; }
   .menu-item-name{
@@ -329,7 +426,7 @@
   .menu-item-price{
     font-family: 'IBM Plex Mono', monospace;
     font-size: 13px;
-    color: var(--text-dim);
+    color: var(--caramel-deep);
     white-space: nowrap;
   }
 
@@ -342,11 +439,11 @@
     font-size: 11px;
     letter-spacing: 0.04em;
     cursor: pointer;
-    opacity: 0.45;
+    opacity: 0.55;
     text-decoration: underline;
     padding: 0;
   }
-  .admin-link:hover{ opacity: 1; color: var(--amber); }
+  .admin-link:hover{ opacity: 1; color: var(--caramel); }
 
   .admin-toolbar{
     display: none;
@@ -354,8 +451,8 @@
     flex-wrap: wrap;
     gap: 12px;
     background: var(--panel);
-    border: 1px solid var(--amber-dim);
-    border-radius: 6px;
+    border: 1px solid var(--caramel);
+    border-radius: 12px;
     padding: 14px 18px;
     margin-bottom: 30px;
   }
@@ -365,47 +462,53 @@
     font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--amber);
+    color: var(--caramel-deep);
     margin-right: 6px;
   }
   .admin-toolbar-btn{
     font-family: 'Public Sans', sans-serif;
     font-size: 13px;
     font-weight: 500;
-    background: transparent;
+    background: var(--cream);
     color: var(--text);
     border: 1px solid var(--panel-line);
-    border-radius: 4px;
+    border-radius: 8px;
     padding: 8px 14px;
     cursor: pointer;
     transition: border-color 0.18s ease, color 0.18s ease;
   }
-  .admin-toolbar-btn:hover{ border-color: var(--amber); color: var(--amber); }
+  .admin-toolbar-btn:hover{ border-color: var(--caramel); color: var(--caramel-deep); }
   .admin-toolbar-btn-primary{
-    background: var(--amber);
-    color: var(--bg-deep);
-    border-color: var(--amber);
+    background: var(--caramel);
+    color: #FFF6E9;
+    border-color: var(--caramel);
     font-weight: 600;
   }
-  .admin-toolbar-btn-primary:hover{ background: #f0b476; color: var(--bg-deep); }
+  .admin-toolbar-btn-primary:hover{ background: var(--caramel-btn-hover); color: #FFF6E9; }
+  .admin-toolbar-note{
+    flex-basis: 100%;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    margin-top: 4px;
+  }
 
   body.admin-mode .menu-group{
-    background: var(--panel);
-    border: 1px solid var(--panel-line);
-    border-radius: 6px;
+    border: 1px solid var(--caramel);
     padding: 20px 20px 16px;
   }
   .admin-input{
     font-family: 'Public Sans', sans-serif;
-    background: var(--bg);
+    background: var(--cream);
     border: 1px solid var(--panel-line);
     color: var(--text);
-    border-radius: 4px;
+    border-radius: 6px;
     padding: 6px 8px;
     font-size: 14px;
     width: 100%;
   }
-  .admin-input:focus{ border-color: var(--amber); }
+  .admin-input:focus{ border-color: var(--caramel); }
   .name-input{ font-weight: 500; margin-bottom: 6px; }
   .desc-input{ font-size: 12.5px; color: var(--text-dim); }
   .price-input{
@@ -422,14 +525,14 @@
     margin: -2px -4px;
   }
   [contenteditable="true"]:focus{
-    outline: 1px solid var(--amber);
-    background: var(--bg);
+    outline: 1px solid var(--caramel);
+    background: var(--cream);
   }
   .admin-del-btn{
     background: transparent;
     border: 1px solid var(--panel-line);
     color: var(--text-dim);
-    border-radius: 4px;
+    border-radius: 6px;
     width: 26px;
     height: 26px;
     line-height: 1;
@@ -437,7 +540,7 @@
     font-size: 15px;
     flex-shrink: 0;
   }
-  .admin-del-btn:hover{ border-color: var(--ember); color: var(--ember); }
+  .admin-del-btn:hover{ border-color: #A4432F; color: #A4432F; }
   .admin-add-btn, .admin-del-group-btn{
     font-family: 'IBM Plex Mono', monospace;
     font-size: 12px;
@@ -449,45 +552,68 @@
     padding: 10px 0 0;
     display: block;
   }
-  .admin-add-btn:hover{ color: var(--amber); }
-  .admin-del-group-btn{ color: var(--ember); opacity: 0.7; }
+  .admin-add-btn:hover{ color: var(--caramel-deep); }
+  .admin-del-group-btn{ color: #A4432F; opacity: 0.75; }
   .admin-del-group-btn:hover{ opacity: 1; }
 
   @media (max-width: 900px){
     .hero-grid{ grid-template-columns: 1fr; }
-    .menu-groups{ grid-template-columns: 1fr; gap: 40px; }
+    .menu-groups{ grid-template-columns: 1fr; gap: 22px; }
   }
 
   /* ---------- About ---------- */
   .about{
     display:grid;
     grid-template-columns: 0.9fr 1.1fr;
-    gap: 64px;
+    gap: 56px;
     align-items: start;
   }
   .about-figure{
     background: var(--panel);
     border: 1px solid var(--panel-line);
-    border-radius: 6px;
-    padding: 30px;
-    font-family: 'IBM Plex Mono', monospace;
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: 0 12px 28px -22px var(--cream-shadow);
   }
   .about-figure .big-stat{
     font-family: 'Fraunces', serif;
-    font-size: 54px;
-    color: var(--amber);
+    font-size: 50px;
+    font-weight: 600;
+    color: var(--caramel);
     line-height: 1;
   }
   .about-figure .stat-label{
+    font-family: 'IBM Plex Mono', monospace;
     font-size: 12px;
     color: var(--text-dim);
     margin-top: 8px;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.02em;
   }
   .about-figure .divider{
     height:1px;
     background: var(--panel-line);
-    margin: 22px 0;
+    margin: 20px 0;
+  }
+  .rules-list{
+    list-style: none;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .rules-list li{
+    display:flex;
+    align-items: baseline;
+    gap: 9px;
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .rules-list .rule-num{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--caramel);
+    flex-shrink: 0;
   }
   .about p{
     font-size: 16px;
@@ -495,7 +621,7 @@
     margin-bottom: 18px;
     max-width: 58ch;
   }
-  .about p strong{ color: var(--text); font-weight: 600;}
+  .about p strong{ color: var(--espresso); font-weight: 600;}
 
   @media (max-width: 900px){
     .about{ grid-template-columns: 1fr; }
@@ -505,21 +631,20 @@
   .visit-grid{
     display:grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--panel-line);
-    border: 1px solid var(--panel-line);
-    border-radius: 6px;
-    overflow: hidden;
+    gap: 20px;
   }
   .visit-cell{
-    background: var(--bg);
-    padding: 30px 28px;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 14px;
+    padding: 28px 26px;
+    box-shadow: 0 12px 28px -22px var(--cream-shadow);
   }
   .visit-cell h3{
-    font-size: 14px;
+    font-size: 13px;
     font-family: 'IBM Plex Mono', monospace;
-    color: var(--amber);
-    letter-spacing: 0.04em;
+    color: var(--caramel-deep);
+    letter-spacing: 0.06em;
     margin-bottom: 14px;
   }
   .visit-cell p, .visit-cell address{
@@ -534,7 +659,7 @@
     font-size: 14px;
     padding: 4px 0;
   }
-  .hours-row span:first-child{ color: var(--text); }
+  .hours-row span:first-child{ color: var(--espresso); }
   .hours-row span:last-child{ color: var(--text-dim); font-family:'IBM Plex Mono', monospace; font-size: 13px;}
 
   @media (max-width: 900px){
@@ -545,6 +670,7 @@
   footer{
     position: relative;
     z-index: 1;
+    background: var(--bg-deep);
     border-top: 1px solid var(--panel-line);
     padding: 40px 0;
   }
@@ -555,33 +681,54 @@
     flex-wrap: wrap;
     gap: 16px;
     font-size: 13px;
-    color: var(--text-dim);
+    color: #D9C4A4;
   }
-  .footer-row a{ text-decoration: none; }
-  .footer-row a:hover{ color: var(--amber); }
+  .footer-row a{ text-decoration: none; color: #D9C4A4; }
+  .footer-row a:hover{ color: #F0B979; }
+  .footer-row .admin-link{ color: #D9C4A4; }
+  .footer-row .admin-link:hover{ color: #F0B979; }
 </style>
 </head>
 <body>
 
-<div class="stars" aria-hidden="true"></div>
+<div class="beans" aria-hidden="true"></div>
 
 <header>
   <nav class="nav wrap">
-    <div class="logo"><span class="mark">☾</span> Sola Cafe</div>
+    <a href="#top" class="logo">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 9h13a3 3 0 0 1 0 6h-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M4 9v6a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M8 2.5c-.6.9-.6 1.5 0 2.4M11.5 2.5c-.6.9-.6 1.5 0 2.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+      Sola Cafe
+    </a>
     <ul class="nav-links">
       <li><a href="#menu">Menu</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#visit">Visit</a></li>
     </ul>
-    <div class="status-pill">
-      <span class="status-dot" id="statusDot"></span>
-      <span id="statusText">Checking hours…</span>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="status-pill">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Checking hours…</span>
+      </div>
+      <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
+  <div class="nav-mobile-panel" id="navMobilePanel">
+    <ul>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul>
+  </div>
 </header>
 
-<main>
-  <section class="hero wrap" style="border-top:none; padding-top:110px;">
+<main id="top">
+  <section class="hero wrap" style="border-top:none; padding-top:96px;">
     <div class="hero-grid">
       <div>
         <div class="eyebrow">Coffee bar · Open 6AM&nbsp;–&nbsp;6PM</div>
@@ -594,7 +741,15 @@
       </div>
 
       <div class="timeline-card">
-        <div class="eyebrow">Today</div>
+        <div class="timeline-head">
+          <svg class="steam-cup" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="steam s1" d="M8 2.5c-.6.9-.6 1.5 0 2.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path class="steam s2" d="M11.5 2.5c-.6.9-.6 1.5 0 2.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M4 9h13a3 3 0 0 1 0 6h-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M4 9v6a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="eyebrow">Today's brew window</div>
+        </div>
         <div class="timeline-title">6:00 AM racks up front through 6:00 PM last call · Mon–Fri</div>
         <div class="timeline-track">
           <div class="timeline-fill" id="timelineFill"></div>
@@ -622,8 +777,11 @@
     <div id="adminToolbar" class="admin-toolbar">
       <span class="admin-toolbar-label">Admin mode</span>
       <button type="button" id="addGroupBtn" class="admin-toolbar-btn">+ Add menu group</button>
-      <button type="button" id="downloadBtn" class="admin-toolbar-btn admin-toolbar-btn-primary">Download updated page</button>
+      <button type="button" id="publishBtn" class="admin-toolbar-btn admin-toolbar-btn-primary">Publish live</button>
+      <button type="button" id="downloadBtn" class="admin-toolbar-btn">Download instead</button>
       <button type="button" id="resetMenuBtn" class="admin-toolbar-btn">Reset to published version</button>
+      <button type="button" id="forgetTokenBtn" class="admin-toolbar-btn">Change GitHub token</button>
+      <div class="admin-toolbar-note">"Publish live" pushes straight to your GitHub repo — no download needed. It needs a one-time GitHub personal access token (Contents: Read and write, scoped to this repo).</div>
     </div>
 
     <div class="menu-groups" id="menuGroups"></div>
@@ -639,15 +797,18 @@
         <div class="stat-label">Year we swapped a cart for a storefront</div>
         <div class="divider"></div>
         <div class="big-stat">4</div>
-        <div class="stat-label">1 Rule: the kitchen opens with the door, and closes with it too</div>
-        <div class="stat-label">2 Rule: Smoking is prohibited</div>
-        <div class="stat-label">3 Rule: Be Considerate</div>
-        <div class="stat-label">4 Rule: Chill and Enjoy</div>
+        <div class="stat-label">House rules</div>
+        <ol class="rules-list">
+          <li><span class="rule-num">01</span> The kitchen opens with the door, and closes with it too.</li>
+          <li><span class="rule-num">02</span> Smoking is prohibited.</li>
+          <li><span class="rule-num">03</span> Be considerate of other guests.</li>
+          <li><span class="rule-num">04</span> Chill, stay a while, and enjoy.</li>
+        </ol>
       </div>
       <div>
         <div class="eyebrow">Why daytime</div>
         <h2 style="margin: 10px 0 22px; font-size: clamp(26px,3vw,34px);">A café that runs on the school week, not the clock.</h2>
-        <p>Sola Cafe started as a <strong>6AM pop-up cart</strong> outside a high school, pouring coffee for students and teachers coming in. Enough of them asked for a place to sit down that we found one — infront of Marciano High School, open from <strong>6AM to 6PM</strong>, Monday to Friday.</p>
+        <p>Sola Cafe started as a <strong>6AM pop-up cart</strong> outside a high school, pouring coffee for students and teachers coming in. Enough of them asked for a place to sit down that we found one — right in front of Marciano High School, open from <strong>6AM to 6PM</strong>, Monday to Friday.</p>
         <p>We roast in small batches overnight so the beans are ready by the time our door opens at 6AM. Everything on the bar and in the kitchen is built for people starting their day: strong coffee, a real breakfast, and rice meals that hold you until dinner.</p>
         <p>The room seats 8. Half the tables have toys to play with and books to read. All of them have good light for reading, and the kitchen keeps serving right up until we close the door at 6PM.</p>
       </div>
@@ -657,7 +818,7 @@
   <section id="visit" class="wrap">
     <div class="section-head">
       <div>
-        <div class="eyebrow">Day and Everyday</div>
+        <div class="eyebrow">Day and everyday</div>
         <h2>Visit</h2>
       </div>
     </div>
@@ -670,11 +831,11 @@
       </div>
       <div class="visit-cell">
         <h3>LOCATION</h3>
-        <address>Natividad, Pilar, Capiz<br>Infront of Mariciano High school<br>After the Waiting shed</address>
+        <address>Natividad, Pilar, Capiz<br>In front of Marciano High School<br>Right after the waiting shed</address>
       </div>
       <div class="visit-cell">
         <h3>GOOD TO KNOW</h3>
-        <p>Cash and Gcash. Laptops welcome all day. Find us on Facebook <strong>@SolaCafe</strong> and Instagram <strong>@_solacafe_</strong>.</p>
+        <p>Cash and GCash. Laptops welcome all day. Find us on Facebook <strong>@SolaCafe</strong> and Instagram <strong>@_solacafe_</strong>.</p>
       </div>
     </div>
   </section>
@@ -688,6 +849,19 @@
 </footer>
 
 <script>
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  navToggle.addEventListener('click', () => {
+    const open = document.body.classList.toggle('nav-open');
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.getElementById('navMobilePanel').querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.body.classList.remove('nav-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+
   // Day timeline: window is 6:00 AM to 6:00 PM, Monday through Friday.
   function updateTimeline(){
     const now = new Date();
@@ -752,8 +926,8 @@
   const ADMIN_PASSWORD = "solacafe2026";
 
   // MENU_DATA_START — this default array is what loads for every visitor
-  // who hasn't made local admin edits. When you click "Download updated
-  // page" in admin mode, this block gets replaced with your current menu.
+  // who hasn't made local admin edits. When you click "Download instead"
+  // or "Publish live" in admin mode, this block gets updated.
   const DEFAULT_MENU = /*MENU_DATA_START*/[
     { "title": "Snack", "desc": "Something quick between classes.", "items": [
       { "name": "Burger & Fries", "desc": "", "price": "₱49" },
@@ -917,6 +1091,7 @@
   function setAdminMode(on){
     isAdmin = on;
     document.body.classList.toggle('admin-mode', on);
+    document.getElementById('adminToggle').textContent = on ? 'Exit admin' : 'Admin';
     if (on) sessionStorage.setItem('solaAdmin','1');
     else sessionStorage.removeItem('solaAdmin');
     renderMenu();
@@ -948,6 +1123,106 @@
       menuData = JSON.parse(JSON.stringify(DEFAULT_MENU));
       renderMenu();
     }
+  });
+
+  // =====================================================================
+  // PUBLISH LIVE — commits the updated menu straight to your GitHub repo
+  // via the GitHub API, so GitHub Pages rebuilds the live site for every
+  // visitor without you needing to download/upload anything by hand.
+  //
+  // Change these three to match your repo (from a URL like
+  // github.com/OWNER/REPO, with this file at FILE_PATH):
+  // =====================================================================
+  const GITHUB_OWNER = "bagobo101";
+  const GITHUB_REPO = "Sola-Cafe";
+  const GITHUB_FILE_PATH = "index.html";
+
+  function utf8ToBase64(str){
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+  function base64ToUtf8(str){
+    return decodeURIComponent(escape(atob(str)));
+  }
+
+  function getGithubToken(promptIfMissing){
+    let token = sessionStorage.getItem('solaGhToken');
+    if (!token && promptIfMissing){
+      token = prompt(
+        'Paste your GitHub personal access token.\n\n' +
+        'It needs "Contents: Read and write" access on the ' + GITHUB_OWNER + '/' + GITHUB_REPO + ' repo.\n' +
+        'Create one at github.com/settings/personal-access-tokens/new\n\n' +
+        'This token is kept only in this browser tab (never saved to the file or sent anywhere but GitHub).'
+      );
+      if (token) sessionStorage.setItem('solaGhToken', token.trim());
+    }
+    return token ? token.trim() : token;
+  }
+
+  async function publishToGithub(){
+    const token = getGithubToken(true);
+    if (!token) return;
+
+    const btn = document.getElementById('publishBtn');
+    const originalLabel = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Publishing…';
+
+    try{
+      const apiBase = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO;
+      const headers = {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/vnd.github+json'
+      };
+
+      const repoRes = await fetch(apiBase, { headers });
+      if (!repoRes.ok) throw new Error('Could not read repo info (status ' + repoRes.status + '). Check the owner/repo name at the top of this script and that your token has access.');
+      const repoInfo = await repoRes.json();
+      const branch = repoInfo.default_branch || 'main';
+
+      const fileRes = await fetch(apiBase + '/contents/' + GITHUB_FILE_PATH + '?ref=' + branch, { headers });
+      if (!fileRes.ok) throw new Error('Could not read ' + GITHUB_FILE_PATH + ' from the repo (status ' + fileRes.status + ').');
+      const fileInfo = await fileRes.json();
+      const currentHtml = base64ToUtf8(fileInfo.content);
+
+      const newDataStr = JSON.stringify(menuData, null, 2);
+      const updatedHtml = currentHtml.replace(
+        /\/\*MENU_DATA_START\*\/[\s\S]*?\/\*MENU_DATA_END\*\//,
+        '/*MENU_DATA_START*/' + newDataStr + '/*MENU_DATA_END*/'
+      );
+
+      if (updatedHtml === currentHtml){
+        throw new Error('Could not find the menu data markers in the live file, so nothing was published.');
+      }
+
+      const putRes = await fetch(apiBase + '/contents/' + GITHUB_FILE_PATH, {
+        method: 'PUT',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
+        body: JSON.stringify({
+          message: 'Update menu via admin panel',
+          content: utf8ToBase64(updatedHtml),
+          sha: fileInfo.sha,
+          branch: branch
+        })
+      });
+
+      if (!putRes.ok){
+        const errBody = await putRes.json().catch(() => ({}));
+        throw new Error('GitHub rejected the update (status ' + putRes.status + '): ' + (errBody.message || 'unknown error'));
+      }
+
+      alert('Published! GitHub Pages usually takes about a minute to rebuild — refresh the live site shortly to see your changes.');
+    } catch(err){
+      alert('Could not publish: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+    }
+  }
+
+  document.getElementById('publishBtn').addEventListener('click', publishToGithub);
+  document.getElementById('forgetTokenBtn').addEventListener('click', () => {
+    sessionStorage.removeItem('solaGhToken');
+    alert('Saved token cleared. You\'ll be asked to paste it again next time you publish.');
   });
 
   document.getElementById('downloadBtn').addEventListener('click', () => {
