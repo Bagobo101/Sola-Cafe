@@ -863,6 +863,112 @@
   .footer-row a:hover{ color: #F0B979; }
   .footer-row .admin-link{ color: #D9C4A4; }
   .footer-row .admin-link:hover{ color: #F0B979; }
+
+/* ===== PHASE 2: ANNOUNCEMENTS + MENU AVAILABILITY ===== */
+.announcement-wrap{display:none;margin:0 auto 28px;max-width:1180px;padding:0 24px}
+.announcement-wrap.is-visible{display:block}
+.announcement-card{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:start;padding:18px 20px;border:1px solid var(--line,#ddd);background:var(--paper,#fff);box-shadow:0 8px 24px rgba(0,0,0,.06)}
+.announcement-icon{font-size:24px;line-height:1}
+.announcement-kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-bottom:5px;opacity:.7}
+.announcement-title{margin:0 0 4px;font-size:18px}
+.announcement-message{margin:0;line-height:1.55}
+.announcement-dismiss{border:0;background:transparent;cursor:pointer;font-size:20px;line-height:1;padding:2px 4px;opacity:.6}
+.announcement-dismiss:hover{opacity:1}
+.announcement-card[data-type="special"]{border-left:4px solid #8a6a2f}
+.announcement-card[data-type="important"]{border-left:4px solid #b47720}
+.announcement-card[data-type="urgent"]{border-left:4px solid #a43b31}
+.announcement-admin{display:none;margin:18px 0;padding:18px;border:1px dashed var(--line,#ccc);background:rgba(0,0,0,.025)}
+body.admin-mode .announcement-admin{display:block}
+.announcement-admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.announcement-admin-grid .full{grid-column:1/-1}
+.announcement-admin label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}
+.announcement-admin input,.announcement-admin textarea,.announcement-admin select{width:100%;box-sizing:border-box;padding:10px 11px;border:1px solid var(--line,#ccc);background:#fff;font:inherit}
+.announcement-admin textarea{min-height:86px;resize:vertical}
+.announcement-admin-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.announcement-preview{margin-top:14px}
+.availability-summary{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.availability-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--line,#ddd);font-size:12px}
+.availability-dot{width:8px;height:8px;border-radius:50%;background:#777}
+.availability-chip.available .availability-dot{background:#4d8b57}
+.availability-chip.sold-out .availability-dot{background:#b47720}
+.availability-chip.not-available .availability-dot{background:#a43b31}
+.availability-chip.coming-soon .availability-dot{background:#55779a}
+.menu-item.is-unavailable{opacity:.62}
+.menu-item-status{display:inline-flex;align-items:center;margin-left:8px;padding:3px 7px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;vertical-align:middle}
+.menu-item-status.sold-out{background:rgba(227,161,92,0.18);color:var(--caramel-deep)}
+.menu-item-status.not-available{background:rgba(217,110,94,0.18);color:#E39C8F}
+.menu-item-status.coming-soon{background:rgba(143,179,122,0.18);color:var(--moss)}
+.menu-item-price.is-status{font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.admin-status-select{width:100%;max-width:170px;margin-top:7px;padding:7px 8px;border:1px solid var(--line,#ccc);background:#fff;font:inherit}
+.admin-status-label{display:block;font-size:11px;font-weight:700;margin-top:8px}
+@media(max-width:700px){
+  .announcement-wrap{padding:0 16px}
+  .announcement-card{grid-template-columns:auto 1fr}
+  .announcement-dismiss{grid-column:3;grid-row:1}
+  .announcement-admin-grid{grid-template-columns:1fr}
+  .announcement-admin-grid .full{grid-column:auto}
+}
+
+
+/* ===== PHASE 3: SMART CAFE SYSTEM ===== */
+.smart-menu-tools{
+  display:none;margin:0 0 24px;padding:20px;border-radius:14px;
+  border:1px solid var(--panel-line);
+  background:var(--panel);
+  box-shadow:var(--panel-shadow);
+}
+body:not(.admin-mode) .smart-menu-tools{display:block}
+.smart-menu-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.smart-search{
+  flex:1 1 240px;min-width:180px;padding:11px 13px;border-radius:8px;
+  border:1px solid var(--panel-line);font:inherit;
+  background:var(--cream-deep);color:var(--text);
+}
+.smart-search::placeholder{color:var(--text-dim)}
+.smart-search:focus-visible{outline-color:var(--focus)}
+.smart-filter,.smart-budget,.student-toggle{
+  padding:9px 14px;border-radius:999px;
+  border:1px solid var(--panel-line);
+  background:var(--cream-deep);color:var(--text-dim);
+  font:inherit;font-size:13.5px;font-weight:500;cursor:pointer;
+  transition:background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.smart-filter:hover,.smart-budget:hover,.student-toggle:hover{border-color:var(--caramel);color:var(--espresso-2)}
+.smart-filter.active,.smart-budget.active,.student-toggle.active{background:var(--caramel);color:var(--cream-deep);border-color:var(--caramel);font-weight:600}
+.smart-filter-bar{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.smart-budget-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.smart-budget-label{font-size:12px;font-weight:700;color:var(--caramel-deep)}
+.smart-results-note{margin-top:12px;font-size:12px;color:var(--text-dim)}
+.smart-empty{padding:28px;text-align:center;border:1px dashed var(--panel-line);border-radius:10px;margin-top:14px;color:var(--text-dim)}
+.student-pick-badge{display:inline-flex;margin-left:6px;padding:3px 7px;border-radius:999px;background:rgba(143,179,122,0.16);color:var(--moss);font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+.low-stock-badge{display:inline-flex;margin-left:6px;padding:3px 7px;border-radius:999px;background:rgba(227,161,92,0.16);color:var(--caramel-deep);font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+.menu-item-stock{font-size:11px;color:var(--text-dim);margin-top:4px}
+body.admin-mode .smart-menu-tools{display:none}
+.dashboard-overlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);padding:24px;overflow:auto}
+.dashboard-overlay.open{display:block}
+.dashboard-panel{max-width:1100px;margin:30px auto;background:#fff;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.dashboard-head{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:20px}
+.dashboard-close{border:0;background:transparent;font-size:28px;cursor:pointer}
+.dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.dashboard-card{padding:16px;border:1px solid #ddd}
+.dashboard-card-value{font-size:28px;font-weight:800}
+.dashboard-card-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;opacity:.65}
+.dashboard-section{border-top:1px solid #ddd;padding-top:18px;margin-top:18px}
+.dashboard-section h3{margin-top:0}
+.dashboard-list{display:grid;gap:8px}
+.dashboard-list-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #eee}
+.dashboard-restock{display:flex;gap:6px;align-items:center}
+.dashboard-restock input{width:65px;padding:7px;border:1px solid #ccc}
+.dashboard-restock button{padding:7px 10px;cursor:pointer}
+.dashboard-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px;border-bottom:1px solid #ddd;padding-bottom:10px}
+.dashboard-tab{padding:8px 12px;border:1px solid #ccc;background:#fff;cursor:pointer}
+.dashboard-tab.active{background:#111;color:#fff}
+.dashboard-tab-content{display:none}
+.dashboard-tab-content.active{display:block}
+.smart-combo-note{font-size:12px;opacity:.7;margin-top:7px}
+@media(max-width:800px){.dashboard-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.dashboard-grid{grid-template-columns:1fr}.dashboard-panel{padding:16px;margin:8px auto}.dashboard-list-row{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -952,6 +1058,38 @@
       <p class="section-note">Where rich aromas meet moments of calm and time slows down with every sip. Iced coffee and non-coffee drinks are 12oz / 16oz — first price is 12oz.</p>
     </div>
 
+
+
+    <div class="smart-menu-tools" id="smartMenuTools">
+      <div class="smart-menu-row">
+        <input id="menuSearch" class="smart-search" type="search" placeholder="🔍 Search menu..." aria-label="Search menu">
+        <button type="button" id="studentModeBtn" class="student-toggle">🎒 Student Mode</button>
+      </div>
+      <div class="smart-filter-bar" id="categoryFilters"></div>
+      <div class="smart-budget-row">
+        <span class="smart-budget-label">💰 Budget:</span>
+        <button type="button" class="smart-budget" data-budget="30">₱30</button>
+        <button type="button" class="smart-budget" data-budget="50">₱50</button>
+        <button type="button" class="smart-budget" data-budget="75">₱75</button>
+        <button type="button" class="smart-budget" data-budget="100">₱100</button>
+        <button type="button" class="smart-budget" data-budget="150">₱150+</button>
+        <button type="button" class="smart-budget active" data-budget="0">All</button>
+      </div>
+      <div id="smartResultsNote" class="smart-results-note"></div>
+    </div>
+
+    <div id="announcementWrap" class="announcement-wrap" aria-live="polite">
+      <div id="announcementCard" class="announcement-card" data-type="general">
+        <div class="announcement-icon" id="announcementIcon" aria-hidden="true">📢</div>
+        <div>
+          <div class="announcement-kicker" id="announcementKicker">Notice</div>
+          <h3 class="announcement-title" id="announcementTitle"></h3>
+          <p class="announcement-message" id="announcementMessage"></p>
+        </div>
+        <button type="button" id="announcementDismiss" class="announcement-dismiss" aria-label="Dismiss announcement">×</button>
+      </div>
+    </div>
+
     <div id="adminToolbar" class="admin-toolbar">
       <span class="admin-toolbar-label">Admin mode</span>
       <button type="button" id="addGroupBtn" class="admin-toolbar-btn">+ Add menu group</button>
@@ -959,7 +1097,99 @@
       <button type="button" id="downloadBtn" class="admin-toolbar-btn">Download instead</button>
       <button type="button" id="resetMenuBtn" class="admin-toolbar-btn">Reset to published version</button>
       <button type="button" id="forgetTokenBtn" class="admin-toolbar-btn">Change GitHub token</button>
-      <div class="admin-toolbar-note">"Publish live" pushes straight to your GitHub repo — no download needed. It saves the menu, gallery, and contact info together, and needs a one-time GitHub personal access token (Contents: Read and write, scoped to this repo).</div>
+
+      <button type="button" id="openDashboardBtn" class="admin-toolbar-btn">📊 Dashboard</button>
+      <button type="button" id="markAllAvailableBtn" class="admin-toolbar-btn">Mark all available</button>
+      <button type="button" id="clearAnnouncementBtn" class="admin-toolbar-btn">Clear announcement</button>
+      <div class="admin-toolbar-note">"Publish live" pushes straight to your GitHub repo — no download needed. It saves the menu, availability, announcement, gallery, and contact info together, and needs a one-time GitHub personal access token (Contents: Read and write, scoped to this repo).</div>
+    </div>
+
+<div class="announcement-admin" id="announcementAdmin">
+      <div class="eyebrow">Announcement Manager</div>
+      <h3 style="margin:6px 0 14px;">Tell customers what they need to know</h3>
+      <div class="announcement-admin-grid">
+        <div>
+          <label for="announcementEnabled">Status</label>
+          <select id="announcementEnabled">
+            <option value="enabled">Enabled</option>
+            <option value="disabled">Disabled</option>
+          </select>
+        </div>
+        <div>
+          <label for="announcementType">Type</label>
+          <select id="announcementType">
+            <option value="general">📢 General</option>
+            <option value="special">⭐ Special</option>
+            <option value="important">⚠️ Important</option>
+            <option value="urgent">🚨 Urgent</option>
+          </select>
+        </div>
+        <div>
+          <label for="announcementTitleInput">Title</label>
+          <input id="announcementTitleInput" type="text" placeholder="Today's notice">
+        </div>
+        <div>
+          <label for="announcementExpires">Expires (optional)</label>
+          <input id="announcementExpires" type="datetime-local">
+        </div>
+        <div class="full">
+          <label for="announcementMessageInput">Message</label>
+          <textarea id="announcementMessageInput" placeholder="Example: Spanish Latte is temporarily sold out. We'll update the menu when it's back."></textarea>
+        </div>
+      </div>
+      <div class="announcement-admin-actions">
+        <button type="button" id="saveAnnouncementBtn" class="admin-toolbar-btn admin-toolbar-btn-primary">Save announcement</button>
+        <button type="button" id="previewAnnouncementBtn" class="admin-toolbar-btn">Preview</button>
+      </div>
+      <div id="announcementPreview" class="announcement-preview"></div>
+      <div class="availability-summary" id="availabilitySummary"></div>
+    </div>
+
+
+    <div id="dashboardOverlay" class="dashboard-overlay" aria-hidden="true">
+      <div class="dashboard-panel">
+        <div class="dashboard-head">
+          <div>
+            <div class="eyebrow">Sola Café Admin</div>
+            <h2 style="margin:5px 0 0;">Café Dashboard</h2>
+          </div>
+          <button type="button" id="closeDashboardBtn" class="dashboard-close" aria-label="Close dashboard">×</button>
+        </div>
+
+        <div class="dashboard-grid" id="dashboardStats"></div>
+
+        <div class="dashboard-tabs">
+          <button type="button" class="dashboard-tab active" data-tab="overview">Overview</button>
+          <button type="button" class="dashboard-tab" data-tab="inventory">Inventory</button>
+          <button type="button" class="dashboard-tab" data-tab="students">Student Picks</button>
+        </div>
+
+        <div class="dashboard-tab-content active" data-tab-content="overview">
+          <div class="dashboard-section">
+            <h3>Active Announcement</h3>
+            <div id="dashboardAnnouncement"></div>
+          </div>
+          <div class="dashboard-section">
+            <h3>Inventory Alerts</h3>
+            <div id="dashboardAlerts" class="dashboard-list"></div>
+          </div>
+        </div>
+
+        <div class="dashboard-tab-content" data-tab-content="inventory">
+          <div class="dashboard-section">
+            <h3>Inventory</h3>
+            <div id="dashboardInventory" class="dashboard-list"></div>
+          </div>
+        </div>
+
+        <div class="dashboard-tab-content" data-tab-content="students">
+          <div class="dashboard-section">
+            <h3>Student Picks</h3>
+            <p class="smart-combo-note">Use the checkbox beside each menu item to mark it as a Student Pick.</p>
+            <div id="dashboardStudents" class="dashboard-list"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="menu-groups" id="menuGroups"></div>
@@ -1144,6 +1374,16 @@
   // MENU_DATA_START — this default array is what loads for every visitor
   // who hasn't made local admin edits. When you click "Download instead"
   // or "Publish live" in admin mode, this block gets updated.
+
+  // ANNOUNCEMENT_DATA_START — published together with menu/gallery/contact data.
+  const DEFAULT_ANNOUNCEMENT = /*ANNOUNCEMENT_DATA_START*/{
+    "enabled": false,
+    "type": "general",
+    "title": "",
+    "message": "",
+    "expiresAt": ""
+  }/*ANNOUNCEMENT_DATA_END*/;
+
   const DEFAULT_MENU = /*MENU_DATA_START*/[
   {
     "title": "Snack",
@@ -1152,7 +1392,8 @@
       {
         "name": "Burger & Fries",
         "desc": "",
-        "price": "₱49"
+        "price": "₱49",
+        "studentPick": true
       },
       {
         "name": "Street Food Platter",
@@ -1169,13 +1410,15 @@
       {
         "name": "Siomai Rice",
         "desc": "",
-        "price": "₱35"
+        "price": "₱35",
+        "studentPick": true
       },
       {
         "name": "Chicken Pastil",
         "desc": "",
         "price": "₱29",
-        "bestseller": false
+        "bestseller": false,
+        "studentPick": true
       },
       {
         "name": "Gyoza w/ Rice",
@@ -1212,7 +1455,8 @@
       {
         "name": "Batchoy",
         "desc": "Special / Ordinary",
-        "price": "₱25 / ₱15"
+        "price": "₱25 / ₱15",
+        "studentPick": true
       }
     ]
   },
@@ -1240,7 +1484,8 @@
       {
         "name": "Americano",
         "desc": "",
-        "price": "₱25 / ₱35"
+        "price": "₱25 / ₱35",
+        "studentPick": true
       },
       {
         "name": "Strawberry Iced Latte",
@@ -1277,7 +1522,8 @@
       {
         "name": "Lemonade",
         "desc": "",
-        "price": "₱19 / ₱29"
+        "price": "₱19 / ₱29",
+        "studentPick": true
       },
       {
         "name": "Lychee",
@@ -1324,7 +1570,8 @@
         "name": "Milo Dinosaur",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": true
+        "bestseller": true,
+        "studentPick": true
       }
     ]
   }
@@ -1359,6 +1606,49 @@
   "messenger": "61592274440938",
   "mapsQuery": "11.4835935, 123.0119436"
 }/*CONTACT_DATA_END*/;
+
+
+  function normalizeMenuData(data){
+    if (!Array.isArray(data)) return JSON.parse(JSON.stringify(DEFAULT_MENU));
+    return data.map((group, gi) => ({
+      ...group,
+      category: group.category || group.title || ('Category '+(gi+1)),
+      items: Array.isArray(group.items) ? group.items.map(item => ({
+        ...item,
+        status: ['available','sold-out','not-available','coming-soon'].includes(item.status) ? item.status : 'available',
+        stock: Number.isFinite(Number(item.stock)) ? Math.max(0, Number(item.stock)) : null,
+        lowStockAt: Number.isFinite(Number(item.lowStockAt)) ? Math.max(0, Number(item.lowStockAt)) : 3,
+        studentPick: !!item.studentPick
+      })) : []
+    }));
+  }
+
+  function syncInventoryStatus(item){
+    if (item.stock !== null && item.stock <= 0 && item.status === 'available') item.status = 'sold-out';
+    if (item.stock !== null && item.stock > 0 && item.status === 'sold-out') item.status = 'available';
+  }
+
+
+  function loadAnnouncement(){
+    try{
+      const saved = localStorage.getItem('solaAnnouncement');
+      if (saved) return { ...JSON.parse(JSON.stringify(DEFAULT_ANNOUNCEMENT)), ...JSON.parse(saved) };
+    }catch(e){}
+    return JSON.parse(JSON.stringify(DEFAULT_ANNOUNCEMENT));
+  }
+
+  function saveAnnouncementLocal(){
+    try{ localStorage.setItem('solaAnnouncement', JSON.stringify(announcementData)); }catch(e){}
+  }
+
+  function announcementIsActive(){
+    if (!announcementData.enabled || !announcementData.title || !announcementData.message) return false;
+    if (announcementData.expiresAt){
+      const expiry = new Date(announcementData.expiresAt);
+      if (!isNaN(expiry.getTime()) && Date.now() >= expiry.getTime()) return false;
+    }
+    return true;
+  }
 
   function loadMenu(){
     try{
@@ -1404,16 +1694,135 @@
     return escapeHtml(str).replace(/"/g,'&quot;');
   }
 
-  let menuData = loadMenu();
+  let menuData = normalizeMenuData(loadMenu());
+  let announcementData = loadAnnouncement();
   let galleryData = loadGallery();
   let contactData = loadContact();
   let isAdmin = sessionStorage.getItem('solaAdmin') === '1';
 
+  function getStatusMeta(status){
+    const map = {
+      available: { label:'Available', short:'Available', cls:'available' },
+      'sold-out': { label:'Sold Out', short:'Sold Out', cls:'sold-out' },
+      'not-available': { label:'Not Available', short:'Not Available', cls:'not-available' },
+      'coming-soon': { label:'Coming Soon', short:'Coming Soon', cls:'coming-soon' }
+    };
+    return map[status] || map.available;
+  }
+
+  function getAllMenuItems(){
+    const result = [];
+    menuData.forEach((group, gi) => group.items.forEach((item, ii) => {
+      syncInventoryStatus(item);
+      result.push({ item, group, gi, ii });
+    }));
+    return result;
+  }
+
+  function getPriceNumber(price){
+    const match = String(price || '').replace(/,/g,'').match(/(\d+(?:\.\d+)?)/);
+    return match ? Number(match[1]) : NaN;
+  }
+
+  let smartFilters = { search:'', category:'All', budget:0, student:false };
+
+  function getCategories(){
+    return ['All', ...Array.from(new Set(menuData.map(g => g.category || g.title).filter(Boolean)))];
+  }
+
+  function renderCategoryFilters(){
+    const el = document.getElementById('categoryFilters');
+    if (!el) return;
+    el.innerHTML = getCategories().map(cat =>
+      '<button type="button" class="smart-filter'+(smartFilters.category===cat?' active':'')+'" data-category="'+escapeAttr(cat)+'">'+escapeHtml(cat)+'</button>'
+    ).join('');
+    el.querySelectorAll('.smart-filter').forEach(btn => btn.addEventListener('click', () => {
+      smartFilters.category = btn.dataset.category;
+      renderCategoryFilters();
+      renderMenu();
+    }));
+  }
+
+  function itemMatchesSmartFilters(item, group){
+    const search = smartFilters.search.trim().toLowerCase();
+    const category = group.category || group.title;
+    if (search && !(String(item.name||'')+' '+String(item.desc||'')+' '+String(category||'')).toLowerCase().includes(search)) return false;
+    if (smartFilters.category !== 'All' && category !== smartFilters.category) return false;
+    const price = getPriceNumber(item.price);
+    if (smartFilters.budget > 0 && (!Number.isFinite(price) || price > smartFilters.budget)) return false;
+    if (smartFilters.student && !item.studentPick) return false;
+    return true;
+  }
+
+  function updateSmartResultsNote(total){
+    const el = document.getElementById('smartResultsNote');
+    if (!el) return;
+    const parts = [];
+    if (smartFilters.search) parts.push('search: "'+smartFilters.search+'"');
+    if (smartFilters.category !== 'All') parts.push(smartFilters.category);
+    if (smartFilters.budget > 0) parts.push('budget ≤ ₱'+smartFilters.budget);
+    if (smartFilters.student) parts.push('student picks');
+    el.textContent = parts.length ? total+' item'+(total===1?'':'s')+' found · '+parts.join(' · ') : 'Browse the full menu, or use search, categories, budget, and Student Mode.';
+  }
+
+
+  function renderAvailabilitySummary(){
+    const el = document.getElementById('availabilitySummary');
+    if (!el) return;
+    const counts = { available:0, 'sold-out':0, 'not-available':0, 'coming-soon':0 };
+    menuData.forEach(group => group.items.forEach(item => counts[item.status || 'available'] = (counts[item.status || 'available'] || 0) + 1));
+    el.innerHTML = Object.keys(counts).map(status => {
+      const meta = getStatusMeta(status);
+      return '<span class="availability-chip '+meta.cls+'"><span class="availability-dot"></span>'+meta.label+': '+counts[status]+'</span>';
+    }).join('');
+  }
+
+  function renderAnnouncement(){
+    const wrap = document.getElementById('announcementWrap');
+    const card = document.getElementById('announcementCard');
+    if (!wrap || !card) return;
+    const active = announcementIsActive();
+    wrap.classList.toggle('is-visible', active);
+    if (!active) return;
+
+    const labels = { general:'Notice', special:'Special', important:'Important', urgent:'Urgent' };
+    const icons = { general:'📢', special:'⭐', important:'⚠️', urgent:'🚨' };
+    card.dataset.type = announcementData.type || 'general';
+    document.getElementById('announcementIcon').textContent = icons[announcementData.type] || icons.general;
+    document.getElementById('announcementKicker').textContent = labels[announcementData.type] || labels.general;
+    document.getElementById('announcementTitle').textContent = announcementData.title || '';
+    document.getElementById('announcementMessage').textContent = announcementData.message || '';
+
+    const dismissedKey = 'solaAnnouncementDismissed:' + [announcementData.type, announcementData.title, announcementData.message, announcementData.expiresAt].join('|');
+    const dismissed = sessionStorage.getItem(dismissedKey) === '1';
+    wrap.classList.toggle('dismissed', dismissed);
+    if (dismissed) wrap.classList.remove('is-visible');
+  }
+
+  function renderAnnouncementAdmin(){
+    const enabled = document.getElementById('announcementEnabled');
+    if (!enabled) return;
+    enabled.value = announcementData.enabled ? 'enabled' : 'disabled';
+    document.getElementById('announcementType').value = announcementData.type || 'general';
+    document.getElementById('announcementTitleInput').value = announcementData.title || '';
+    document.getElementById('announcementMessageInput').value = announcementData.message || '';
+    document.getElementById('announcementExpires').value = announcementData.expiresAt || '';
+    renderAvailabilitySummary();
+  }
+
   function renderMenu(){
     const container = document.getElementById('menuGroups');
     container.innerHTML = '';
+    renderCategoryFilters();
+
+    let visibleCount = 0;
+    let hasFilteredGroups = false;
 
     menuData.forEach((group, gi) => {
+      const visibleItems = group.items.filter(item => itemMatchesSmartFilters(item, group));
+      if (!isAdmin && visibleItems.length === 0) return;
+
+      hasFilteredGroups = true;
       const groupEl = document.createElement('div');
       groupEl.className = 'menu-group';
 
@@ -1422,34 +1831,53 @@
           '<h3 contenteditable="true" data-gi="'+gi+'" data-field="title">'+escapeHtml(group.title)+'</h3>' +
           '<p class="group-desc" contenteditable="true" data-gi="'+gi+'" data-field="desc">'+escapeHtml(group.desc||'')+'</p>';
       } else {
-        groupEl.innerHTML =
-          '<h3>'+escapeHtml(group.title)+'</h3>' +
-          '<p class="group-desc">'+escapeHtml(group.desc||'')+'</p>';
+        groupEl.innerHTML = '<h3>'+escapeHtml(group.title)+'</h3><p class="group-desc">'+escapeHtml(group.desc||'')+'</p>';
       }
 
-      group.items.forEach((item, ii) => {
+      const itemsToRender = isAdmin ? group.items : visibleItems;
+      itemsToRender.forEach((item) => {
+        const ii = group.items.indexOf(item);
+        syncInventoryStatus(item);
+        const meta = getStatusMeta(item.status);
         const itemEl = document.createElement('div');
-        itemEl.className = 'menu-item';
+        itemEl.className = 'menu-item' + (item.status !== 'available' ? ' is-unavailable' : '');
+
         if (isAdmin){
           itemEl.innerHTML =
             '<div style="flex:1; min-width:0;">' +
               '<input type="text" class="admin-input name-input" value="'+escapeAttr(item.name)+'" placeholder="Item name" data-gi="'+gi+'" data-ii="'+ii+'" data-field="name">' +
               '<input type="text" class="admin-input desc-input" value="'+escapeAttr(item.desc||'')+'" placeholder="Description (optional)" data-gi="'+gi+'" data-ii="'+ii+'" data-field="desc">' +
               '<label class="admin-bestseller-label"><input type="checkbox" class="admin-bestseller-check" data-gi="'+gi+'" data-ii="'+ii+'"'+(item.bestseller ? ' checked' : '')+'> Best seller</label>' +
+              '<label class="admin-bestseller-label"><input type="checkbox" class="admin-student-check" data-gi="'+gi+'" data-ii="'+ii+'"'+(item.studentPick ? ' checked' : '')+'> Student Pick</label>' +
+              '<label class="admin-status-label">Availability</label>' +
+              '<select class="admin-status-select" data-gi="'+gi+'" data-ii="'+ii+'">' +
+                '<option value="available"'+(item.status==='available'?' selected':'')+'>🟢 Available</option>' +
+                '<option value="sold-out"'+(item.status==='sold-out'?' selected':'')+'>🟠 Sold Out</option>' +
+                '<option value="not-available"'+(item.status==='not-available'?' selected':'')+'>🔴 Not Available</option>' +
+                '<option value="coming-soon"'+(item.status==='coming-soon'?' selected':'')+'>🔵 Coming Soon</option>' +
+              '</select>' +
+              '<label class="admin-status-label">Stock (blank = not tracked)</label>' +
+              '<input type="number" min="0" class="admin-input stock-input" value="'+(item.stock===null?'':item.stock)+'" placeholder="e.g. 12" data-gi="'+gi+'" data-ii="'+ii+'">' +
+              '<label class="admin-status-label">Low stock alert at</label>' +
+              '<input type="number" min="0" class="admin-input low-stock-input" value="'+(item.lowStockAt ?? 3)+'" data-gi="'+gi+'" data-ii="'+ii+'">' +
             '</div>' +
             '<input type="text" class="admin-input price-input" value="'+escapeAttr(item.price)+'" placeholder="₱0" data-gi="'+gi+'" data-ii="'+ii+'" data-field="price">' +
             '<button type="button" class="admin-del-btn" data-gi="'+gi+'" data-ii="'+ii+'" title="Remove item" aria-label="Remove '+escapeAttr(item.name)+'">×</button>';
         } else {
-          const badge = item.bestseller
-            ? '<span class="badge-bestseller"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 2.5 14.7 9l6.8.6-5.2 4.5 1.6 6.6L12 17.3 5.9 20.7l1.6-6.6L2.3 9.6 9.1 9 12 2.5Z"/></svg>Best Seller</span>'
-            : '';
+          const badge = item.bestseller ? '<span class="badge-bestseller">⭐ Best Seller</span>' : '';
+          const studentBadge = item.studentPick ? '<span class="student-pick-badge">🎒 Student Pick</span>' : '';
+          const stockBadge = item.status === 'available' && item.stock !== null && item.stock > 0 && item.stock <= item.lowStockAt
+            ? '<span class="low-stock-badge">Only '+item.stock+' left</span>' : '';
+          const statusBadge = item.status !== 'available' ? '<span class="menu-item-status '+meta.cls+'">'+meta.short+'</span>' : '';
+          const price = item.status === 'available' ? escapeHtml(item.price) : '<span class="menu-item-price is-status">'+meta.short+'</span>';
           itemEl.innerHTML =
-            '<div><div class="menu-item-name-row"><span class="menu-item-name">'+escapeHtml(item.name)+'</span>'+badge+'</div>' +
+            '<div><div class="menu-item-name-row"><span class="menu-item-name">'+escapeHtml(item.name)+'</span>'+badge+studentBadge+statusBadge+stockBadge+'</div>' +
             (item.desc ? '<div class="menu-item-desc">'+escapeHtml(item.desc)+'</div>' : '') +
-            '</div>' +
-            '<div class="menu-item-price">'+escapeHtml(item.price)+'</div>';
+            (item.status === 'available' && item.stock !== null && item.stock > 0 && item.stock <= item.lowStockAt ? '<div class="menu-item-stock">Limited stock available</div>' : '') +
+            '</div><div class="menu-item-price">'+price+'</div>';
         }
         groupEl.appendChild(itemEl);
+        visibleCount++;
       });
 
       if (isAdmin){
@@ -1458,7 +1886,7 @@
         addItemBtn.className = 'admin-add-btn';
         addItemBtn.textContent = '+ Add item to "'+group.title+'"';
         addItemBtn.addEventListener('click', () => {
-          group.items.push({ name: 'New item', desc: '', price: '₱0' });
+          group.items.push({ name:'New item', desc:'', price:'₱0', status:'available', stock:null, lowStockAt:3, studentPick:false });
           saveMenuLocal();
           renderMenu();
         });
@@ -1470,9 +1898,7 @@
         delGroupBtn.textContent = 'Delete this group';
         delGroupBtn.addEventListener('click', () => {
           if (confirm('Delete the "'+group.title+'" group and everything in it?')){
-            menuData.splice(gi, 1);
-            saveMenuLocal();
-            renderMenu();
+            menuData.splice(gi,1); saveMenuLocal(); renderMenu();
           }
         });
         groupEl.appendChild(delGroupBtn);
@@ -1481,38 +1907,51 @@
       container.appendChild(groupEl);
     });
 
+    if (!isAdmin && !hasFilteredGroups){
+      container.innerHTML = '<div class="smart-empty"><strong>No items found.</strong><br>Try another search, category, budget, or turn off Student Mode.</div>';
+    }
+
     if (isAdmin){
-      container.querySelectorAll('[contenteditable="true"]').forEach(el => {
-        el.addEventListener('blur', () => {
-          const gi = +el.dataset.gi, field = el.dataset.field;
-          menuData[gi][field] = el.textContent.trim();
-          saveMenuLocal();
-        });
-      });
+      container.querySelectorAll('[contenteditable="true"]').forEach(el => el.addEventListener('blur', () => {
+        menuData[+el.dataset.gi][el.dataset.field] = el.textContent.trim();
+        saveMenuLocal();
+      }));
       container.querySelectorAll('.admin-input').forEach(el => {
         el.addEventListener('input', () => {
-          const gi = +el.dataset.gi, ii = +el.dataset.ii, field = el.dataset.field;
-          menuData[gi].items[ii][field] = el.value;
+          const gi=+el.dataset.gi, ii=+el.dataset.ii, field=el.dataset.field;
+          if (field) menuData[gi].items[ii][field]=el.value;
         });
         el.addEventListener('blur', saveMenuLocal);
       });
-      container.querySelectorAll('.admin-bestseller-check').forEach(el => {
-        el.addEventListener('change', () => {
-          const gi = +el.dataset.gi, ii = +el.dataset.ii;
-          menuData[gi].items[ii].bestseller = el.checked;
-          saveMenuLocal();
-        });
-      });
-      container.querySelectorAll('.admin-del-btn').forEach(el => {
-        el.addEventListener('click', () => {
-          const gi = +el.dataset.gi, ii = +el.dataset.ii;
-          menuData[gi].items.splice(ii, 1);
-          saveMenuLocal();
-          renderMenu();
-        });
-      });
+      container.querySelectorAll('.admin-bestseller-check').forEach(el => el.addEventListener('change', () => {
+        menuData[+el.dataset.gi].items[+el.dataset.ii].bestseller=el.checked; saveMenuLocal(); renderMenu();
+      }));
+      container.querySelectorAll('.admin-student-check').forEach(el => el.addEventListener('change', () => {
+        menuData[+el.dataset.gi].items[+el.dataset.ii].studentPick=el.checked; saveMenuLocal(); renderMenu();
+      }));
+      container.querySelectorAll('.admin-status-select').forEach(el => el.addEventListener('change', () => {
+        menuData[+el.dataset.gi].items[+el.dataset.ii].status=el.value; saveMenuLocal(); renderMenu();
+      }));
+      container.querySelectorAll('.stock-input').forEach(el => el.addEventListener('change', () => {
+        const item=menuData[+el.dataset.gi].items[+el.dataset.ii];
+        item.stock = el.value === '' ? null : Math.max(0, Number(el.value));
+        syncInventoryStatus(item); saveMenuLocal(); renderMenu();
+      }));
+      container.querySelectorAll('.low-stock-input').forEach(el => el.addEventListener('change', () => {
+        const item=menuData[+el.dataset.gi].items[+el.dataset.ii];
+        item.lowStockAt = Math.max(0, Number(el.value)||0); saveMenuLocal(); renderMenu();
+      }));
+      container.querySelectorAll('.admin-del-btn').forEach(el => el.addEventListener('click', () => {
+        const gi=+el.dataset.gi, ii=+el.dataset.ii;
+        if(confirm('Remove "'+menuData[gi].items[ii].name+'"?')){menuData[gi].items.splice(ii,1);saveMenuLocal();renderMenu();}
+      }));
     }
+
+    renderAvailabilitySummary();
+    updateSmartResultsNote(visibleCount);
+    renderDashboard();
   }
+
 
   function renderGallery(){
     const grid = document.getElementById('galleryGrid');
@@ -1648,6 +2087,150 @@
     renderGallery();
   });
 
+
+
+  document.getElementById('menuSearch').addEventListener('input', e => {
+    smartFilters.search = e.target.value;
+    renderMenu();
+  });
+  document.querySelectorAll('.smart-budget').forEach(btn => btn.addEventListener('click', () => {
+    smartFilters.budget = Number(btn.dataset.budget);
+    document.querySelectorAll('.smart-budget').forEach(b => b.classList.toggle('active', b===btn));
+    renderMenu();
+  }));
+  document.getElementById('studentModeBtn').addEventListener('click', () => {
+    smartFilters.student = !smartFilters.student;
+    document.getElementById('studentModeBtn').classList.toggle('active', smartFilters.student);
+    renderMenu();
+  });
+
+  function renderDashboard(){
+    const stats = document.getElementById('dashboardStats');
+    if (!stats) return;
+    const all = getAllMenuItems();
+    const counts = {available:0, low:0, 'sold-out':0, 'not-available':0, 'coming-soon':0};
+    all.forEach(({item}) => {
+      syncInventoryStatus(item);
+      if (item.status === 'available') counts.available++;
+      else if (item.status === 'sold-out') counts['sold-out']++;
+      else if (item.status === 'not-available') counts['not-available']++;
+      else counts['coming-soon']++;
+      if (item.status === 'available' && item.stock !== null && item.stock <= item.lowStockAt) counts.low++;
+    });
+    stats.innerHTML = [
+      ['🟢',counts.available,'Available'],
+      ['🟡',counts.low,'Low Stock'],
+      ['🟠',counts['sold-out'],'Sold Out'],
+      ['🔴',counts['not-available'],'Not Available']
+    ].map(x => '<div class="dashboard-card"><div class="dashboard-card-value">'+x[0]+' '+x[1]+'</div><div class="dashboard-card-label">'+x[2]+'</div></div>').join('');
+
+    const ann = document.getElementById('dashboardAnnouncement');
+    ann.innerHTML = announcementIsActive()
+      ? '<strong>📢 '+escapeHtml(announcementData.title)+'</strong><p>'+escapeHtml(announcementData.message)+'</p>'
+      : '<span style="opacity:.65;">No active announcement.</span>';
+
+    const alerts = document.getElementById('dashboardAlerts');
+    const lowItems = all.filter(({item}) => item.status==='available' && item.stock!==null && item.stock<=item.lowStockAt);
+    const soldItems = all.filter(({item}) => item.status==='sold-out');
+    const alertItems = [...lowItems, ...soldItems];
+    alerts.innerHTML = alertItems.length ? alertItems.map(({item,group}) =>
+      '<div class="dashboard-list-row"><span>'+escapeHtml(item.name)+' <small>('+escapeHtml(group.title)+')</small></span><span>'+getStatusMeta(item.status).short+(item.stock!==null?' · '+item.stock+' left':'')+'</span></div>'
+    ).join('') : '<div style="opacity:.65;">No inventory alerts.</div>';
+
+    const inventory = document.getElementById('dashboardInventory');
+    inventory.innerHTML = all.map(({item,group,gi,ii}) =>
+      '<div class="dashboard-list-row"><span><strong>'+escapeHtml(item.name)+'</strong><br><small>'+escapeHtml(group.title)+'</small></span>' +
+      '<span>'+(item.stock===null?'Not tracked':item.stock+' in stock')+'</span>' +
+      '<div class="dashboard-restock"><input type="number" min="1" value="1" data-restock-gi="'+gi+'" data-restock-ii="'+ii+'"><button type="button" data-restock-btn="'+gi+':'+ii+'">+ Restock</button></div></div>'
+    ).join('');
+    inventory.querySelectorAll('[data-restock-btn]').forEach(btn => btn.addEventListener('click', () => {
+      const [gi,ii]=btn.dataset.restockBtn.split(':').map(Number);
+      const input=inventory.querySelector('[data-restock-gi="'+gi+'"][data-restock-ii="'+ii+'"]');
+      const amount=Math.max(1,Number(input.value)||1);
+      const item=menuData[gi].items[ii];
+      item.stock=(item.stock===null?0:item.stock)+amount;
+      if(item.status==='sold-out') item.status='available';
+      saveMenuLocal(); renderMenu();
+    }));
+
+    const students = document.getElementById('dashboardStudents');
+    const studentItems = all.filter(({item})=>item.studentPick);
+    students.innerHTML = studentItems.length ? studentItems.map(({item,group}) =>
+      '<div class="dashboard-list-row"><span>🎒 <strong>'+escapeHtml(item.name)+'</strong> <small>('+escapeHtml(group.title)+')</small></span><span>'+escapeHtml(item.price)+'</span><span>'+getStatusMeta(item.status).short+'</span></div>'
+    ).join('') : '<div style="opacity:.65;">No Student Picks yet. Mark items as Student Pick in the menu editor.</div>';
+  }
+
+  function openDashboard(){
+    renderDashboard();
+    const overlay=document.getElementById('dashboardOverlay');
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden','false');
+  }
+  function closeDashboard(){
+    const overlay=document.getElementById('dashboardOverlay');
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden','true');
+  }
+  document.getElementById('openDashboardBtn').addEventListener('click', openDashboard);
+  document.getElementById('closeDashboardBtn').addEventListener('click', closeDashboard);
+  document.getElementById('dashboardOverlay').addEventListener('click', e => {
+    if(e.target.id==='dashboardOverlay') closeDashboard();
+  });
+  document.querySelectorAll('.dashboard-tab').forEach(tab => tab.addEventListener('click', () => {
+    document.querySelectorAll('.dashboard-tab').forEach(t=>t.classList.toggle('active',t===tab));
+    document.querySelectorAll('.dashboard-tab-content').forEach(c=>c.classList.toggle('active',c.dataset.tabContent===tab.dataset.tab));
+  }));
+
+  document.getElementById('announcementDismiss').addEventListener('click', () => {
+    const key = 'solaAnnouncementDismissed:' + [announcementData.type, announcementData.title, announcementData.message, announcementData.expiresAt].join('|');
+    sessionStorage.setItem(key, '1');
+    renderAnnouncement();
+  });
+
+  document.getElementById('saveAnnouncementBtn').addEventListener('click', () => {
+    announcementData.enabled = document.getElementById('announcementEnabled').value === 'enabled';
+    announcementData.type = document.getElementById('announcementType').value;
+    announcementData.title = document.getElementById('announcementTitleInput').value.trim();
+    announcementData.message = document.getElementById('announcementMessageInput').value.trim();
+    announcementData.expiresAt = document.getElementById('announcementExpires').value;
+    saveAnnouncementLocal();
+    renderAnnouncement();
+    alert('Announcement saved locally. Click Publish live to make it visible to everyone.');
+  });
+
+  document.getElementById('previewAnnouncementBtn').addEventListener('click', () => {
+    const preview = document.getElementById('announcementPreview');
+    const old = { ...announcementData };
+    announcementData = {
+      enabled: true,
+      type: document.getElementById('announcementType').value,
+      title: document.getElementById('announcementTitleInput').value.trim() || 'Preview',
+      message: document.getElementById('announcementMessageInput').value.trim() || 'Your announcement preview will appear here.',
+      expiresAt: ''
+    };
+    preview.innerHTML =
+      '<div class="announcement-card" data-type="'+escapeAttr(announcementData.type)+'">' +
+      '<div class="announcement-icon">'+({general:'📢',special:'⭐',important:'⚠️',urgent:'🚨'}[announcementData.type]||'📢')+'</div>' +
+      '<div><div class="announcement-kicker">'+escapeHtml(({general:'Notice',special:'Special',important:'Important',urgent:'Urgent'}[announcementData.type]||'Notice'))+'</div>' +
+      '<h3 class="announcement-title">'+escapeHtml(announcementData.title)+'</h3><p class="announcement-message">'+escapeHtml(announcementData.message)+'</p></div></div>';
+    announcementData = old;
+  });
+
+  document.getElementById('markAllAvailableBtn').addEventListener('click', () => {
+    if (!confirm('Mark every menu item as Available?')) return;
+    menuData.forEach(group => group.items.forEach(item => item.status = 'available'));
+    saveMenuLocal();
+    renderMenu();
+  });
+
+  document.getElementById('clearAnnouncementBtn').addEventListener('click', () => {
+    if (!confirm('Clear the announcement and hide it from visitors?')) return;
+    announcementData = { enabled:false, type:'general', title:'', message:'', expiresAt:'' };
+    saveAnnouncementLocal();
+    renderAnnouncementAdmin();
+    renderAnnouncement();
+  });
+
   function setAdminMode(on){
     isAdmin = on;
     document.body.classList.toggle('admin-mode', on);
@@ -1684,9 +2267,11 @@
       localStorage.removeItem('solaMenuData');
       localStorage.removeItem('solaGalleryData');
       localStorage.removeItem('solaContactData');
-      menuData = JSON.parse(JSON.stringify(DEFAULT_MENU));
+      localStorage.removeItem('solaAnnouncement');
+      menuData = normalizeMenuData(JSON.parse(JSON.stringify(DEFAULT_MENU)));
       galleryData = JSON.parse(JSON.stringify(DEFAULT_GALLERY));
       contactData = JSON.parse(JSON.stringify(DEFAULT_CONTACT));
+      announcementData = JSON.parse(JSON.stringify(DEFAULT_ANNOUNCEMENT));
       renderMenu();
       renderGallery();
       applyContactLinks();
@@ -1766,7 +2351,7 @@
         method: 'PUT',
         headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
         body: JSON.stringify({
-          message: 'Update menu, gallery, and contact info via admin panel',
+          message: 'Update menu, availability, announcement, gallery, and contact info via admin panel',
           content: utf8ToBase64(updatedHtml),
           sha: fileInfo.sha,
           branch: branch
@@ -1793,7 +2378,7 @@
 
     const menuRe = /\/\*MENU_DATA_START\*\/[\s\S]*?\/\*MENU_DATA_END\*\//;
     if (menuRe.test(out)) {
-      out = out.replace(menuRe, '/*MENU_DATA_START*/' + JSON.stringify(menuData, null, 2) + '/*MENU_DATA_END*/');
+      out = out.replace(menuRe, '/*MENU_DATA_START*/' + JSON.stringify(normalizeMenuData(menuData), null, 2) + '/*MENU_DATA_END*/');
     } else {
       missing.push('MENU_DATA_START / MENU_DATA_END');
     }
@@ -1803,6 +2388,14 @@
       out = out.replace(galleryRe, '/*GALLERY_DATA_START*/' + JSON.stringify(galleryData, null, 2) + '/*GALLERY_DATA_END*/');
     } else {
       missing.push('GALLERY_DATA_START / GALLERY_DATA_END');
+    }
+
+
+    const announcementRe = /\/\*ANNOUNCEMENT_DATA_START\*\/[\s\S]*?\/\*ANNOUNCEMENT_DATA_END\*\//;
+    if (announcementRe.test(out)) {
+      out = out.replace(announcementRe, '/*ANNOUNCEMENT_DATA_START*/' + JSON.stringify(announcementData, null, 2) + '/*ANNOUNCEMENT_DATA_END*/');
+    } else {
+      missing.push('ANNOUNCEMENT_DATA_START / ANNOUNCEMENT_DATA_END');
     }
 
     const contactRe = /\/\*CONTACT_DATA_START\*\/[\s\S]*?\/\*CONTACT_DATA_END\*\//;
@@ -1822,8 +2415,12 @@
   });
 
   document.getElementById('downloadBtn').addEventListener('click', () => {
-    let html = document.documentElement.outerHTML;
-    html = injectAllData(html);
+    const raw = document.documentElement.outerHTML;
+    const { html, missing } = injectAllData(raw);
+    if (missing.length){
+      alert('Could not find these markers in this file: ' + missing.join('; ') + '. Download cancelled so nothing gets corrupted.');
+      return;
+    }
     const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -1841,6 +2438,9 @@
   renderGallery();
   applyContactLinks();
   renderContactAdminFields();
+  renderAnnouncementAdmin();
+  renderAnnouncement();
+  renderDashboard();
 </script>
 
 </body>
