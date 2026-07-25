@@ -714,6 +714,1577 @@
   @media (max-width: 760px){
     .gallery-grid{ grid-template-columns: repeat(2, 1fr); }
   }
+  .gallery-item.is-editing{
+    aspect-ratio: auto;
+    display:flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px;
+  }
+  .gallery-item.is-editing .gallery-preview{
+    width:100%;
+    aspect-ratio: 4/3;
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--cream-deep);
+  }
+  .gallery-item.is-editing .admin-input{ width:100%; }
+  .gallery-item .admin-del-btn{ align-self: flex-end; }
+
+  /* ---------- Visit ---------- */
+  .visit-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 26px;
+  }
+  .visit-cell{
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 14px;
+    padding: 28px 26px;
+    box-shadow: var(--panel-shadow);
+  }
+  .visit-cell h3{
+    font-size: 13px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--caramel-deep);
+    letter-spacing: 0.06em;
+    margin-bottom: 14px;
+  }
+  .visit-cell p, .visit-cell address{
+    font-style: normal;
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+  .contact-row{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .contact-btn{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    font-family:'Public Sans', sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration:none;
+    border: 1px solid var(--panel-line);
+    background: var(--cream-deep);
+    color: var(--text);
+    transition: border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  }
+  .contact-btn svg{ width:16px; height:16px; flex-shrink:0; color: var(--caramel-deep); }
+  .contact-btn:hover{ border-color: var(--caramel); color: var(--caramel-deep); transform: translateY(-1px); }
+  .contact-admin-edit{
+    display:none;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--panel-line);
+  }
+  body.admin-mode .contact-admin-edit{ display:flex; }
+  .contact-admin-edit label{
+    display:flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--text-dim);
+  }
+  .contact-admin-edit .admin-input{ width: 100%; }
+  .social-link{
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.18s ease, border-color 0.18s ease;
+  }
+  .social-link strong{ color: var(--caramel-deep); }
+  .social-link:hover{ border-color: var(--caramel); }
+  .social-link:hover strong{ color: var(--caramel); }
+  .hours-row{
+    display:flex;
+    justify-content: space-between;
+    font-size: 14px;
+    padding: 4px 0;
+  }
+  .hours-row span:first-child{ color: var(--espresso); }
+  .hours-row span:last-child{ color: var(--text-dim); font-family:'IBM Plex Mono', monospace; font-size: 13px;}
+
+  @media (max-width: 900px){
+    .visit-grid{ grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    position: relative;
+    z-index: 1;
+    background: var(--bg-deep);
+    border-top: 1px solid var(--panel-line);
+    padding: 40px 0;
+  }
+  .footer-row{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+    color: #D9C4A4;
+  }
+  .footer-row a{ text-decoration: none; color: #D9C4A4; }
+  .footer-row a:hover{ color: #F0B979; }
+  .footer-row .admin-link{ color: #D9C4A4; }
+  .footer-row .admin-link:hover{ color: #F0B979; }
+</style>
+</head>
+<body>
+
+<div class="beans" aria-hidden="true"></div>
+
+<header>
+  <nav class="nav wrap">
+    <a href="#top" class="logo">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <path d="M4 9h13a3 3 0 0 1 0 6h-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M4 9v6a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M8 2.5c-.6.9-.6 1.5 0 2.4M11.5 2.5c-.6.9-.6 1.5 0 2.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+      Sola Cafe
+    </a>
+    <ul class="nav-links">
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="status-pill">
+        <span class="status-dot" id="statusDot" aria-hidden="true"></span>
+        <span id="statusText">Checking hours…</span>
+      </div>
+      <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile-panel" id="navMobilePanel">
+    <ul>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero wrap" style="border-top:none; padding-top:96px;">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Café · Open 6AM&nbsp;–&nbsp;6PM</div>
+        <h1>Coffee for the city that's <em>already up.</em></h1>
+        <p class="hero-sub">Sola Cafe opens when the sun does. Slow drip, strong pours, and a menu built for people starting their day — students on their way to class, teachers before homeroom, and anyone who needs breakfast and a good cup before 6PM.</p>
+        <div class="hero-cta">
+          <a href="#menu" class="btn btn-primary">See the menu</a>
+          <a href="#visit" class="btn btn-ghost">Find us today</a>
+        </div>
+      </div>
+
+      <div class="timeline-card">
+        <div class="timeline-head">
+          <svg class="steam-cup" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+            <path class="steam s1" d="M8 2.5c-.6.9-.6 1.5 0 2.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path class="steam s2" d="M11.5 2.5c-.6.9-.6 1.5 0 2.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M4 9h13a3 3 0 0 1 0 6h-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M4 9v6a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="eyebrow">Today's brew window</div>
+        </div>
+        <div class="timeline-title">6:00 AM racks up front through 6:00 PM last call · Mon–Fri</div>
+        <div class="timeline-track">
+          <div class="timeline-fill" id="timelineFill"></div>
+          <div class="timeline-now" id="timelineNow"></div>
+        </div>
+        <div class="timeline-labels">
+          <span>6AM</span><span>10AM</span><span>2PM</span><span>6PM</span>
+        </div>
+        <div class="timeline-readout" id="timelineReadout">
+          Reading the clock…
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="menu" class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">On the Counter</div>
+        <h2>Menu</h2>
+      </div>
+      <p class="section-note">Where rich aromas meet moments of calm and time slows down with every sip. Iced coffee and non-coffee drinks are 12oz / 16oz — first price is 12oz.</p>
+    </div>
+
+    <div id="adminToolbar" class="admin-toolbar">
+      <span class="admin-toolbar-label">Admin mode</span>
+      <button type="button" id="addGroupBtn" class="admin-toolbar-btn">+ Add menu group</button>
+      <button type="button" id="publishBtn" class="admin-toolbar-btn admin-toolbar-btn-primary">Publish live</button>
+      <button type="button" id="downloadBtn" class="admin-toolbar-btn">Download instead</button>
+      <button type="button" id="resetMenuBtn" class="admin-toolbar-btn">Reset to published version</button>
+      <button type="button" id="forgetTokenBtn" class="admin-toolbar-btn">Change GitHub token</button>
+      <div class="admin-toolbar-note">"Publish live" pushes straight to your GitHub repo — no download needed. It saves the menu, gallery, and contact info together, and needs a one-time GitHub personal access token (Contents: Read and write, scoped to this repo).</div>
+    </div>
+
+    <div class="menu-groups" id="menuGroups"></div>
+  </section>
+
+  <section id="about" class="wrap">
+    <div class="about">
+      <div class="about-figure">
+        <div class="big-stat">12</div>
+        <div class="stat-label">Hours open, every one of them before sundown</div>
+        <div class="divider"></div>
+        <div class="big-stat">2026</div>
+        <div class="stat-label">Year we swapped a cart for a storefront</div>
+        <div class="divider"></div>
+        <div class="big-stat">4</div>
+        <div class="stat-label">House rules</div>
+        <ol class="rules-list">
+          <li><span class="rule-num">01</span> The kitchen opens with the door, and closes with it too.</li>
+          <li><span class="rule-num">02</span> Smoking is prohibited.</li>
+          <li><span class="rule-num">03</span> Be considerate of other guests.</li>
+          <li><span class="rule-num">04</span> Chill, stay a while, and enjoy.</li>
+        </ol>
+      </div>
+      <div>
+        <div class="eyebrow">Why daytime</div>
+        <h2 style="margin: 10px 0 22px; font-size: clamp(26px,3vw,34px);">A café that runs on the school week, not the clock.</h2>
+        <p>Sola Cafe started as a <strong>6AM pop-up cart</strong> outside a high school, pouring coffee for students and teachers coming in. Enough of them asked for a place to sit down that we found one — right in front of Marciano High School, open from <strong>6AM to 6PM</strong>, Monday to Friday.</p>
+        <p>We roast in small batches overnight so the beans are ready by the time our door opens at 6AM. Everything on the Counter and in the kitchen is built for people starting their day: strong coffee, a real breakfast, and rice meals that hold you until dinner.</p>
+        <p>The room seats 8. Half the tables have toys to play with and books to read. All of them have good light for reading, and the kitchen keeps serving right up until we close the door at 6PM.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">A look inside</div>
+        <h2>Gallery</h2>
+      </div>
+      <p class="section-note">The counter, the corner tables, and what's actually in the cup — added as we snap them.</p>
+    </div>
+
+    <div id="galleryAdminToolbar" class="admin-toolbar">
+      <span class="admin-toolbar-label">Admin mode</span>
+      <button type="button" id="addPhotoBtn" class="admin-toolbar-btn">+ Add photo</button>
+      <div class="admin-toolbar-note">Paste an image URL into a tile below (photos hosted on your GitHub repo, like the logo, work well). Leave the URL blank to keep a placeholder tile. Use "Publish live" or "Download instead" in the Menu section above to save gallery changes for every visitor.</div>
+    </div>
+
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </section>
+
+  <section id="visit" class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Day and everyday</div>
+        <h2>Visit</h2>
+      </div>
+    </div>
+    <div class="visit-grid">
+      <div class="visit-cell">
+        <h3>HOURS</h3>
+        <div class="hours-row"><span>Mon – Fri</span><span>6:00 AM – 6:00 PM</span></div>
+        <div class="hours-row"><span>Sat – Sun</span><span>Closed</span></div>
+        <div class="hours-row"><span>Kitchen closes</span><span>5:30 PM</span></div>
+      </div>
+      <div class="visit-cell">
+        <h3>LOCATION</h3>
+        <address>Natividad, Pilar, Capiz<br>In front of Marciano High School<br>Right after the waiting shed</address>
+        <div class="contact-row">
+          <a id="callBtn" href="#" class="contact-btn" aria-label="Call Sola Cafe">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M4 5c0-.6.4-1 1-1h2.6c.5 0 .9.3 1 .8l.8 3.2c.1.4 0 .9-.4 1.2L7.6 10.4a12 12 0 0 0 6 6l1.2-1.4c.3-.3.8-.5 1.2-.4l3.2.8c.5.1.8.5.8 1V19c0 .6-.4 1-1 1h-1.5C9.4 20 4 14.6 4 8V5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            <span id="callBtnLabel">Call us</span>
+          </a>
+          <a id="messengerBtn" href="#" target="_blank" rel="noopener" class="contact-btn" aria-label="Message Sola Cafe on Messenger">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M12 3C7 3 3 6.7 3 11.3c0 2.6 1.3 4.9 3.4 6.4V21l3.1-1.7c.8.2 1.6.3 2.5.3 5 0 9-3.7 9-8.3S17 3 12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="m7.5 12.8 3-3.2 2.4 1.9 2.9-3.2-3 3.3-2.4-1.9-2.9 3.1Z" fill="currentColor"/></svg>
+            Message us
+          </a>
+          <a id="directionsBtn" href="#" target="_blank" rel="noopener" class="contact-btn" aria-label="Get directions to Sola Cafe on Google Maps">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.4" stroke="currentColor" stroke-width="1.5"/></svg>
+            Get directions
+          </a>
+        </div>
+        <div id="contactAdminEdit" class="contact-admin-edit">
+          <label>Phone (shown on button)<input type="text" id="editPhoneDisplay" class="admin-input" placeholder="0917 000 0000"></label>
+          <label>Phone (dial link, digits only, with country code)<input type="text" id="editPhoneDial" class="admin-input" placeholder="+639170000000"></label>
+          <label>Messenger page ID or username<input type="text" id="editMessenger" class="admin-input" placeholder="61592274440938"></label>
+          <label>Maps search text<input type="text" id="editMapsQuery" class="admin-input" placeholder="Sola Cafe Natividad Pilar Capiz"></label>
+        </div>
+      </div>
+      <div class="visit-cell">
+        <h3>GOOD TO KNOW</h3>
+        <p>Cash and GCash. Laptops welcome all day. Find us on Facebook <a href="https://web.facebook.com/profile.php?id=61592274440938" target="_blank" rel="noopener" class="social-link"><strong>@SolaCafe</strong></a> and Instagram <a href="https://www.instagram.com/_solacafe_/" target="_blank" rel="noopener" class="social-link"><strong>@_solacafe_</strong></a>.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 Sola Cafe</div>
+    <div><a href="#menu">Menu</a> &nbsp;·&nbsp; <a href="#about">About</a> &nbsp;·&nbsp; <a href="#gallery">Gallery</a> &nbsp;·&nbsp; <a href="#visit">Visit</a> &nbsp;·&nbsp; <button type="button" id="adminToggle" class="admin-link">Admin</button></div>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  navToggle.addEventListener('click', () => {
+    const open = document.body.classList.toggle('nav-open');
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.getElementById('navMobilePanel').querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.body.classList.remove('nav-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // Day timeline: window is 6:00 AM to 6:00 PM, Monday through Friday.
+  function updateTimeline(){
+    const now = new Date();
+    const day = now.getDay(); // 0 = Sunday ... 6 = Saturday
+    const h = now.getHours();
+    const m = now.getMinutes();
+    const minutesNow = h * 60 + m;
+
+    const openStart = 6 * 60;   // 6:00 AM in minutes
+    const openEnd = 18 * 60;    // 6:00 PM in minutes
+    const totalWindow = openEnd - openStart; // 720 minutes
+
+    const isWeekday = day >= 1 && day <= 5;
+    const elapsed = minutesNow - openStart;
+    const isOpen = isWeekday && elapsed >= 0 && elapsed <= totalWindow;
+
+    const dot = document.getElementById('statusDot');
+    const text = document.getElementById('statusText');
+    const fill = document.getElementById('timelineFill');
+    const nowMarker = document.getElementById('timelineNow');
+    const readout = document.getElementById('timelineReadout');
+
+    if (isOpen){
+      const pct = Math.min(100, Math.max(0, (elapsed / totalWindow) * 100));
+      fill.style.width = pct + '%';
+      nowMarker.style.left = pct + '%';
+      dot.classList.remove('closed');
+      text.textContent = 'Open now';
+
+      const minsLeft = totalWindow - elapsed;
+      const hoursLeft = Math.floor(minsLeft / 60);
+      const minsLeftRem = Math.round(minsLeft % 60);
+      readout.innerHTML = '<strong>Open now.</strong> Last call in ' + hoursLeft + 'h ' + minsLeftRem + 'm.';
+    } else {
+      fill.style.width = '0%';
+      nowMarker.style.left = '0%';
+      dot.classList.add('closed');
+
+      if (!isWeekday){
+        text.textContent = 'Closed — opens Monday';
+        readout.innerHTML = '<strong>Closed for the weekend.</strong> Doors open again Monday at 6:00 AM.';
+      } else if (elapsed < 0){
+        text.textContent = 'Closed — opens 6AM';
+        readout.innerHTML = '<strong>Closed right now.</strong> Doors open at 6:00 AM.';
+      } else {
+        text.textContent = 'Closed — opens 6AM';
+        readout.innerHTML = '<strong>Closed for the day.</strong> Doors open again at 6:00 AM.';
+      }
+    }
+  }
+
+  updateTimeline();
+  setInterval(updateTimeline, 60000);
+
+  // =====================================================================
+  // MENU DATA + ADMIN EDITING
+  // Change ADMIN_PASSWORD below to whatever you want the admin password
+  // to be. This is a simple client-side lock — fine for keeping casual
+  // visitors out, but anyone who reads the page source can find it, so
+  // don't reuse a password you care about elsewhere.
+  // =====================================================================
+  const ADMIN_PASSWORD = "solacafe2026";
+
+  // MENU_DATA_START — this default array is what loads for every visitor
+  // who hasn't made local admin edits. When you click "Download instead"
+  // or "Publish live" in admin mode, this block gets updated.
+  const DEFAULT_MENU = /*MENU_DATA_START*/[
+    { "title": "Snack", "desc": "Something quick between classes.", "items": [
+      { "name": "Burger & Fries", "desc": "", "price": "₱49" },
+      { "name": "Street Food Platter", "desc": "Hotdog, kikiam, lumpiang shanghai, siomai, fries, fishball", "price": "₱85", "bestseller": true }
+    ]},
+    { "title": "Rice Meal", "desc": "Lunch, done properly.", "items": [
+      { "name": "Siomai Rice", "desc": "", "price": "₱35" },
+      { "name": "Chicken Pastil", "desc": "", "price": "₱29", "bestseller": true },
+      { "name": "Gyoza w/ Rice", "desc": "", "price": "₱39" },
+      { "name": "Chicken Poppers", "desc": "", "price": "₱39" }
+    ]},
+    { "title": "Breakfast Meal", "desc": "Served all day, 6AM to 6PM.", "items": [
+      { "name": "Cornsilog", "desc": "", "price": "₱39", "bestseller": true },
+      { "name": "Hotsilog", "desc": "", "price": "₱39" },
+      { "name": "Cantonsilog", "desc": "", "price": "₱35" },
+      { "name": "Batchoy", "desc": "Special / Ordinary", "price": "₱25 / ₱15" }
+    ]},
+    { "title": "Iced Coffee", "desc": "12oz / 16oz.", "items": [
+      { "name": "Caramel Macchiato", "desc": "", "price": "₱25 / ₱35", "bestseller": true },
+      { "name": "Spanish Latte", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Mocha", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Americano", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Strawberry Iced Latte", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Dirty Matcha", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Oreo Coffee Latte", "desc": "", "price": "₱25 / ₱35" }
+    ]},
+    { "title": "Fruit Soda", "desc": "12oz / 16oz.", "items": [
+      { "name": "Strawberry", "desc": "", "price": "₱19 / ₱29" },
+      { "name": "Blueberry", "desc": "", "price": "₱19 / ₱29" },
+      { "name": "Lemonade", "desc": "", "price": "₱19 / ₱29" },
+      { "name": "Lychee", "desc": "", "price": "₱19 / ₱29" },
+      { "name": "Green Apple", "desc": "", "price": "₱25 / ₱39" },
+      { "name": "Lychee Blueberry", "desc": "", "price": "₱25 / ₱39" },
+      { "name": "Blueberry Dirty", "desc": "", "price": "₱25 / ₱39" }
+    ]},
+    { "title": "Non-Coffee", "desc": "12oz / 16oz.", "items": [
+      { "name": "Dark Chocolate", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Choco Berry", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Oreo Cream Latte", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Milo Dinosaur", "desc": "", "price": "₱25 / ₱35", "bestseller": true }
+    ]}
+  ]/*MENU_DATA_END*/;
+
+  // GALLERY_DATA_START — image is a URL; leave it "" to show a placeholder
+  // tile. Edited the same way as the menu: through admin mode, then
+  // published with the "Publish live" or "Download instead" buttons.
+  const DEFAULT_GALLERY = /*GALLERY_DATA_START*/[
+    { "image": "", "caption": "Storefront at 6AM" },
+    { "image": "", "caption": "Counter & drip station" },
+    { "image": "", "caption": "Reading corner & seating" },
+    { "image": "", "caption": "Iced coffee lineup" },
+    { "image": "", "caption": "Breakfast plated" },
+    { "image": "", "caption": "Morning line-up" }
+  ]/*GALLERY_DATA_END*/;
+
+  // CONTACT_DATA_START — powers the Call / Message / Directions buttons.
+  const DEFAULT_CONTACT = /*CONTACT_DATA_START*/{
+    "phoneDisplay": "0917 000 0000",
+    "phoneDial": "+639170000000",
+    "messenger": "61592274440938",
+    "mapsQuery": "Sola Cafe Natividad Pilar Capiz"
+  }/*CONTACT_DATA_END*/;
+
+  function loadMenu(){
+    try{
+      const saved = localStorage.getItem('solaMenuData');
+      if (saved) return JSON.parse(saved);
+    }catch(e){ /* ignore corrupt local data */ }
+    return JSON.parse(JSON.stringify(DEFAULT_MENU));
+  }
+
+  function saveMenuLocal(){
+    try{ localStorage.setItem('solaMenuData', JSON.stringify(menuData)); }catch(e){}
+  }
+
+  function loadGallery(){
+    try{
+      const saved = localStorage.getItem('solaGalleryData');
+      if (saved) return JSON.parse(saved);
+    }catch(e){ /* ignore corrupt local data */ }
+    return JSON.parse(JSON.stringify(DEFAULT_GALLERY));
+  }
+
+  function saveGalleryLocal(){
+    try{ localStorage.setItem('solaGalleryData', JSON.stringify(galleryData)); }catch(e){}
+  }
+
+  function loadContact(){
+    try{
+      const saved = localStorage.getItem('solaContactData');
+      if (saved) return JSON.parse(saved);
+    }catch(e){ /* ignore corrupt local data */ }
+    return JSON.parse(JSON.stringify(DEFAULT_CONTACT));
+  }
+
+  function saveContactLocal(){
+    try{ localStorage.setItem('solaContactData', JSON.stringify(contactData)); }catch(e){}
+  }
+
+  function escapeHtml(str){
+    return String(str == null ? '' : str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function escapeAttr(str){
+    return escapeHtml(str).replace(/"/g,'&quot;');
+  }
+
+  let menuData = loadMenu();
+  let galleryData = loadGallery();
+  let contactData = loadContact();
+  let isAdmin = sessionStorage.getItem('solaAdmin') === '1';
+
+  function renderMenu(){
+    const container = document.getElementById('menuGroups');
+    container.innerHTML = '';
+
+    menuData.forEach((group, gi) => {
+      const groupEl = document.createElement('div');
+      groupEl.className = 'menu-group';
+
+      if (isAdmin){
+        groupEl.innerHTML =
+          '<h3 contenteditable="true" data-gi="'+gi+'" data-field="title">'+escapeHtml(group.title)+'</h3>' +
+          '<p class="group-desc" contenteditable="true" data-gi="'+gi+'" data-field="desc">'+escapeHtml(group.desc||'')+'</p>';
+      } else {
+        groupEl.innerHTML =
+          '<h3>'+escapeHtml(group.title)+'</h3>' +
+          '<p class="group-desc">'+escapeHtml(group.desc||'')+'</p>';
+      }
+
+      group.items.forEach((item, ii) => {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'menu-item';
+        if (isAdmin){
+          itemEl.innerHTML =
+            '<div style="flex:1; min-width:0;">' +
+              '<input type="text" class="admin-input name-input" value="'+escapeAttr(item.name)+'" placeholder="Item name" data-gi="'+gi+'" data-ii="'+ii+'" data-field="name">' +
+              '<input type="text" class="admin-input desc-input" value="'+escapeAttr(item.desc||'')+'" placeholder="Description (optional)" data-gi="'+gi+'" data-ii="'+ii+'" data-field="desc">' +
+              '<label class="admin-bestseller-label"><input type="checkbox" class="admin-bestseller-check" data-gi="'+gi+'" data-ii="'+ii+'"'+(item.bestseller ? ' checked' : '')+'> Best seller</label>' +
+            '</div>' +
+            '<input type="text" class="admin-input price-input" value="'+escapeAttr(item.price)+'" placeholder="₱0" data-gi="'+gi+'" data-ii="'+ii+'" data-field="price">' +
+            '<button type="button" class="admin-del-btn" data-gi="'+gi+'" data-ii="'+ii+'" title="Remove item" aria-label="Remove '+escapeAttr(item.name)+'">×</button>';
+        } else {
+          const badge = item.bestseller
+            ? '<span class="badge-bestseller"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 2.5 14.7 9l6.8.6-5.2 4.5 1.6 6.6L12 17.3 5.9 20.7l1.6-6.6L2.3 9.6 9.1 9 12 2.5Z"/></svg>Best Seller</span>'
+            : '';
+          itemEl.innerHTML =
+            '<div><div class="menu-item-name-row"><span class="menu-item-name">'+escapeHtml(item.name)+'</span>'+badge+'</div>' +
+            (item.desc ? '<div class="menu-item-desc">'+escapeHtml(item.desc)+'</div>' : '') +
+            '</div>' +
+            '<div class="menu-item-price">'+escapeHtml(item.price)+'</div>';
+        }
+        groupEl.appendChild(itemEl);
+      });
+
+      if (isAdmin){
+        const addItemBtn = document.createElement('button');
+        addItemBtn.type = 'button';
+        addItemBtn.className = 'admin-add-btn';
+        addItemBtn.textContent = '+ Add item to "'+group.title+'"';
+        addItemBtn.addEventListener('click', () => {
+          group.items.push({ name: 'New item', desc: '', price: '₱0' });
+          saveMenuLocal();
+          renderMenu();
+        });
+        groupEl.appendChild(addItemBtn);
+
+        const delGroupBtn = document.createElement('button');
+        delGroupBtn.type = 'button';
+        delGroupBtn.className = 'admin-del-group-btn';
+        delGroupBtn.textContent = 'Delete this group';
+        delGroupBtn.addEventListener('click', () => {
+          if (confirm('Delete the "'+group.title+'" group and everything in it?')){
+            menuData.splice(gi, 1);
+            saveMenuLocal();
+            renderMenu();
+          }
+        });
+        groupEl.appendChild(delGroupBtn);
+      }
+
+      container.appendChild(groupEl);
+    });
+
+    if (isAdmin){
+      container.querySelectorAll('[contenteditable="true"]').forEach(el => {
+        el.addEventListener('blur', () => {
+          const gi = +el.dataset.gi, field = el.dataset.field;
+          menuData[gi][field] = el.textContent.trim();
+          saveMenuLocal();
+        });
+      });
+      container.querySelectorAll('.admin-input').forEach(el => {
+        el.addEventListener('input', () => {
+          const gi = +el.dataset.gi, ii = +el.dataset.ii, field = el.dataset.field;
+          menuData[gi].items[ii][field] = el.value;
+        });
+        el.addEventListener('blur', saveMenuLocal);
+      });
+      container.querySelectorAll('.admin-bestseller-check').forEach(el => {
+        el.addEventListener('change', () => {
+          const gi = +el.dataset.gi, ii = +el.dataset.ii;
+          menuData[gi].items[ii].bestseller = el.checked;
+          saveMenuLocal();
+        });
+      });
+      container.querySelectorAll('.admin-del-btn').forEach(el => {
+        el.addEventListener('click', () => {
+          const gi = +el.dataset.gi, ii = +el.dataset.ii;
+          menuData[gi].items.splice(ii, 1);
+          saveMenuLocal();
+          renderMenu();
+        });
+      });
+    }
+  }
+
+  function renderGallery(){
+    const grid = document.getElementById('galleryGrid');
+    grid.innerHTML = '';
+
+    galleryData.forEach((item, gi) => {
+      const el = document.createElement('div');
+
+      if (isAdmin){
+        el.className = 'gallery-item is-editing';
+        el.innerHTML =
+          (item.image ? '<img class="gallery-preview" src="'+escapeAttr(item.image)+'" alt="">' : '') +
+          '<input type="text" class="admin-input gallery-image-input" value="'+escapeAttr(item.image||'')+'" placeholder="Image URL (leave blank for placeholder)" data-gi="'+gi+'" data-field="image">' +
+          '<input type="text" class="admin-input gallery-caption-input" value="'+escapeAttr(item.caption||'')+'" placeholder="Caption" data-gi="'+gi+'" data-field="caption">' +
+          '<button type="button" class="admin-del-btn" data-gi="'+gi+'" title="Remove photo" aria-label="Remove photo: '+escapeAttr(item.caption||'untitled')+'">×</button>';
+      } else if (item.image){
+        el.className = 'gallery-item';
+        el.innerHTML =
+          '<img src="'+escapeAttr(item.image)+'" alt="'+escapeAttr(item.caption||'Photo of Sola Cafe')+'">' +
+          (item.caption ? '<span class="gallery-caption">'+escapeHtml(item.caption)+'</span>' : '');
+      } else {
+        el.className = 'gallery-item is-placeholder';
+        el.innerHTML =
+          '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect x="3" y="7" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l1.5-2.5h5L16 7" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="13.5" r="3.2" stroke="currentColor" stroke-width="1.5"/></svg>' +
+          '<span class="placeholder-label">'+escapeHtml(item.caption||'Photo coming soon')+'</span>';
+      }
+
+      grid.appendChild(el);
+    });
+
+    if (isAdmin){
+      grid.querySelectorAll('.gallery-image-input, .gallery-caption-input').forEach(elInput => {
+        elInput.addEventListener('input', () => {
+          const gi = +elInput.dataset.gi, field = elInput.dataset.field;
+          galleryData[gi][field] = elInput.value;
+        });
+        elInput.addEventListener('blur', () => {
+          saveGalleryLocal();
+          renderGallery();
+        });
+      });
+      grid.querySelectorAll('.admin-del-btn').forEach(elBtn => {
+        elBtn.addEventListener('click', () => {
+          const gi = +elBtn.dataset.gi;
+          galleryData.splice(gi, 1);
+          saveGalleryLocal();
+          renderGallery();
+        });
+      });
+    }
+  }
+
+  function applyContactLinks(){
+    const callBtn = document.getElementById('callBtn');
+    const messengerBtn = document.getElementById('messengerBtn');
+    const directionsBtn = document.getElementById('directionsBtn');
+    const callBtnLabel = document.getElementById('callBtnLabel');
+
+    callBtn.href = 'tel:' + (contactData.phoneDial || '').replace(/\s+/g,'');
+    callBtnLabel.textContent = 'Call us' + (contactData.phoneDisplay ? ' · ' + contactData.phoneDisplay : '');
+    messengerBtn.href = 'https://m.me/' + encodeURIComponent(contactData.messenger || '');
+    directionsBtn.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(contactData.mapsQuery || '');
+  }
+
+  function renderContactAdminFields(){
+    document.getElementById('editPhoneDisplay').value = contactData.phoneDisplay || '';
+    document.getElementById('editPhoneDial').value = contactData.phoneDial || '';
+    document.getElementById('editMessenger').value = contactData.messenger || '';
+    document.getElementById('editMapsQuery').value = contactData.mapsQuery || '';
+  }
+
+  ['editPhoneDisplay','editPhoneDial','editMessenger','editMapsQuery'].forEach(id => {
+    const fieldMap = { editPhoneDisplay:'phoneDisplay', editPhoneDial:'phoneDial', editMessenger:'messenger', editMapsQuery:'mapsQuery' };
+    document.getElementById(id).addEventListener('input', (e) => {
+      contactData[fieldMap[id]] = e.target.value;
+      applyContactLinks();
+    });
+    document.getElementById(id).addEventListener('blur', saveContactLocal);
+  });
+
+  document.getElementById('addPhotoBtn').addEventListener('click', () => {
+    galleryData.push({ image: '', caption: 'New photo' });
+    saveGalleryLocal();
+    renderGallery();
+  });
+
+  function setAdminMode(on){
+    isAdmin = on;
+    document.body.classList.toggle('admin-mode', on);
+    document.getElementById('adminToggle').textContent = on ? 'Exit admin' : 'Admin';
+    if (on) sessionStorage.setItem('solaAdmin','1');
+    else sessionStorage.removeItem('solaAdmin');
+    renderMenu();
+    renderGallery();
+    renderContactAdminFields();
+  }
+
+  document.getElementById('adminToggle').addEventListener('click', () => {
+    if (isAdmin){
+      setAdminMode(false);
+    } else {
+      const pw = prompt('Enter admin password:');
+      if (pw === null) return;
+      if (pw === ADMIN_PASSWORD){
+        setAdminMode(true);
+      } else {
+        alert('Incorrect password.');
+      }
+    }
+  });
+
+  document.getElementById('addGroupBtn').addEventListener('click', () => {
+    menuData.push({ title: 'New Group', desc: '', items: [{ name: 'New item', desc: '', price: '₱0' }] });
+    saveMenuLocal();
+    renderMenu();
+  });
+
+  document.getElementById('resetMenuBtn').addEventListener('click', () => {
+    if (confirm('Reset the menu, gallery, and contact info to the version currently published in this file? This clears your local edits on this device.')){
+      localStorage.removeItem('solaMenuData');
+      localStorage.removeItem('solaGalleryData');
+      localStorage.removeItem('solaContactData');
+      menuData = JSON.parse(JSON.stringify(DEFAULT_MENU));
+      galleryData = JSON.parse(JSON.stringify(DEFAULT_GALLERY));
+      contactData = JSON.parse(JSON.stringify(DEFAULT_CONTACT));
+      renderMenu();
+      renderGallery();
+      applyContactLinks();
+      renderContactAdminFields();
+    }
+  });
+
+  // =====================================================================
+  // PUBLISH LIVE — commits the updated menu straight to your GitHub repo
+  // via the GitHub API, so GitHub Pages rebuilds the live site for every
+  // visitor without you needing to download/upload anything by hand.
+  //
+  // Change these three to match your repo (from a URL like
+  // github.com/OWNER/REPO, with this file at FILE_PATH):
+  // =====================================================================
+  const GITHUB_OWNER = "bagobo101";
+  const GITHUB_REPO = "Sola-Cafe";
+  const GITHUB_FILE_PATH = "index.html";
+
+  function utf8ToBase64(str){
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+  function base64ToUtf8(str){
+    return decodeURIComponent(escape(atob(str)));
+  }
+
+  function getGithubToken(promptIfMissing){
+    let token = sessionStorage.getItem('solaGhToken');
+    if (!token && promptIfMissing){
+      token = prompt(
+        'Paste your GitHub personal access token.\n\n' +
+        'It needs "Contents: Read and write" access on the ' + GITHUB_OWNER + '/' + GITHUB_REPO + ' repo.\n' +
+        'Create one at github.com/settings/personal-access-tokens/new\n\n' +
+        'This token is kept only in this browser tab (never saved to the file or sent anywhere but GitHub).'
+      );
+      if (token) sessionStorage.setItem('solaGhToken', token.trim());
+    }
+    return token ? token.trim() : token;
+  }
+
+  async function publishToGithub(){
+    const token = getGithubToken(true);
+    if (!token) return;
+
+    const btn = document.getElementById('publishBtn');
+    const originalLabel = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Publishing…';
+
+    try{
+      const apiBase = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO;
+      const headers = {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/vnd.github+json'
+      };
+
+      const repoRes = await fetch(apiBase, { headers });
+      if (!repoRes.ok) throw new Error('Could not read repo info (status ' + repoRes.status + '). Check the owner/repo name at the top of this script and that your token has access.');
+      const repoInfo = await repoRes.json();
+      const branch = repoInfo.default_branch || 'main';
+
+      const fileRes = await fetch(apiBase + '/contents/' + GITHUB_FILE_PATH + '?ref=' + branch, { headers });
+      if (!fileRes.ok) throw new Error('Could not read ' + GITHUB_FILE_PATH + ' from the repo (status ' + fileRes.status + ').');
+      const fileInfo = await fileRes.json();
+      const currentHtml = base64ToUtf8(fileInfo.content);
+      const updatedHtml = injectAllData(currentHtml);
+
+      if (updatedHtml === currentHtml){
+        throw new Error('Could not find the data markers in the live file, so nothing was published.');
+      }
+
+      const putRes = await fetch(apiBase + '/contents/' + GITHUB_FILE_PATH, {
+        method: 'PUT',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
+        body: JSON.stringify({
+          message: 'Update menu, gallery, and contact info via admin panel',
+          content: utf8ToBase64(updatedHtml),
+          sha: fileInfo.sha,
+          branch: branch
+        })
+      });
+
+      if (!putRes.ok){
+        const errBody = await putRes.json().catch(() => ({}));
+        throw new Error('GitHub rejected the update (status ' + putRes.status + '): ' + (errBody.message || 'unknown error'));
+      }
+
+      alert('Published! GitHub Pages usually takes about a minute to rebuild — refresh the live site shortly to see your changes.');
+    } catch(err){
+      alert('Could not publish: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+    }
+  }
+
+  function injectAllData(html){
+    let out = html;
+    out = out.replace(
+      /\/\*MENU_DATA_START\*\/[\s\S]*?\/\*MENU_DATA_END\*\//,
+      '/*MENU_DATA_START*/' + JSON.stringify(menuData, null, 2) + '/*MENU_DATA_END*/'
+    );
+    out = out.replace(
+      /\/\*GALLERY_DATA_START\*\/[\s\S]*?\/\*GALLERY_DATA_END\*\//,
+      '/*GALLERY_DATA_START*/' + JSON.stringify(galleryData, null, 2) + '/*GALLERY_DATA_END*/'
+    );
+    out = out.replace(
+      /\/\*CONTACT_DATA_START\*\/[\s\S]*?\/\*CONTACT_DATA_END\*\//,
+      '/*CONTACT_DATA_START*/' + JSON.stringify(contactData, null, 2) + '/*CONTACT_DATA_END*/'
+    );
+    return out;
+  }
+
+  document.getElementById('publishBtn').addEventListener('click', publishToGithub);
+  document.getElementById('forgetTokenBtn').addEventListener('click', () => {
+    sessionStorage.removeItem('solaGhToken');
+    alert('Saved token cleared. You\'ll be asked to paste it again next time you publish.');
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    let html = document.documentElement.outerHTML;
+    html = injectAllData(html);
+    const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'index.html';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    alert('Downloaded index.html. Upload this file to your GitHub repo (replacing the current one) to publish these menu, gallery, and contact changes for every visitor.');
+  });
+
+  if (isAdmin) document.body.classList.add('admin-mode');
+  renderMenu();
+  renderGallery();
+  applyContactLinks();
+  renderContactAdminFields();
+</script>
+
+</body>
+</html>
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Public Sans', sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  }
+
+  a{ color: inherit; }
+  img{ max-width:100%; display:block; }
+
+  ::selection{ background: var(--caramel); color: var(--cream); }
+
+  :focus-visible{
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  .wrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .eyebrow{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--caramel-deep);
+  }
+
+  h1,h2,h3{
+    font-family: 'Fraunces', serif;
+    font-weight: 450;
+    letter-spacing: -0.01em;
+    color: var(--espresso);
+  }
+
+  /* ---------- Background texture: warm scattered beans + glow ---------- */
+  .beans{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(560px 380px at 88% -8%, rgba(227,161,92,0.10), transparent 70%),
+      radial-gradient(480px 340px at 4% 14%, rgba(143,179,122,0.06), transparent 70%),
+      radial-gradient(2px 2px at 12% 22%, rgba(244,231,211,0.22), transparent 60%),
+      radial-gradient(2px 2px at 78% 12%, rgba(244,231,211,0.16), transparent 60%),
+      radial-gradient(2px 2px at 33% 62%, rgba(244,231,211,0.18), transparent 60%),
+      radial-gradient(2px 2px at 91% 48%, rgba(244,231,211,0.14), transparent 60%),
+      radial-gradient(2px 2px at 60% 85%, rgba(244,231,211,0.16), transparent 60%),
+      radial-gradient(2px 2px at 18% 92%, rgba(244,231,211,0.12), transparent 60%);
+    background-size: 100% 100%;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(21,16,11,0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--panel-line);
+  }
+  .nav{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    padding: 16px 32px;
+  }
+  .logo{
+    font-family: 'Fraunces', serif;
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    text-decoration: none;
+  }
+  .logo .mark{
+    color: var(--caramel);
+    width: 22px; height: 22px;
+    flex-shrink: 0;
+  }
+  .nav-links{
+    display:flex;
+    align-items: center;
+    gap: 32px;
+    list-style:none;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .nav-links a{
+    text-decoration:none;
+    color: var(--text-dim);
+    transition: color 0.2s ease;
+  }
+  .nav-links a:hover{ color: var(--caramel-deep); }
+
+  .status-pill{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding: 6px 12px;
+    border: 1px solid var(--panel-line);
+    border-radius: 999px;
+    color: var(--text-dim);
+    background: var(--panel);
+  }
+  .status-dot{
+    width:7px; height:7px;
+    border-radius:50%;
+    background: var(--caramel);
+    box-shadow: 0 0 8px 1px rgba(190,106,52,0.7);
+  }
+  .status-dot.closed{ background: var(--moss); box-shadow:none; }
+
+  .nav-toggle{
+    display:none;
+    background:none;
+    border: 1px solid var(--panel-line);
+    border-radius: 8px;
+    width: 38px; height: 34px;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .nav-toggle span{
+    display:block;
+    width: 18px; height: 2px;
+    background: var(--espresso);
+    border-radius: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  body.nav-open .nav-toggle span:nth-child(1){ transform: translateY(6px) rotate(45deg); }
+  body.nav-open .nav-toggle span:nth-child(2){ opacity: 0; }
+  body.nav-open .nav-toggle span:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
+
+  .nav-mobile-panel{ display:none; }
+
+  @media (max-width: 760px){
+    .nav-links{ display:none; }
+    .nav-toggle{ display:flex; }
+    .nav-mobile-panel{
+      display: block;
+      max-height: 0;
+      overflow: hidden;
+      border-top: 1px solid var(--panel-line);
+      transition: max-height 0.25s ease;
+    }
+    body.nav-open .nav-mobile-panel{ max-height: 260px; }
+    .nav-mobile-panel ul{
+      list-style:none;
+      padding: 6px 32px 18px;
+      display:flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .nav-mobile-panel a{
+      display:block;
+      padding: 10px 0;
+      text-decoration:none;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 500;
+      border-bottom: 1px solid var(--panel-line);
+    }
+    .nav-mobile-panel li:last-child a{ border-bottom: none; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position: relative;
+    z-index: 1;
+    padding: 88px 0 84px;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .hero h1{
+    font-size: clamp(40px, 5.4vw, 66px);
+    line-height: 1.05;
+    margin-top: 16px;
+    max-width: 12ch;
+  }
+  .hero h1 em{
+    font-style: italic;
+    color: var(--caramel);
+    font-weight: 450;
+  }
+  .hero-sub{
+    margin-top: 22px;
+    font-size: 17px;
+    color: var(--text-dim);
+    max-width: 46ch;
+  }
+  .hero-cta{
+    margin-top: 34px;
+    display:flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn{
+    font-family:'Public Sans',sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    padding: 14px 26px;
+    border-radius: 8px;
+    text-decoration:none;
+    display:inline-block;
+    transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    cursor:pointer;
+    border: none;
+  }
+  .btn-primary{
+    background: var(--caramel);
+    color: #FFF6E9;
+    box-shadow: 0 10px 22px -10px rgba(140,74,31,0.65);
+  }
+  .btn-primary:hover{ transform: translateY(-2px); background: var(--caramel-btn-hover); }
+  .btn-ghost{
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--panel-line);
+  }
+  .btn-ghost:hover{ border-color: var(--caramel); color: var(--caramel-deep); }
+
+  /* ---------- Signature: brew timeline ---------- */
+  .timeline-card{
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 16px;
+    padding: 26px 24px 22px;
+    box-shadow: var(--panel-shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .timeline-card::before{
+    content:"";
+    position:absolute;
+    top:-40px; right:-40px;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, rgba(190,106,52,0.16), transparent 70%);
+    pointer-events:none;
+  }
+  .timeline-head{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .steam-cup{ width: 20px; height: 20px; color: var(--caramel); flex-shrink:0; }
+  .steam-cup .steam{ animation: steamRise 3.2s ease-in-out infinite; transform-origin: bottom center; }
+  .steam-cup .steam.s2{ animation-delay: 0.6s; }
+  @keyframes steamRise{
+    0%{ opacity:0; transform: translateY(0) scaleY(0.8); }
+    30%{ opacity:0.9; }
+    100%{ opacity:0; transform: translateY(-6px) scaleY(1.15); }
+  }
+  .timeline-title{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+  .timeline-track{
+    position: relative;
+    height: 6px;
+    background: var(--cream-deep);
+    border-radius: 6px;
+    margin: 0 6px;
+  }
+  .timeline-fill{
+    position:absolute;
+    left:0; top:0; bottom:0;
+    background: linear-gradient(90deg, #E3A45E, var(--caramel));
+    border-radius: 6px;
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+  .timeline-now{
+    position:absolute;
+    top: 50%;
+    width: 13px; height: 13px;
+    border-radius:50%;
+    background: var(--caramel);
+    box-shadow: 0 0 0 5px rgba(190,106,52,0.18), 0 0 10px 1px rgba(190,106,52,0.5);
+    transform: translate(-50%,-50%);
+    left: 0%;
+    transition: left 0.6s ease;
+  }
+  .timeline-labels{
+    display:flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .timeline-readout{
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--panel-line);
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+  .timeline-readout strong{
+    color: var(--espresso);
+    font-weight: 600;
+  }
+
+  /* ---------- Section shell ---------- */
+  section{
+    position: relative;
+    z-index: 1;
+    padding: 78px 0;
+    border-top: 1px solid var(--panel-line);
+  }
+  .section-head{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: 44px;
+    flex-wrap: wrap;
+  }
+  .section-head h2{
+    font-size: clamp(28px, 3.4vw, 38px);
+    margin-top: 8px;
+  }
+  .section-note{
+    font-size: 14.5px;
+    color: var(--text-dim);
+    max-width: 34ch;
+  }
+
+  /* ---------- Menu ---------- */
+  .menu-groups{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px 30px;
+  }
+  .menu-group{
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 14px;
+    padding: 24px 24px 18px;
+    box-shadow: var(--panel-shadow);
+  }
+  .menu-group h3{
+    font-size: 19px;
+    color: var(--caramel-deep);
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+  .menu-group .group-desc{
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 18px;
+  }
+  .menu-item{
+    display:flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 13px 0;
+    border-bottom: 1px dashed var(--panel-line);
+  }
+  .menu-item:last-child{ border-bottom: none; }
+  .menu-item-name{
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .menu-item-desc{
+    font-size: 12.5px;
+    color: var(--text-dim);
+    margin-top: 3px;
+  }
+  .menu-item-price{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--caramel-deep);
+    white-space: nowrap;
+  }
+  .menu-item-name-row{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .badge-bestseller{
+    display:inline-flex;
+    align-items:center;
+    gap: 3px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #2A1B0C;
+    background: linear-gradient(90deg, #E3A45E, var(--caramel));
+    border-radius: 999px;
+    padding: 2px 8px 2px 6px;
+    white-space: nowrap;
+  }
+  .badge-bestseller svg{ width:9px; height:9px; flex-shrink:0; }
+  .admin-bestseller-label{
+    display:inline-flex;
+    align-items:center;
+    gap: 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    cursor: pointer;
+  }
+  .admin-bestseller-label input{ accent-color: var(--caramel); cursor:pointer; }
+
+  /* ---------- Admin mode ---------- */
+  .admin-link{
+    background:none;
+    border:none;
+    color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    opacity: 0.55;
+    text-decoration: underline;
+    padding: 0;
+  }
+  .admin-link:hover{ opacity: 1; color: var(--caramel); }
+
+  .admin-toolbar{
+    display: none;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: var(--panel);
+    border: 1px solid var(--caramel);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 30px;
+  }
+  body.admin-mode .admin-toolbar{ display: flex; }
+  .admin-toolbar-label{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--caramel-deep);
+    margin-right: 6px;
+  }
+  .admin-toolbar-btn{
+    font-family: 'Public Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    background: var(--cream);
+    color: var(--text);
+    border: 1px solid var(--panel-line);
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: border-color 0.18s ease, color 0.18s ease;
+  }
+  .admin-toolbar-btn:hover{ border-color: var(--caramel); color: var(--caramel-deep); }
+  .admin-toolbar-btn-primary{
+    background: var(--caramel);
+    color: #FFF6E9;
+    border-color: var(--caramel);
+    font-weight: 600;
+  }
+  .admin-toolbar-btn-primary:hover{ background: var(--caramel-btn-hover); color: #FFF6E9; }
+  .admin-toolbar-note{
+    flex-basis: 100%;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    margin-top: 4px;
+  }
+
+  body.admin-mode .menu-group{
+    border: 1px solid var(--caramel);
+    padding: 20px 20px 16px;
+  }
+  .admin-input{
+    font-family: 'Public Sans', sans-serif;
+    background: var(--cream);
+    border: 1px solid var(--panel-line);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 14px;
+    width: 100%;
+  }
+  .admin-input:focus{ border-color: var(--caramel); }
+  .name-input{ font-weight: 500; margin-bottom: 6px; }
+  .desc-input{ font-size: 12.5px; color: var(--text-dim); }
+  .price-input{
+    width: 96px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  body.admin-mode .menu-item{ align-items: flex-start; gap: 10px; }
+  [contenteditable="true"]{
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin: -2px -4px;
+  }
+  [contenteditable="true"]:focus{
+    outline: 1px solid var(--caramel);
+    background: var(--cream);
+  }
+  .admin-del-btn{
+    background: transparent;
+    border: 1px solid var(--panel-line);
+    color: var(--text-dim);
+    border-radius: 6px;
+    width: 26px;
+    height: 26px;
+    line-height: 1;
+    cursor: pointer;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .admin-del-btn:hover{ border-color: #A4432F; color: #A4432F; }
+  .admin-add-btn, .admin-del-group-btn{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 10px 0 0;
+    display: block;
+  }
+  .admin-add-btn:hover{ color: var(--caramel-deep); }
+  .admin-del-group-btn{ color: #A4432F; opacity: 0.75; }
+  .admin-del-group-btn:hover{ opacity: 1; }
+
+  @media (max-width: 900px){
+    .hero-grid{ grid-template-columns: 1fr; }
+    .menu-groups{ grid-template-columns: 1fr; gap: 28px; }
+  }
+
+  /* ---------- About ---------- */
+  .about{
+    display:grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .about-figure{
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: var(--panel-shadow);
+  }
+  .about-figure .big-stat{
+    font-family: 'Fraunces', serif;
+    font-size: 50px;
+    font-weight: 600;
+    color: var(--caramel);
+    line-height: 1;
+  }
+  .about-figure .stat-label{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 8px;
+    letter-spacing: 0.02em;
+  }
+  .about-figure .divider{
+    height:1px;
+    background: var(--panel-line);
+    margin: 20px 0;
+  }
+  .rules-list{
+    list-style: none;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .rules-list li{
+    display:flex;
+    align-items: baseline;
+    gap: 9px;
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .rules-list .rule-num{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--caramel);
+    flex-shrink: 0;
+  }
+  .about p{
+    font-size: 16px;
+    color: var(--text-dim);
+    margin-bottom: 18px;
+    max-width: 58ch;
+  }
+  .about p strong{ color: var(--espresso); font-weight: 600;}
+
+  @media (max-width: 900px){
+    .about{ grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Gallery ---------- */
+  .gallery-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .gallery-item{
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    box-shadow: var(--panel-shadow);
+  }
+  .gallery-item img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display:block;
+  }
+  .gallery-item.is-placeholder{
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content:center;
+    gap: 10px;
+    color: var(--text-dim);
+    text-align:center;
+    padding: 16px;
+  }
+  .gallery-item.is-placeholder svg{
+    width: 30px; height:30px;
+    color: var(--caramel);
+    opacity: 0.85;
+  }
+  .gallery-item.is-placeholder .placeholder-label{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.03em;
+  }
+  .gallery-caption{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    padding: 10px 12px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #FFF6E9;
+    background: linear-gradient(0deg, rgba(0,0,0,0.72), transparent);
+  }
+  @media (max-width: 760px){
+    .gallery-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
 
   /* ---------- Visit ---------- */
   .visit-grid{
