@@ -333,6 +333,126 @@
     white-space: nowrap;
   }
 
+  /* ---------- Admin mode ---------- */
+  .admin-link{
+    background:none;
+    border:none;
+    color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    opacity: 0.45;
+    text-decoration: underline;
+    padding: 0;
+  }
+  .admin-link:hover{ opacity: 1; color: var(--amber); }
+
+  .admin-toolbar{
+    display: none;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: var(--panel);
+    border: 1px solid var(--amber-dim);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 30px;
+  }
+  body.admin-mode .admin-toolbar{ display: flex; }
+  .admin-toolbar-label{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-right: 6px;
+  }
+  .admin-toolbar-btn{
+    font-family: 'Public Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--panel-line);
+    border-radius: 4px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: border-color 0.18s ease, color 0.18s ease;
+  }
+  .admin-toolbar-btn:hover{ border-color: var(--amber); color: var(--amber); }
+  .admin-toolbar-btn-primary{
+    background: var(--amber);
+    color: var(--bg-deep);
+    border-color: var(--amber);
+    font-weight: 600;
+  }
+  .admin-toolbar-btn-primary:hover{ background: #f0b476; color: var(--bg-deep); }
+
+  body.admin-mode .menu-group{
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 6px;
+    padding: 20px 20px 16px;
+  }
+  .admin-input{
+    font-family: 'Public Sans', sans-serif;
+    background: var(--bg);
+    border: 1px solid var(--panel-line);
+    color: var(--text);
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-size: 14px;
+    width: 100%;
+  }
+  .admin-input:focus{ border-color: var(--amber); }
+  .name-input{ font-weight: 500; margin-bottom: 6px; }
+  .desc-input{ font-size: 12.5px; color: var(--text-dim); }
+  .price-input{
+    width: 96px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  body.admin-mode .menu-item{ align-items: flex-start; gap: 10px; }
+  [contenteditable="true"]{
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin: -2px -4px;
+  }
+  [contenteditable="true"]:focus{
+    outline: 1px solid var(--amber);
+    background: var(--bg);
+  }
+  .admin-del-btn{
+    background: transparent;
+    border: 1px solid var(--panel-line);
+    color: var(--text-dim);
+    border-radius: 4px;
+    width: 26px;
+    height: 26px;
+    line-height: 1;
+    cursor: pointer;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .admin-del-btn:hover{ border-color: var(--ember); color: var(--ember); }
+  .admin-add-btn, .admin-del-group-btn{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 10px 0 0;
+    display: block;
+  }
+  .admin-add-btn:hover{ color: var(--amber); }
+  .admin-del-group-btn{ color: var(--ember); opacity: 0.7; }
+  .admin-del-group-btn:hover{ opacity: 1; }
+
   @media (max-width: 900px){
     .hero-grid{ grid-template-columns: 1fr; }
     .menu-groups{ grid-template-columns: 1fr; gap: 40px; }
@@ -499,149 +619,14 @@
       <p class="section-note">Where rich aromas meet moments of calm and time slows down with every sip. Iced coffee and non-coffee drinks are 12oz / 16oz — first price is 12oz.</p>
     </div>
 
-    <div class="menu-groups">
-      <div class="menu-group">
-        <h3>Snack</h3>
-        <p class="group-desc">Something quick between classes.</p>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Burger &amp; Fries</div></div>
-          <div class="menu-item-price">₱49</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Street Food Platter</div><div class="menu-item-desc">Hotdog, kikiam, lumpiang shanghai, siomai, fries, fishball</div></div>
-          <div class="menu-item-price">₱85</div>
-        </div>
-      </div>
-
-      <div class="menu-group">
-        <h3>Rice Meal</h3>
-        <p class="group-desc">Lunch, done properly.</p>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Siomai Rice</div></div>
-          <div class="menu-item-price">₱35</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Chicken Pastil</div></div>
-          <div class="menu-item-price">₱29</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Gyoza w/ Rice</div></div>
-          <div class="menu-item-price">₱39</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Chicken Poppers</div></div>
-          <div class="menu-item-price">₱39</div>
-        </div>
-      </div>
-
-      <div class="menu-group">
-        <h3>Breakfast Meal</h3>
-        <p class="group-desc">Served all day, 6AM to 6PM.</p>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Cornsilog</div></div>
-          <div class="menu-item-price">₱39</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Hotsilog</div></div>
-          <div class="menu-item-price">₱39</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Cantonsilog</div></div>
-          <div class="menu-item-price">₱35</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Batchoy</div><div class="menu-item-desc">Special / Ordinary</div></div>
-          <div class="menu-item-price">₱25 / ₱15</div>
-        </div>
-      </div>
-
-      <div class="menu-group">
-        <h3>Iced Coffee</h3>
-        <p class="group-desc">12oz / 16oz.</p>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Caramel Macchiato</div></div>
-          <div class="menu-item-price">₱25 / ₱35</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Spanish Latte</div></div>
-          <div class="menu-item-price">₱25 / ₱35</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Mocha</div></div>
-          <div class="menu-item-price">₱25 / ₱35</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Americano</div></div>
-          <div class="menu-item-price">₱25 / ₱35</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Strawberry Iced Latte</div></div>
-          <div class="menu-item-price">₱25 / ₱35</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Dirty Matcha</div></div>
-          <div class="menu-item-price">₱25 / ₱35</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Oreo Coffee Latte</div></div>
-          <div class="menu-item-price">₱25 / ₱35</div>
-        </div>
-      </div>
-
-      <div class="menu-group">
-        <h3>Fruit Soda</h3>
-        <p class="group-desc">12oz / 16oz.</p>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Strawberry</div></div>
-          <div class="menu-item-price">₱19 / ₱29</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Blueberry</div></div>
-          <div class="menu-item-price">₱19 / ₱29</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Lemonade</div></div>
-          <div class="menu-item-price">₱19 / ₱29</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Lychee</div></div>
-          <div class="menu-item-price">₱19 / ₱29</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Green Apple</div></div>
-          <div class="menu-item-price">₱25 / ₱39</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Lychee Blueberry</div></div>
-          <div class="menu-item-price">₱25 / ₱39</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Blueberry Dirty</div></div>
-          <div class="menu-item-price">₱25 / ₱39</div>
-        </div>
-      </div>
-
-      <div class="menu-group">
-        <h3>Non-Coffee</h3>
-        <p class="group-desc">12oz / 16oz.</p>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Dark Chocolate</div></div>
-          <div class="menu-item-price">₱25 / ₱35</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Choco Berry</div></div>
-          <div class="menu-item-price">₱25 / ₱35</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Oreo Cream Latte</div></div>
-          <div class="menu-item-price">₱25 / ₱35</div>
-        </div>
-        <div class="menu-item">
-          <div><div class="menu-item-name">Milo Dinosaur</div></div>
-          <div class="menu-item-price">₱25 / ₱35</div>
-        </div>
-      </div>
+    <div id="adminToolbar" class="admin-toolbar">
+      <span class="admin-toolbar-label">Admin mode</span>
+      <button type="button" id="addGroupBtn" class="admin-toolbar-btn">+ Add menu group</button>
+      <button type="button" id="downloadBtn" class="admin-toolbar-btn admin-toolbar-btn-primary">Download updated page</button>
+      <button type="button" id="resetMenuBtn" class="admin-toolbar-btn">Reset to published version</button>
     </div>
+
+    <div class="menu-groups" id="menuGroups"></div>
   </section>
 
   <section id="about" class="wrap">
@@ -695,7 +680,7 @@
 <footer>
   <div class="wrap footer-row">
     <div>© 2026 Sola Cafe Coffee Bar</div>
-    <div><a href="#menu">Menu</a> &nbsp;·&nbsp; <a href="#about">About</a> &nbsp;·&nbsp; <a href="#visit">Visit</a></div>
+    <div><a href="#menu">Menu</a> &nbsp;·&nbsp; <a href="#about">About</a> &nbsp;·&nbsp; <a href="#visit">Visit</a> &nbsp;·&nbsp; <button type="button" id="adminToggle" class="admin-link">Admin</button></div>
   </div>
 </footer>
 
@@ -753,6 +738,236 @@
 
   updateTimeline();
   setInterval(updateTimeline, 60000);
+
+  // =====================================================================
+  // MENU DATA + ADMIN EDITING
+  // Change ADMIN_PASSWORD below to whatever you want the admin password
+  // to be. This is a simple client-side lock — fine for keeping casual
+  // visitors out, but anyone who reads the page source can find it, so
+  // don't reuse a password you care about elsewhere.
+  // =====================================================================
+  const ADMIN_PASSWORD = "solacafe2026";
+
+  // MENU_DATA_START — this default array is what loads for every visitor
+  // who hasn't made local admin edits. When you click "Download updated
+  // page" in admin mode, this block gets replaced with your current menu.
+  const DEFAULT_MENU = /*MENU_DATA_START*/[
+    { "title": "Snack", "desc": "Something quick between classes.", "items": [
+      { "name": "Burger & Fries", "desc": "", "price": "₱49" },
+      { "name": "Street Food Platter", "desc": "Hotdog, kikiam, lumpiang shanghai, siomai, fries, fishball", "price": "₱85" }
+    ]},
+    { "title": "Rice Meal", "desc": "Lunch, done properly.", "items": [
+      { "name": "Siomai Rice", "desc": "", "price": "₱35" },
+      { "name": "Chicken Pastil", "desc": "", "price": "₱29" },
+      { "name": "Gyoza w/ Rice", "desc": "", "price": "₱39" },
+      { "name": "Chicken Poppers", "desc": "", "price": "₱39" }
+    ]},
+    { "title": "Breakfast Meal", "desc": "Served all day, 6AM to 6PM.", "items": [
+      { "name": "Cornsilog", "desc": "", "price": "₱39" },
+      { "name": "Hotsilog", "desc": "", "price": "₱39" },
+      { "name": "Cantonsilog", "desc": "", "price": "₱35" },
+      { "name": "Batchoy", "desc": "Special / Ordinary", "price": "₱25 / ₱15" }
+    ]},
+    { "title": "Iced Coffee", "desc": "12oz / 16oz.", "items": [
+      { "name": "Caramel Macchiato", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Spanish Latte", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Mocha", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Americano", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Strawberry Iced Latte", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Dirty Matcha", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Oreo Coffee Latte", "desc": "", "price": "₱25 / ₱35" }
+    ]},
+    { "title": "Fruit Soda", "desc": "12oz / 16oz.", "items": [
+      { "name": "Strawberry", "desc": "", "price": "₱19 / ₱29" },
+      { "name": "Blueberry", "desc": "", "price": "₱19 / ₱29" },
+      { "name": "Lemonade", "desc": "", "price": "₱19 / ₱29" },
+      { "name": "Lychee", "desc": "", "price": "₱19 / ₱29" },
+      { "name": "Green Apple", "desc": "", "price": "₱25 / ₱39" },
+      { "name": "Lychee Blueberry", "desc": "", "price": "₱25 / ₱39" },
+      { "name": "Blueberry Dirty", "desc": "", "price": "₱25 / ₱39" }
+    ]},
+    { "title": "Non-Coffee", "desc": "12oz / 16oz.", "items": [
+      { "name": "Dark Chocolate", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Choco Berry", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Oreo Cream Latte", "desc": "", "price": "₱25 / ₱35" },
+      { "name": "Milo Dinosaur", "desc": "", "price": "₱25 / ₱35" }
+    ]}
+  ]/*MENU_DATA_END*/;
+
+  function loadMenu(){
+    try{
+      const saved = localStorage.getItem('solaMenuData');
+      if (saved) return JSON.parse(saved);
+    }catch(e){ /* ignore corrupt local data */ }
+    return JSON.parse(JSON.stringify(DEFAULT_MENU));
+  }
+
+  function saveMenuLocal(){
+    try{ localStorage.setItem('solaMenuData', JSON.stringify(menuData)); }catch(e){}
+  }
+
+  function escapeHtml(str){
+    return String(str == null ? '' : str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function escapeAttr(str){
+    return escapeHtml(str).replace(/"/g,'&quot;');
+  }
+
+  let menuData = loadMenu();
+  let isAdmin = sessionStorage.getItem('solaAdmin') === '1';
+
+  function renderMenu(){
+    const container = document.getElementById('menuGroups');
+    container.innerHTML = '';
+
+    menuData.forEach((group, gi) => {
+      const groupEl = document.createElement('div');
+      groupEl.className = 'menu-group';
+
+      if (isAdmin){
+        groupEl.innerHTML =
+          '<h3 contenteditable="true" data-gi="'+gi+'" data-field="title">'+escapeHtml(group.title)+'</h3>' +
+          '<p class="group-desc" contenteditable="true" data-gi="'+gi+'" data-field="desc">'+escapeHtml(group.desc||'')+'</p>';
+      } else {
+        groupEl.innerHTML =
+          '<h3>'+escapeHtml(group.title)+'</h3>' +
+          '<p class="group-desc">'+escapeHtml(group.desc||'')+'</p>';
+      }
+
+      group.items.forEach((item, ii) => {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'menu-item';
+        if (isAdmin){
+          itemEl.innerHTML =
+            '<div style="flex:1; min-width:0;">' +
+              '<input type="text" class="admin-input name-input" value="'+escapeAttr(item.name)+'" placeholder="Item name" data-gi="'+gi+'" data-ii="'+ii+'" data-field="name">' +
+              '<input type="text" class="admin-input desc-input" value="'+escapeAttr(item.desc||'')+'" placeholder="Description (optional)" data-gi="'+gi+'" data-ii="'+ii+'" data-field="desc">' +
+            '</div>' +
+            '<input type="text" class="admin-input price-input" value="'+escapeAttr(item.price)+'" placeholder="₱0" data-gi="'+gi+'" data-ii="'+ii+'" data-field="price">' +
+            '<button type="button" class="admin-del-btn" data-gi="'+gi+'" data-ii="'+ii+'" title="Remove item">×</button>';
+        } else {
+          itemEl.innerHTML =
+            '<div><div class="menu-item-name">'+escapeHtml(item.name)+'</div>' +
+            (item.desc ? '<div class="menu-item-desc">'+escapeHtml(item.desc)+'</div>' : '') +
+            '</div>' +
+            '<div class="menu-item-price">'+escapeHtml(item.price)+'</div>';
+        }
+        groupEl.appendChild(itemEl);
+      });
+
+      if (isAdmin){
+        const addItemBtn = document.createElement('button');
+        addItemBtn.type = 'button';
+        addItemBtn.className = 'admin-add-btn';
+        addItemBtn.textContent = '+ Add item to "'+group.title+'"';
+        addItemBtn.addEventListener('click', () => {
+          group.items.push({ name: 'New item', desc: '', price: '₱0' });
+          saveMenuLocal();
+          renderMenu();
+        });
+        groupEl.appendChild(addItemBtn);
+
+        const delGroupBtn = document.createElement('button');
+        delGroupBtn.type = 'button';
+        delGroupBtn.className = 'admin-del-group-btn';
+        delGroupBtn.textContent = 'Delete this group';
+        delGroupBtn.addEventListener('click', () => {
+          if (confirm('Delete the "'+group.title+'" group and everything in it?')){
+            menuData.splice(gi, 1);
+            saveMenuLocal();
+            renderMenu();
+          }
+        });
+        groupEl.appendChild(delGroupBtn);
+      }
+
+      container.appendChild(groupEl);
+    });
+
+    if (isAdmin){
+      container.querySelectorAll('[contenteditable="true"]').forEach(el => {
+        el.addEventListener('blur', () => {
+          const gi = +el.dataset.gi, field = el.dataset.field;
+          menuData[gi][field] = el.textContent.trim();
+          saveMenuLocal();
+        });
+      });
+      container.querySelectorAll('.admin-input').forEach(el => {
+        el.addEventListener('input', () => {
+          const gi = +el.dataset.gi, ii = +el.dataset.ii, field = el.dataset.field;
+          menuData[gi].items[ii][field] = el.value;
+        });
+        el.addEventListener('blur', saveMenuLocal);
+      });
+      container.querySelectorAll('.admin-del-btn').forEach(el => {
+        el.addEventListener('click', () => {
+          const gi = +el.dataset.gi, ii = +el.dataset.ii;
+          menuData[gi].items.splice(ii, 1);
+          saveMenuLocal();
+          renderMenu();
+        });
+      });
+    }
+  }
+
+  function setAdminMode(on){
+    isAdmin = on;
+    document.body.classList.toggle('admin-mode', on);
+    if (on) sessionStorage.setItem('solaAdmin','1');
+    else sessionStorage.removeItem('solaAdmin');
+    renderMenu();
+  }
+
+  document.getElementById('adminToggle').addEventListener('click', () => {
+    if (isAdmin){
+      setAdminMode(false);
+    } else {
+      const pw = prompt('Enter admin password:');
+      if (pw === null) return;
+      if (pw === ADMIN_PASSWORD){
+        setAdminMode(true);
+      } else {
+        alert('Incorrect password.');
+      }
+    }
+  });
+
+  document.getElementById('addGroupBtn').addEventListener('click', () => {
+    menuData.push({ title: 'New Group', desc: '', items: [{ name: 'New item', desc: '', price: '₱0' }] });
+    saveMenuLocal();
+    renderMenu();
+  });
+
+  document.getElementById('resetMenuBtn').addEventListener('click', () => {
+    if (confirm('Reset the menu to the version currently published in this file? This clears your local edits on this device.')){
+      localStorage.removeItem('solaMenuData');
+      menuData = JSON.parse(JSON.stringify(DEFAULT_MENU));
+      renderMenu();
+    }
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    let html = document.documentElement.outerHTML;
+    const newDataStr = JSON.stringify(menuData, null, 2);
+    html = html.replace(
+      /\/\*MENU_DATA_START\*\/[\s\S]*?\/\*MENU_DATA_END\*\//,
+      '/*MENU_DATA_START*/' + newDataStr + '/*MENU_DATA_END*/'
+    );
+    const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'index.html';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    alert('Downloaded index.html. Upload this file to your GitHub repo (replacing the current one) to publish these menu changes for every visitor.');
+  });
+
+  if (isAdmin) document.body.classList.add('admin-mode');
+  renderMenu();
 </script>
 
 </body>
