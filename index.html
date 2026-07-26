@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
 <title>Sola Café — Coffee for the early risers</title>
 <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Bagobo101/Sola-Café/main/logo-removebg-preview.png">
 <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Bagobo101/Sola-Café/main/logo-removebg-preview.png">
@@ -13,6 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;0,9..144,700;1,9..144,450;1,9..144,600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
+    color-scheme: dark;
     /* ---- Cozy Café palette — night roast ---- */
     --cream:        #15100B;   /* page background — near-black roast */
     --cream-deep:   #0E0A06;   /* recessed groove — darker than panel for inset tracks */
@@ -35,11 +37,13 @@
 
   /* ---- Light theme (personal toggle, saved per visitor) ---- */
   body.theme-light{
+    color-scheme: light;
     --cream:        #FBF3E7;
     --cream-deep:   #F1E1C7;
-    --bg-deep:      #EFDFC5;
+    --bg-deep:      #2A1D13;   /* footer stays a dark coffee band even in light mode — see :root comment */
     --espresso:     #3B2A1D;
     --espresso-2:   #2A1D13;
+    --text:         var(--espresso);
     --text-dim:     #7C6650;
     --panel:        #FFFFFF;
     --panel-line:   #E7D6BC;
@@ -1229,7 +1233,7 @@ body.admin-mode .announcement-admin{display:block}
 .menu-item.is-unavailable{opacity:.62}
 .menu-item-status{display:inline-flex;align-items:center;margin-left:8px;padding:3px 7px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;vertical-align:middle}
 .menu-item-status.sold-out{background:rgba(227,161,92,0.18);color:var(--caramel-deep)}
-.menu-item-status.not-available{background:rgba(217,110,94,0.18);color:#E39C8F}
+.menu-item-status.not-available{background:rgba(217,110,94,0.18);color:#D96E5E}
 .menu-item-status.coming-soon{background:rgba(143,179,122,0.18);color:var(--moss)}
 .menu-item-price.is-status{font-size:11px;letter-spacing:.06em;text-transform:uppercase}
 .admin-status-select{width:100%;max-width:170px;margin-top:7px;padding:7px 8px;border:1px solid var(--line,#ccc);background:#fff;font:inherit}
