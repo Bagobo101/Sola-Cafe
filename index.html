@@ -206,6 +206,12 @@
   }
   .nav-links a:hover{ color: var(--caramel-deep); }
 
+  .nav-actions{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+  }
+
   .theme-toggle-btn{
     width: 34px; height: 34px; border-radius: 50%;
     border: 1px solid var(--panel-line); background: var(--panel);
@@ -231,10 +237,10 @@
   .status-dot{
     width:7px; height:7px;
     border-radius:50%;
-    background: var(--caramel);
-    box-shadow: 0 0 8px 1px rgba(190,106,52,0.7);
+    background: var(--moss);
+    box-shadow: 0 0 8px 1px rgba(143,179,122,0.6);
   }
-  .status-dot.closed{ background: var(--moss); box-shadow:none; }
+  .status-dot.closed{ background: var(--text-dim); box-shadow:none; }
 
   .nav-toggle{
     display:none;
@@ -262,6 +268,11 @@
   .nav-mobile-panel{ display:none; }
 
   @media (max-width: 760px){
+    .nav{ padding: 14px 20px; }
+    .nav-actions{ gap: 8px; }
+    .logo{ font-size: 18px; gap: 7px; }
+    .theme-toggle-btn{ width: 32px; height: 32px; font-size: 14px; }
+    .nav-toggle{ width: 36px; height: 32px; }
     .nav-links{ display:none; }
     .nav-toggle{ display:flex; }
     .nav-mobile-panel{
@@ -289,6 +300,19 @@
       border-bottom: 1px solid var(--panel-line);
     }
     .nav-mobile-panel li:last-child a{ border-bottom: none; }
+  }
+
+  /* Below ~400px, logo + theme toggle + status pill + hamburger no longer
+     fit comfortably with the pill's text — shrink the pill to just its dot. */
+  @media (max-width: 400px){
+    .status-pill{ padding: 8px; }
+    .status-pill .status-text{
+      position: absolute;
+      width: 1px; height: 1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+    }
   }
 
   /* ---------- Hero ---------- */
@@ -434,6 +458,11 @@
     color: var(--espresso);
     font-weight: 600;
   }
+  @media (max-width: 420px){
+    .timeline-card{ padding: 20px 18px 18px; }
+    .timeline-title{ font-size: 11.5px; }
+    .timeline-labels{ font-size: 10px; }
+  }
 
   /* ---------- Section shell ---------- */
   section{
@@ -484,23 +513,51 @@
     color: var(--text-dim);
     margin-bottom: 18px;
   }
+  /* Show more / peek expand — collapsed groups show a short peek of the
+     next item, faded out by a gradient mask instead of being hard-cut.
+     max-height is set to an exact pixel value in JS (not a big flat
+     number) so expanding and collapsing animate the same distance,
+     at the same speed, in both directions. */
+  .menu-group-extra{
+    --peek-height: 68px;
+    --mask-height: 56px;
+    position: relative;
+    max-height: var(--peek-height);
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .menu-group-extra::after{
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: var(--mask-height);
+    background: linear-gradient(to bottom, transparent, var(--panel) 78%);
+    pointer-events: none;
+  }
+  .menu-group-extra.expanded::after{ opacity: 0; }
   .show-more-btn{
-    display:block;
-    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
     margin-top: 12px;
-    padding: 10px;
+    padding: 8px;
+    border: none;
     border-radius: 8px;
-    border: 1px dashed var(--panel-line);
     background: transparent;
     color: var(--caramel-deep);
     font: inherit;
     font-size: 13px;
     font-weight: 600;
-    cursor: pointer;
     text-align: center;
-    transition: border-color 0.18s ease, background 0.18s ease;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: color 0.18s ease, opacity 0.18s ease;
   }
-  .show-more-btn:hover{ border-color: var(--caramel); background: var(--cream-deep); }
+  .show-more-btn:hover{ opacity: 1; color: var(--caramel); }
+  .show-more-chevron{ display: inline-block; transition: transform 0.3s ease; }
+  .show-more-chevron.open{ transform: rotate(180deg); }
   .menu-item{
     display:flex;
     justify-content: space-between;
@@ -627,6 +684,51 @@
     margin-top: 4px;
   }
 
+  @media (max-width: 640px){
+    .admin-toolbar{ flex-direction: column; align-items: stretch; }
+    .admin-toolbar-label{ margin-right: 0; margin-bottom: 2px; }
+    .admin-toolbar-btn{
+      width: 100%;
+      padding: 12px 14px;
+      text-align: center;
+    }
+  }
+
+  /* Floating "Jump to menu" button — mobile only, appears once the hero
+     has scrolled out of view and hides again once the real menu is on
+     screen (no point floating a shortcut to a place you're already at). */
+  .sticky-menu-btn{
+    display: none;
+    position: fixed;
+    z-index: 30;
+    right: 18px;
+    bottom: 18px;
+    align-items: center;
+    gap: 7px;
+    padding: 13px 20px;
+    border-radius: 999px;
+    background: var(--caramel);
+    color: #FFF6E9;
+    text-decoration: none;
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 10px 26px -8px rgba(0,0,0,0.45);
+    opacity: 0;
+    transform: translateY(14px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease, background 0.18s ease;
+  }
+  .sticky-menu-btn:hover{ background: var(--caramel-btn-hover); }
+  .sticky-menu-btn.is-visible{
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  @media (max-width: 760px){
+    .sticky-menu-btn{ display: inline-flex; }
+  }
+
   body.admin-mode .menu-group{
     border: 1px solid var(--caramel);
     padding: 20px 20px 16px;
@@ -674,6 +776,9 @@
     flex-shrink: 0;
   }
   .admin-del-btn:hover{ border-color: #A4432F; color: #A4432F; }
+  @media (max-width: 600px){
+    .admin-del-btn{ width: 40px; height: 40px; font-size: 18px; }
+  }
   .admin-add-btn, .admin-del-group-btn{
     font-family: 'IBM Plex Mono', monospace;
     font-size: 12px;
@@ -922,7 +1027,7 @@
   @media print{
     header, .beans, .hero, .announcement-wrap, #gallery, #about, #visit, footer,
     .admin-toolbar, .smart-menu-tools, .dashboard-overlay, .print-menu-btn,
-    .admin-add-btn, .admin-del-group-btn, .status-pill { display:none !important; }
+    .admin-add-btn, .admin-del-group-btn, .status-pill, .sticky-menu-btn { display:none !important; }
     body{ background:#fff !important; color:#111 !important; }
     #menu{ padding-top:0 !important; }
     .menu-item-name, h1, h2, h3 { color:#111 !important; }
@@ -1132,7 +1237,7 @@ body.admin-mode .announcement-admin{display:block}
 @media(max-width:700px){
   .announcement-wrap{padding:0 16px}
   .announcement-card{grid-template-columns:auto 1fr}
-  .announcement-dismiss{grid-column:3;grid-row:1}
+  .announcement-dismiss{grid-column:3;grid-row:1;padding:10px;margin:-10px;font-size:18px}
   .announcement-admin-grid{grid-template-columns:1fr}
   .announcement-admin-grid .full{grid-column:auto}
 }
@@ -1243,11 +1348,11 @@ body.admin-mode .smart-menu-tools{display:none}
       <li><a href="#gallery">Gallery</a></li>
       <li><a href="#visit">Visit</a></li>
     </ul>
-    <div style="display:flex; align-items:center; gap:12px;">
+    <div class="nav-actions">
       <button type="button" id="themeToggle" class="theme-toggle-btn" aria-label="Switch to light mode" title="Switch theme">🌙</button>
       <div class="status-pill">
         <span class="status-dot" id="statusDot" aria-hidden="true"></span>
-        <span id="statusText">Checking hours…</span>
+        <span id="statusText" class="status-text">Checking hours…</span>
       </div>
       <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -1263,6 +1368,10 @@ body.admin-mode .smart-menu-tools{display:none}
     </ul>
   </div>
 </header>
+
+<a href="#menu" id="stickyMenuBtn" class="sticky-menu-btn" aria-label="Jump to the menu">
+  <span aria-hidden="true">☕</span> Menu
+</a>
 
 <main id="top">
   <section class="hero wrap" style="border-top:none; padding-top:96px;">
@@ -1703,6 +1812,33 @@ body.admin-mode .smart-menu-tools{display:none}
 
   updateTimeline();
   setInterval(updateTimeline, 60000);
+
+  // Sticky "Menu" shortcut (mobile only): show once the hero has scrolled
+  // out of view, hide again once the real #menu section is on screen.
+  (function initStickyMenuButton(){
+    const btn = document.getElementById('stickyMenuBtn');
+    const heroEl = document.querySelector('.hero');
+    const menuEl = document.getElementById('menu');
+    if (!btn || !heroEl || !menuEl) return;
+
+    let heroVisible = true;
+    let menuVisible = false;
+
+    const applyVisibility = () => {
+      btn.classList.toggle('is-visible', !heroVisible && !menuVisible);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.target === heroEl) heroVisible = entry.isIntersecting;
+        if (entry.target === menuEl) menuVisible = entry.isIntersecting;
+      });
+      applyVisibility();
+    }, { rootMargin: '-64px 0px 0px 0px', threshold: 0 });
+
+    observer.observe(heroEl);
+    observer.observe(menuEl);
+  })();
 
   // =====================================================================
   // MENU DATA + ADMIN EDITING
@@ -2156,8 +2292,56 @@ body.admin-mode .smart-menu-tools{display:none}
   }
 
   let smartFilters = { search:'', category:'All', budget:0, student:false };
-  const SHOW_MORE_THRESHOLD = 6;
+  const SHOW_MORE_THRESHOLD = 5;
+  // Keep this in sync with the --peek-height value on .menu-group-extra in the CSS.
+  const PEEK_HEIGHT_PX = 68;
   let expandedGroups = new Set();
+
+  /**
+   * Builds the "Show N more / Show less" toggle button for a menu group
+   * whose item list is longer than SHOW_MORE_THRESHOLD.
+   *
+   * Expanding and collapsing both animate max-height across the exact
+   * same pixel range (peek height <-> real content height), so the two
+   * directions move at the same speed instead of one snapping instantly.
+   */
+  function createShowMoreToggle(group, extraWrap, remaining, startExpanded){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'show-more-btn';
+
+    const setLabel = (expanded) => {
+      btn.innerHTML =
+        '<span class="show-more-label">' + (expanded ? 'Show less' : 'Show ' + remaining + ' more') + '</span>' +
+        '<span class="show-more-chevron' + (expanded ? ' open' : '') + '">▾</span>';
+    };
+    setLabel(startExpanded);
+
+    btn.addEventListener('click', () => {
+      const expanded = !extraWrap.classList.contains('expanded');
+      extraWrap.classList.toggle('expanded', expanded);
+      extraWrap.style.maxHeight = (expanded ? extraWrap.scrollHeight : PEEK_HEIGHT_PX) + 'px';
+      setLabel(expanded);
+      if (expanded) expandedGroups.add(group.title);
+      else expandedGroups.delete(group.title);
+    });
+
+    return btn;
+  }
+
+  /**
+   * Groups that were left expanded before a re-render (e.g. after an
+   * admin edit) need their real height applied immediately, with no
+   * transition — otherwise they'd visibly re-animate open on every render.
+   */
+  function syncExpandedGroupHeights(container){
+    container.querySelectorAll('.menu-group-extra.expanded').forEach(el => {
+      el.style.transition = 'none';
+      el.style.maxHeight = el.scrollHeight + 'px';
+      void el.offsetHeight; // force a reflow so the transition removal takes effect
+      el.style.transition = '';
+    });
+  }
 
   function getCategories(){
     return ['All', ...Array.from(new Set(menuData.map(g => g.category || g.title).filter(Boolean)))];
@@ -2270,9 +2454,18 @@ body.admin-mode .smart-menu-tools{display:none}
       const itemsToRender = isAdmin ? group.items : visibleItems;
       const topPopularKeys = isAdmin ? [] : getTopPopularKeys(3);
       const isExpanded = expandedGroups.has(group.title);
-      const shouldTruncate = !isAdmin && itemsToRender.length > SHOW_MORE_THRESHOLD && !isExpanded;
-      const renderedItems = shouldTruncate ? itemsToRender.slice(0, SHOW_MORE_THRESHOLD) : itemsToRender;
-      renderedItems.forEach((item) => {
+      const hasExtra = !isAdmin && itemsToRender.length > SHOW_MORE_THRESHOLD;
+
+      let extraInner = null;
+      let extraWrap = null;
+      if (hasExtra){
+        extraWrap = document.createElement('div');
+        extraWrap.className = 'menu-group-extra' + (isExpanded ? ' expanded' : '');
+        extraInner = document.createElement('div');
+        extraWrap.appendChild(extraInner);
+      }
+
+      itemsToRender.forEach((item, idx) => {
         const ii = group.items.indexOf(item);
         const meta = getStatusMeta(item.status);
         const itemEl = document.createElement('div');
@@ -2333,24 +2526,16 @@ body.admin-mode .smart-menu-tools{display:none}
             if (item.image) openItemPhotoModal(item);
           });
         }
-        groupEl.appendChild(itemEl);
+        const target = (hasExtra && idx >= SHOW_MORE_THRESHOLD) ? extraInner : groupEl;
+        target.appendChild(itemEl);
         visibleCount++;
       });
-      if (shouldTruncate) visibleCount += (itemsToRender.length - renderedItems.length);
 
-      if (!isAdmin && itemsToRender.length > SHOW_MORE_THRESHOLD){
+      if (hasExtra){
+        groupEl.appendChild(extraWrap);
         const remaining = itemsToRender.length - SHOW_MORE_THRESHOLD;
-        const toggleBtn = document.createElement('button');
-        toggleBtn.type = 'button';
-        toggleBtn.className = 'show-more-btn';
-        toggleBtn.textContent = isExpanded ? 'Show less ↑' : 'Show ' + remaining + ' more ↓';
-        toggleBtn.addEventListener('click', () => {
-          if (isExpanded) expandedGroups.delete(group.title); else expandedGroups.add(group.title);
-          renderMenu();
-        });
-        groupEl.appendChild(toggleBtn);
+        groupEl.appendChild(createShowMoreToggle(group, extraWrap, remaining, isExpanded));
       }
-
 
       if (isAdmin){
         const addItemBtn = document.createElement('button');
@@ -2378,6 +2563,8 @@ body.admin-mode .smart-menu-tools{display:none}
 
       container.appendChild(groupEl);
     });
+
+    syncExpandedGroupHeights(container);
 
     if (!isAdmin && !hasFilteredGroups){
       container.innerHTML = '<div class="smart-empty"><strong>No items found.</strong><br>Try another search, category, budget, or turn off Student Mode.</div>';
