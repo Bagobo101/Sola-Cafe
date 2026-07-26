@@ -416,6 +416,12 @@
     border-bottom: 1px dashed var(--panel-line);
   }
   .menu-item:last-child{ border-bottom: none; }
+  .menu-item-thumb{
+    width: 52px; height: 52px; border-radius: 10px; object-fit: cover;
+    flex-shrink: 0; box-shadow: var(--panel-shadow);
+  }
+  .menu-item.has-photo{ cursor: zoom-in; border-radius: 8px; }
+  .menu-item.has-photo:hover{ background: rgba(227,161,92,0.06); }
   .menu-item-name{
     font-size: 15px;
     font-weight: 500;
@@ -1316,6 +1322,14 @@ body.admin-mode .smart-menu-tools{display:none}
     </div>
 
     <div class="menu-groups" id="menuGroups"></div>
+
+    <div class="gallery-lightbox" id="itemPhotoModal" role="dialog" aria-modal="true" aria-label="Item photo">
+      <div class="gallery-lightbox-figure">
+        <button type="button" class="gallery-lightbox-close" id="itemPhotoModalClose" aria-label="Close photo viewer">×</button>
+        <img id="itemPhotoModalImg" src="" alt="">
+        <div class="gallery-lightbox-caption" id="itemPhotoModalCaption"></div>
+      </div>
+    </div>
   </section>
 
   <section id="about" class="wrap">
@@ -1325,7 +1339,7 @@ body.admin-mode .smart-menu-tools{display:none}
         <div class="stat-label">Hours open, every one of them before sundown</div>
         <div class="divider"></div>
         <div class="big-stat">2026</div>
-        <div class="stat-label">The year that God answered our payers</div>
+        <div class="stat-label">Year we swapped a cart for a storefront</div>
         <div class="divider"></div>
         <div class="big-stat">4</div>
         <div class="stat-label">House rules</div>
@@ -1497,12 +1511,36 @@ body.admin-mode .smart-menu-tools{display:none}
 
   // =====================================================================
   // MENU DATA + ADMIN EDITING
-  // Change ADMIN_PASSWORD below to whatever you want the admin password
-  // to be. This is a simple client-side lock — fine for keeping casual
-  // visitors out, but anyone who reads the page source can find it, so
-  // don't reuse a password you care about elsewhere.
+  // The admin password is stored below as a SHA-256 hash, not plain text,
+  // so it doesn't show up if someone views source or opens the console.
+  //
+  // To set your own password: open any browser console and run
+  //   crypto.subtle.digest('SHA-256', new TextEncoder().encode('yourpassword'))
+  //     .then(b => console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')))
+  // then paste the printed hash below.
+  //
+  // Heads up on what this actually protects: this is a static page with no
+  // server, so this lock only keeps casual visitors from poking around the
+  // editor UI on their own device — it can't stop someone determined from
+  // bypassing it via the console. The part that actually matters (publishing
+  // changes for every visitor) is protected separately by your GitHub
+  // personal access token, which is never stored in this file.
   // =====================================================================
-  const ADMIN_PASSWORD = "solacafe2026";
+  const ADMIN_PASSWORD_HASH = "bfcf1239532853bc6bef69a8dec5b38bb300c1b30726951ba4b2b0d88e24cb09";
+
+  async function hashText(text){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  const ADMIN_LOCKOUT_MS = 30000;
+  function getAdminAttempts(){
+    try{ return JSON.parse(sessionStorage.getItem('solaAdminAttempts') || '{"count":0,"until":0}'); }
+    catch(e){ return { count:0, until:0 }; }
+  }
+  function setAdminAttempts(state){
+    try{ sessionStorage.setItem('solaAdminAttempts', JSON.stringify(state)); }catch(e){}
+  }
 
   // MENU_DATA_START — this default array is what loads for every visitor
   // who hasn't made local admin edits. When you click "Download instead"
@@ -1510,12 +1548,12 @@ body.admin-mode .smart-menu-tools{display:none}
 
   // ANNOUNCEMENT_DATA_START — published together with menu/gallery/contact data.
   const DEFAULT_ANNOUNCEMENT = /*ANNOUNCEMENT_DATA_START*/{
-  "enabled": false,
-  "type": "general",
-  "title": "",
-  "message": "",
-  "expiresAt": ""
-}/*ANNOUNCEMENT_DATA_END*/;
+    "enabled": false,
+    "type": "general",
+    "title": "",
+    "message": "",
+    "expiresAt": ""
+  }/*ANNOUNCEMENT_DATA_END*/;
 
   const DEFAULT_MENU = /*MENU_DATA_START*/[
   {
@@ -1526,23 +1564,15 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Burger & Fries",
         "desc": "",
         "price": "₱49",
-        "studentPick": true,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3
+        "studentPick": true
       },
       {
         "name": "Street Food Platter",
         "desc": "Hotdog, kikiam, lumpiang shanghai, siomai, fries, fishball",
         "price": "₱85",
-        "bestseller": false,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "bestseller": false
       }
-    ],
-    "category": "Snack"
+    ]
   },
   {
     "title": "Rice Meal",
@@ -1552,41 +1582,26 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Siomai Rice",
         "desc": "",
         "price": "₱35",
-        "studentPick": true,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3
+        "studentPick": true
       },
       {
         "name": "Chicken Pastil",
         "desc": "",
         "price": "₱29",
         "bestseller": false,
-        "studentPick": true,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3
+        "studentPick": true
       },
       {
         "name": "Gyoza w/ Rice",
         "desc": "",
-        "price": "₱39",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱39"
       },
       {
         "name": "Chicken Poppers",
         "desc": "",
-        "price": "₱39",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱39"
       }
-    ],
-    "category": "Rice Meal"
+    ]
   },
   {
     "title": "Breakfast Meal",
@@ -1596,41 +1611,25 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Cornsilog",
         "desc": "",
         "price": "₱39",
-        "bestseller": false,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "bestseller": false
       },
       {
         "name": "Hotsilog",
         "desc": "",
-        "price": "₱39",
-        "status": "available",
-        "stock": 5,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱39"
       },
       {
         "name": "Cantonsilog",
         "desc": "",
-        "price": "₱35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱35"
       },
       {
         "name": "Batchoy",
         "desc": "Special / Ordinary",
         "price": "₱25 / ₱15",
-        "studentPick": true,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3
+        "studentPick": true
       }
-    ],
-    "category": "Breakfast Meal"
+    ]
   },
   {
     "title": "Iced Coffee",
@@ -1640,70 +1639,42 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Caramel Macchiato",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": false,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "bestseller": false
       },
       {
         "name": "Spanish Latte",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": true,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "bestseller": true
       },
       {
         "name": "Mocha",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Americano",
         "desc": "",
         "price": "₱25 / ₱35",
-        "studentPick": false,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3
+        "studentPick": true
       },
       {
         "name": "Strawberry Iced Latte",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": true,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": true
+        "bestseller": true
       },
       {
         "name": "Dirty Matcha",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Oreo Coffee Latte",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱25 / ₱35"
       }
-    ],
-    "category": "Iced Coffee"
+    ]
   },
   {
     "title": "Fruit Soda",
@@ -1712,68 +1683,40 @@ body.admin-mode .smart-menu-tools{display:none}
       {
         "name": "Strawberry",
         "desc": "",
-        "price": "₱19 / ₱29",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱19 / ₱29"
       },
       {
         "name": "Blueberry",
         "desc": "",
-        "price": "₱19 / ₱29",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱19 / ₱29"
       },
       {
         "name": "Lemonade",
         "desc": "",
         "price": "₱19 / ₱29",
-        "studentPick": true,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3
+        "studentPick": true
       },
       {
         "name": "Lychee",
         "desc": "",
-        "price": "₱19 / ₱29",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱19 / ₱29"
       },
       {
         "name": "Green Apple",
         "desc": "",
-        "price": "₱25 / ₱39",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱25 / ₱39"
       },
       {
         "name": "Lychee Blueberry",
         "desc": "",
-        "price": "₱25 / ₱39",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱25 / ₱39"
       },
       {
         "name": "Blueberry Dirty",
         "desc": "",
-        "price": "₱25 / ₱39",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱25 / ₱39"
       }
-    ],
-    "category": "Fruit Soda"
+    ]
   },
   {
     "title": "Non-Coffee",
@@ -1782,42 +1725,26 @@ body.admin-mode .smart-menu-tools{display:none}
       {
         "name": "Dark Chocolate",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Choco Berry",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Oreo Cream Latte",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Milo Dinosaur",
         "desc": "",
         "price": "₱25 / ₱35",
         "bestseller": true,
-        "studentPick": true,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3
+        "studentPick": true
       }
-    ],
-    "category": "Non-Coffee"
+    ]
   }
 ]/*MENU_DATA_END*/;
 
@@ -1862,7 +1789,8 @@ body.admin-mode .smart-menu-tools{display:none}
         status: ['available','sold-out','not-available','coming-soon'].includes(item.status) ? item.status : 'available',
         stock: Number.isFinite(Number(item.stock)) ? Math.max(0, Number(item.stock)) : null,
         lowStockAt: Number.isFinite(Number(item.lowStockAt)) ? Math.max(0, Number(item.lowStockAt)) : 3,
-        studentPick: !!item.studentPick
+        studentPick: !!item.studentPick,
+        image: item.image || null
       })) : []
     }));
   }
@@ -1969,6 +1897,7 @@ body.admin-mode .smart-menu-tools{display:none}
   }
 
   let menuData = normalizeMenuData(loadMenu());
+  menuData.forEach(group => group.items.forEach(item => syncInventoryStatus(item)));
   let announcementData = loadAnnouncement();
   let galleryData = loadGallery();
   let contactData = loadContact();
@@ -1988,7 +1917,6 @@ body.admin-mode .smart-menu-tools{display:none}
   function getAllMenuItems(){
     const result = [];
     menuData.forEach((group, gi) => group.items.forEach((item, ii) => {
-      syncInventoryStatus(item);
       result.push({ item, group, gi, ii });
     }));
     return result;
@@ -2113,7 +2041,6 @@ body.admin-mode .smart-menu-tools{display:none}
       const topPopularKeys = isAdmin ? [] : getTopPopularKeys(3);
       itemsToRender.forEach((item) => {
         const ii = group.items.indexOf(item);
-        syncInventoryStatus(item);
         const meta = getStatusMeta(item.status);
         const itemEl = document.createElement('div');
         itemEl.className = 'menu-item' + (item.status !== 'available' ? ' is-unavailable' : '');
@@ -2136,6 +2063,17 @@ body.admin-mode .smart-menu-tools{display:none}
               '<input type="number" min="0" class="admin-input stock-input" value="'+(item.stock===null?'':item.stock)+'" placeholder="e.g. 12" data-gi="'+gi+'" data-ii="'+ii+'">' +
               '<label class="admin-status-label">Low stock alert at</label>' +
               '<input type="number" min="0" class="admin-input low-stock-input" value="'+(item.lowStockAt ?? 3)+'" data-gi="'+gi+'" data-ii="'+ii+'">' +
+              '<label class="admin-status-label">Photo (optional)</label>' +
+              '<div style="display:flex; align-items:center; gap:8px; margin-top:4px; flex-wrap:wrap;">' +
+                (item.image ? '<img class="menu-item-thumb" src="'+escapeAttr(item.image)+'" alt="">' : '') +
+                '<label class="gallery-upload-btn">' +
+                  (item.image ? 'Replace photo' : 'Upload from device') +
+                  '<input type="file" accept="image/*" class="item-photo-file-input" data-gi="'+gi+'" data-ii="'+ii+'" hidden>' +
+                '</label>' +
+                (item.image ? '<button type="button" class="admin-toolbar-btn item-photo-remove-btn" data-gi="'+gi+'" data-ii="'+ii+'">Remove photo</button>' : '') +
+              '</div>' +
+              '<div class="gallery-upload-status item-photo-upload-status" data-gi="'+gi+'" data-ii="'+ii+'"></div>' +
+              '<input type="text" class="admin-input item-photo-url-input" value="'+escapeAttr(item.image||'')+'" placeholder="...or paste an image URL" data-gi="'+gi+'" data-ii="'+ii+'">' +
             '</div>' +
             '<input type="text" class="admin-input price-input" value="'+escapeAttr(item.price)+'" placeholder="₱0" data-gi="'+gi+'" data-ii="'+ii+'" data-field="price">' +
             '<button type="button" class="admin-del-btn" data-gi="'+gi+'" data-ii="'+ii+'" title="Remove item" aria-label="Remove '+escapeAttr(item.name)+'">×</button>';
@@ -2148,17 +2086,24 @@ body.admin-mode .smart-menu-tools{display:none}
             ? '<span class="low-stock-badge">Only '+item.stock+' left</span>' : '';
           const statusBadge = item.status !== 'available' ? '<span class="menu-item-status '+meta.cls+'">'+meta.short+'</span>' : '';
           const price = item.status === 'available' ? escapeHtml(item.price) : '<span class="menu-item-price is-status">'+meta.short+'</span>';
+          const thumb = item.image ? '<img class="menu-item-thumb" src="'+escapeAttr(item.image)+'" alt="">' : '';
           itemEl.dataset.itemKey = itemKey;
+          if (item.image) itemEl.classList.add('has-photo');
           itemEl.innerHTML =
+            thumb +
             '<div><div class="menu-item-name-row"><span class="menu-item-name">'+escapeHtml(item.name)+'</span>'+badge+studentBadge+popularBadge+statusBadge+stockBadge+'</div>' +
             (item.desc ? '<div class="menu-item-desc">'+escapeHtml(item.desc)+'</div>' : '') +
             (item.status === 'available' && item.stock !== null && item.stock > 0 && item.stock <= item.lowStockAt ? '<div class="menu-item-stock">Limited stock available</div>' : '') +
             '</div><div class="menu-item-price">'+price+'</div>';
-          itemEl.addEventListener('click', () => bumpPopularity(itemKey));
+          itemEl.addEventListener('click', () => {
+            bumpPopularity(itemKey);
+            if (item.image) openItemPhotoModal(item);
+          });
         }
         groupEl.appendChild(itemEl);
         visibleCount++;
       });
+
 
       if (isAdmin){
         const addItemBtn = document.createElement('button');
@@ -2220,6 +2165,33 @@ body.admin-mode .smart-menu-tools{display:none}
       container.querySelectorAll('.low-stock-input').forEach(el => el.addEventListener('change', () => {
         const item=menuData[+el.dataset.gi].items[+el.dataset.ii];
         item.lowStockAt = Math.max(0, Number(el.value)||0); saveMenuLocal(); renderMenu();
+      }));
+      container.querySelectorAll('.item-photo-file-input').forEach(el => el.addEventListener('change', async () => {
+        const gi = +el.dataset.gi, ii = +el.dataset.ii;
+        const file = el.files && el.files[0];
+        if (!file) return;
+        const statusEl = container.querySelector('.item-photo-upload-status[data-gi="'+gi+'"][data-ii="'+ii+'"]');
+        if (statusEl) statusEl.textContent = 'Processing…';
+        try{
+          const dataUrl = await resizeImageFile(file, 1000, 0.75);
+          menuData[gi].items[ii].image = dataUrl;
+          saveMenuLocal();
+          renderMenu();
+        }catch(err){
+          if (statusEl) statusEl.textContent = '';
+          alert('Could not read that photo. Try a different file (JPEG or PNG works best).');
+        }
+      }));
+      container.querySelectorAll('.item-photo-url-input').forEach(el => {
+        el.addEventListener('input', () => {
+          menuData[+el.dataset.gi].items[+el.dataset.ii].image = el.value || null;
+        });
+        el.addEventListener('blur', () => { saveMenuLocal(); renderMenu(); });
+      });
+      container.querySelectorAll('.item-photo-remove-btn').forEach(el => el.addEventListener('click', () => {
+        menuData[+el.dataset.gi].items[+el.dataset.ii].image = null;
+        saveMenuLocal();
+        renderMenu();
       }));
       container.querySelectorAll('.admin-del-btn').forEach(el => el.addEventListener('click', () => {
         const gi=+el.dataset.gi, ii=+el.dataset.ii;
@@ -2381,6 +2353,35 @@ body.admin-mode .smart-menu-tools{display:none}
     if (e.key === 'ArrowRight') lightboxNav(1);
   });
 
+  // ---------- Item Photo Quick View ----------
+  function openItemPhotoModal(item){
+    const modal = document.getElementById('itemPhotoModal');
+    const img = document.getElementById('itemPhotoModalImg');
+    const cap = document.getElementById('itemPhotoModalCaption');
+    img.src = item.image;
+    img.alt = item.name || '';
+    cap.innerHTML = '<strong>'+escapeHtml(item.name||'')+'</strong>' +
+      (item.price ? ' — '+escapeHtml(item.price) : '') +
+      (item.desc ? '<br>'+escapeHtml(item.desc) : '');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => requestAnimationFrame(() => modal.classList.add('open')));
+  }
+  function closeItemPhotoModal(){
+    const modal = document.getElementById('itemPhotoModal');
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(() => { modal.style.display = 'none'; }, LIGHTBOX_CLOSE_MS);
+  }
+  document.getElementById('itemPhotoModalClose').addEventListener('click', closeItemPhotoModal);
+  document.getElementById('itemPhotoModal').addEventListener('click', e => {
+    if (e.target.id === 'itemPhotoModal') closeItemPhotoModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('itemPhotoModal').classList.contains('open')) return;
+    if (e.key === 'Escape') closeItemPhotoModal();
+  });
+
   // Reads an image file from disk, downsizes it so it stays a reasonable
   // size to store and publish, and returns a compressed JPEG data URL.
   function resizeImageFile(file, maxDim, quality){
@@ -2495,7 +2496,6 @@ body.admin-mode .smart-menu-tools{display:none}
     const all = getAllMenuItems();
     const counts = {available:0, low:0, 'sold-out':0, 'not-available':0, 'coming-soon':0};
     all.forEach(({item}) => {
-      syncInventoryStatus(item);
       if (item.status === 'available') counts.available++;
       else if (item.status === 'sold-out') counts['sold-out']++;
       else if (item.status === 'not-available') counts['not-available']++;
@@ -2648,17 +2648,28 @@ body.admin-mode .smart-menu-tools{display:none}
     renderContactAdminFields();
   }
 
-  document.getElementById('adminToggle').addEventListener('click', () => {
+  document.getElementById('adminToggle').addEventListener('click', async () => {
     if (isAdmin){
       setAdminMode(false);
+      return;
+    }
+    const attempts = getAdminAttempts();
+    if (attempts.until > Date.now()){
+      const wait = Math.ceil((attempts.until - Date.now()) / 1000);
+      alert('Too many incorrect attempts. Try again in ' + wait + 's.');
+      return;
+    }
+    const pw = prompt('Enter admin password:');
+    if (pw === null) return;
+    const enteredHash = await hashText(pw);
+    if (enteredHash === ADMIN_PASSWORD_HASH){
+      setAdminAttempts({ count:0, until:0 });
+      setAdminMode(true);
     } else {
-      const pw = prompt('Enter admin password:');
-      if (pw === null) return;
-      if (pw === ADMIN_PASSWORD){
-        setAdminMode(true);
-      } else {
-        alert('Incorrect password.');
-      }
+      const count = attempts.count + 1;
+      const until = count >= 5 ? Date.now() + ADMIN_LOCKOUT_MS : 0;
+      setAdminAttempts({ count, until });
+      alert(until ? 'Incorrect password. Too many attempts — locked for 30s.' : 'Incorrect password.');
     }
   });
 
