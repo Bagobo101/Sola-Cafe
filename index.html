@@ -6,6 +6,8 @@
 <title>Sola Café — Coffee for the early risers</title>
 <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Bagobo101/Sola-Café/main/logo-removebg-preview.png">
 <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Bagobo101/Sola-Café/main/logo-removebg-preview.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#E3A15C">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;0,9..144,700;1,9..144,450;1,9..144,600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -28,6 +30,69 @@
     --cream-shadow: rgba(0,0,0,0.55);
     --panel-shadow: 0 16px 36px -16px rgba(0,0,0,0.65), 0 0 0 1px rgba(227,161,92,0.05), 0 1px 0 rgba(244,231,211,0.04) inset;
     --focus:        #E3A15C;
+    --header-bg:    rgba(21,16,11,0.85);
+  }
+
+  /* ---- Light theme (personal toggle, saved per visitor) ---- */
+  body.theme-light{
+    --cream:        #FBF3E7;
+    --cream-deep:   #F1E1C7;
+    --bg-deep:      #EFDFC5;
+    --espresso:     #3B2A1D;
+    --espresso-2:   #2A1D13;
+    --text-dim:     #7C6650;
+    --panel:        #FFFFFF;
+    --panel-line:   #E7D6BC;
+    --caramel:      #C97D3A;
+    --caramel-deep: #A8611F;
+    --caramel-btn-hover: #8F5119;
+    --moss:         #4C7A3B;
+    --cream-shadow: rgba(60,40,20,0.14);
+    --panel-shadow: 0 16px 36px -16px rgba(60,40,20,0.16), 0 0 0 1px rgba(201,125,58,0.08), 0 1px 0 rgba(255,255,255,0.7) inset;
+    --focus:        #A8611F;
+    --header-bg:    rgba(251,243,231,0.88);
+  }
+
+  /* ---- Seasonal skins (site-wide, set by admin, published for everyone) ---- */
+  body.skin-rainy{
+    --caramel:      #5B9AA8;
+    --caramel-deep: #7EC1CF;
+    --caramel-btn-hover: #3F7B88;
+    --moss:         #6FA3B0;
+    --focus:        #5B9AA8;
+  }
+  body.theme-light.skin-rainy{
+    --caramel:      #2E6E7C;
+    --caramel-deep: #1F5763;
+    --caramel-btn-hover: #17454F;
+    --focus:        #2E6E7C;
+  }
+  body.skin-christmas{
+    --caramel:      #D9605A;
+    --caramel-deep: #F08A85;
+    --caramel-btn-hover: #B84944;
+    --moss:         #6FA86B;
+    --focus:        #D9605A;
+  }
+  body.theme-light.skin-christmas{
+    --caramel:      #B23A34;
+    --caramel-deep: #8E2C27;
+    --caramel-btn-hover: #74221E;
+    --moss:         #3E7A38;
+    --focus:        #B23A34;
+  }
+  body.skin-summer{
+    --caramel:      #E8A93C;
+    --caramel-deep: #F5C568;
+    --caramel-btn-hover: #C98A22;
+    --moss:         #8FB37A;
+    --focus:        #E8A93C;
+  }
+  body.theme-light.skin-summer{
+    --caramel:      #D68A15;
+    --caramel-deep: #B06E0E;
+    --caramel-btn-hover: #8F5A0B;
+    --focus:        #D68A15;
   }
 
   *{ box-sizing: border-box; margin:0; padding:0; }
@@ -39,6 +104,7 @@
     font-family: 'Public Sans', sans-serif;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    transition: background 0.25s ease, color 0.25s ease;
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -99,9 +165,10 @@
     position: sticky;
     top: 0;
     z-index: 20;
-    background: rgba(21,16,11,0.85);
+    background: var(--header-bg);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--panel-line);
+    transition: background 0.25s ease, border-color 0.25s ease;
   }
   .nav{
     display:flex;
@@ -138,6 +205,15 @@
     transition: color 0.2s ease;
   }
   .nav-links a:hover{ color: var(--caramel-deep); }
+
+  .theme-toggle-btn{
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid var(--panel-line); background: var(--panel);
+    color: var(--caramel-deep); font-size: 15px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.18s ease, transform 0.2s ease, background 0.2s ease;
+  }
+  .theme-toggle-btn:hover{ border-color: var(--caramel); transform: rotate(15deg); }
 
   .status-pill{
     font-family:'IBM Plex Mono', monospace;
@@ -921,6 +997,33 @@
   .hours-row span:first-child{ color: var(--espresso); }
   .hours-row span:last-child{ color: var(--text-dim); font-family:'IBM Plex Mono', monospace; font-size: 13px;}
 
+  .weather-chip{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px;
+    color: var(--caramel-deep);
+    background: var(--cream-deep);
+    border: 1px solid var(--panel-line);
+    border-radius: 999px;
+    padding: 5px 11px;
+    margin-bottom: 12px;
+  }
+  .visit-map{
+    width: 100%;
+    height: 180px;
+    border: 1px solid var(--panel-line);
+    border-radius: 10px;
+    margin-top: 16px;
+    filter: saturate(0.7) brightness(0.9);
+  }
+  body.theme-light .visit-map{ filter: none; }
+  .payment-display{ display:flex; flex-direction:column; gap:14px; }
+  .payment-method{ display:flex; align-items:center; gap:12px; }
+  .payment-qr{ width:76px; height:76px; border-radius:8px; object-fit:cover; border:1px solid var(--panel-line); flex-shrink:0; }
+  .payment-method-name{ font-weight:600; font-size:14px; }
+  .payment-method-number{ font-family:'IBM Plex Mono', monospace; font-size:12.5px; color: var(--text-dim); }
+  .payment-empty{ color: var(--text-dim); font-size: 13.5px; }
+  .site-qr-code{ border-radius: 10px; border: 1px solid var(--panel-line); background:#fff; padding:8px; }
+
   @media (max-width: 900px){
     .visit-grid{ grid-template-columns: 1fr; }
   }
@@ -946,6 +1049,10 @@
   .footer-row a:hover{ color: #F0B979; }
   .footer-row .admin-link{ color: #D9C4A4; }
   .footer-row .admin-link:hover{ color: #F0B979; }
+  .footer-social{ display:flex; gap:14px; align-items:center; }
+  .social-icon-link{ color:#D9C4A4; display:flex; }
+  .social-icon-link svg{ width:19px; height:19px; }
+  .social-icon-link:hover{ color:#F0B979; }
 
 /* ===== PHASE 2: ANNOUNCEMENTS + MENU AVAILABILITY ===== */
 .announcement-wrap{display:none;margin:0 auto 28px;max-width:1180px;padding:0 24px}
@@ -1099,6 +1206,7 @@ body.admin-mode .smart-menu-tools{display:none}
       <li><a href="#visit">Visit</a></li>
     </ul>
     <div style="display:flex; align-items:center; gap:12px;">
+      <button type="button" id="themeToggle" class="theme-toggle-btn" aria-label="Switch to light mode" title="Switch theme">🌙</button>
       <div class="status-pill">
         <span class="status-dot" id="statusDot" aria-hidden="true"></span>
         <span id="statusText">Checking hours…</span>
@@ -1398,6 +1506,7 @@ body.admin-mode .smart-menu-tools{display:none}
     <div class="visit-grid">
       <div class="visit-cell">
         <h3>HOURS</h3>
+        <div id="weatherChip" class="weather-chip" hidden><span id="weatherIcon">🌤️</span> <span id="weatherText"></span></div>
         <div class="hours-row"><span>Mon – Fri</span><span>6:00 AM – 6:00 PM</span></div>
         <div class="hours-row"><span>Sat – Sun</span><span>Closed</span></div>
         <div class="hours-row"><span>Kitchen closes</span><span>5:30 PM</span></div>
@@ -1419,16 +1528,51 @@ body.admin-mode .smart-menu-tools{display:none}
             Get directions
           </a>
         </div>
+        <iframe id="visitMapEmbed" class="visit-map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Map to Sola Café"></iframe>
         <div id="contactAdminEdit" class="contact-admin-edit">
           <label>Phone (shown on button)<input type="text" id="editPhoneDisplay" class="admin-input" placeholder="0917 000 0000"></label>
           <label>Phone (dial link, digits only, with country code)<input type="text" id="editPhoneDial" class="admin-input" placeholder="+639170000000"></label>
           <label>Messenger page ID or username<input type="text" id="editMessenger" class="admin-input" placeholder="61592274440938"></label>
-          <label>Maps search text<input type="text" id="editMapsQuery" class="admin-input" placeholder="Sola Café Natividad Pilar Capiz"></label>
+          <label>Maps search text (or "lat, lon" for map + weather)<input type="text" id="editMapsQuery" class="admin-input" placeholder="Sola Café Natividad Pilar Capiz"></label>
+          <label>Facebook page URL<input type="text" id="editFacebook" class="admin-input" placeholder="https://facebook.com/yourpage"></label>
+          <label>Instagram page URL<input type="text" id="editInstagram" class="admin-input" placeholder="https://instagram.com/yourpage"></label>
         </div>
       </div>
       <div class="visit-cell">
         <h3>GOOD TO KNOW</h3>
-        <p>Cash and GCash. Laptops welcome all day. Find us on Facebook <a href="https://web.facebook.com/profile.php?id=61592274440938" target="_blank" rel="noopener" class="social-link"><strong>@SolaCafé</strong></a> and Instagram <a href="https://www.instagram.com/_solacafe_/" target="_blank" rel="noopener" class="social-link"><strong>@_solaCafé_</strong></a>.</p>
+        <p>Cash and GCash. Laptops welcome all day. Find us on Facebook <a id="footerFacebookLink" href="https://web.facebook.com/profile.php?id=61592274440938" target="_blank" rel="noopener" class="social-link"><strong>@SolaCafé</strong></a> and Instagram <a id="footerInstagramLink" href="https://www.instagram.com/_solacafe_/" target="_blank" rel="noopener" class="social-link"><strong>@_solaCafé_</strong></a>.</p>
+      </div>
+      <div class="visit-cell" id="paymentCell">
+        <h3>PAY WITH GCASH / MAYA</h3>
+        <div id="paymentDisplay" class="payment-display"></div>
+        <div id="siteSettingsAdminEdit" class="contact-admin-edit">
+          <label class="admin-status-label">Seasonal skin (site-wide)</label>
+          <select id="editSkin" class="admin-status-select">
+            <option value="default">🟤 Default cozy</option>
+            <option value="rainy">🌧️ Rainy season</option>
+            <option value="christmas">🎄 Christmas</option>
+            <option value="summer">☀️ Summer</option>
+          </select>
+          <label>GCash name<input type="text" id="editGcashName" class="admin-input" placeholder="Juan Dela Cruz"></label>
+          <label>GCash number<input type="text" id="editGcashNumber" class="admin-input" placeholder="0917 000 0000"></label>
+          <div style="display:flex; align-items:center; gap:8px; margin-top:4px; flex-wrap:wrap;">
+            <label class="gallery-upload-btn">Upload GCash QR<input type="file" accept="image/*" id="gcashQrFileInput" hidden></label>
+            <button type="button" class="admin-toolbar-btn" id="gcashQrRemoveBtn">Remove QR</button>
+          </div>
+          <div class="gallery-upload-status" id="gcashQrUploadStatus"></div>
+          <label>Maya name<input type="text" id="editMayaName" class="admin-input" placeholder="Juan Dela Cruz"></label>
+          <label>Maya number<input type="text" id="editMayaNumber" class="admin-input" placeholder="0917 000 0000"></label>
+          <div style="display:flex; align-items:center; gap:8px; margin-top:4px; flex-wrap:wrap;">
+            <label class="gallery-upload-btn">Upload Maya QR<input type="file" accept="image/*" id="mayaQrFileInput" hidden></label>
+            <button type="button" class="admin-toolbar-btn" id="mayaQrRemoveBtn">Remove QR</button>
+          </div>
+          <div class="gallery-upload-status" id="mayaQrUploadStatus"></div>
+        </div>
+      </div>
+      <div class="visit-cell">
+        <h3>SCAN &amp; SHARE</h3>
+        <p style="margin-bottom:12px;">Point a phone camera here to open this menu.</p>
+        <img id="siteQrCode" class="site-qr-code" alt="QR code linking to this menu" width="160" height="160">
       </div>
     </div>
   </section>
@@ -1437,6 +1581,14 @@ body.admin-mode .smart-menu-tools{display:none}
 <footer>
   <div class="wrap footer-row">
     <div>© 2026 Sola Café</div>
+    <div class="footer-social" id="footerSocial">
+      <a id="socialFacebook" href="#" target="_blank" rel="noopener" class="social-icon-link" aria-label="Sola Café on Facebook" hidden>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.6h2.6l.4-3h-3v-1.9c0-.9.2-1.5 1.5-1.5h1.6V4.3C15.9 4.2 15 4.1 14 4.1c-2.2 0-3.7 1.3-3.7 3.8v2.1H7.7v3H10.3V21h3.2Z"/></svg>
+      </a>
+      <a id="socialInstagram" href="#" target="_blank" rel="noopener" class="social-icon-link" aria-label="Sola Café on Instagram" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.8" cy="7.2" r="0.9" fill="currentColor" stroke="none"/></svg>
+      </a>
+    </div>
     <div><a href="#menu">Menu</a> &nbsp;·&nbsp; <a href="#about">About</a> &nbsp;·&nbsp; <a href="#gallery">Gallery</a> &nbsp;·&nbsp; <a href="#visit">Visit</a> &nbsp;·&nbsp; <button type="button" id="adminToggle" class="admin-link">Admin</button></div>
   </div>
 </footer>
@@ -1775,8 +1927,21 @@ body.admin-mode .smart-menu-tools{display:none}
   "phoneDisplay": "09686477373",
   "phoneDial": "+639686477373",
   "messenger": "61592274440938",
-  "mapsQuery": "11.4835935, 123.0119436"
+  "mapsQuery": "11.4835935, 123.0119436",
+  "facebook": "",
+  "instagram": ""
 }/*CONTACT_DATA_END*/;
+
+  // SITE_SETTINGS_START — seasonal skin + payment info, site-wide (published for every visitor).
+  const DEFAULT_SITE_SETTINGS = /*SITE_SETTINGS_START*/{
+  "skin": "default",
+  "gcashName": "",
+  "gcashNumber": "",
+  "gcashQr": null,
+  "mayaName": "",
+  "mayaNumber": "",
+  "mayaQr": null
+}/*SITE_SETTINGS_END*/;
 
 
   function normalizeMenuData(data){
@@ -1849,13 +2014,32 @@ body.admin-mode .smart-menu-tools{display:none}
   function loadContact(){
     try{
       const saved = localStorage.getItem('solaContactData');
-      if (saved) return JSON.parse(saved);
+      if (saved) return { ...JSON.parse(JSON.stringify(DEFAULT_CONTACT)), ...JSON.parse(saved) };
     }catch(e){ /* ignore corrupt local data */ }
     return JSON.parse(JSON.stringify(DEFAULT_CONTACT));
   }
 
   function saveContactLocal(){
     try{ localStorage.setItem('solaContactData', JSON.stringify(contactData)); }catch(e){}
+  }
+
+  function loadSiteSettings(){
+    try{
+      const saved = localStorage.getItem('solaSiteSettings');
+      if (saved) return { ...JSON.parse(JSON.stringify(DEFAULT_SITE_SETTINGS)), ...JSON.parse(saved) };
+    }catch(e){ /* ignore corrupt local data */ }
+    return JSON.parse(JSON.stringify(DEFAULT_SITE_SETTINGS));
+  }
+
+  function saveSiteSettingsLocal(){
+    try{ localStorage.setItem('solaSiteSettings', JSON.stringify(siteSettings)); }catch(e){}
+  }
+
+  function applySkin(){
+    document.body.classList.remove('skin-rainy','skin-christmas','skin-summer');
+    if (siteSettings.skin && siteSettings.skin !== 'default'){
+      document.body.classList.add('skin-' + siteSettings.skin);
+    }
   }
 
   function getItemKey(group, item){
@@ -1901,6 +2085,7 @@ body.admin-mode .smart-menu-tools{display:none}
   let announcementData = loadAnnouncement();
   let galleryData = loadGallery();
   let contactData = loadContact();
+  let siteSettings = loadSiteSettings();
   let popularityData = loadPopularity();
   let isAdmin = sessionStorage.getItem('solaAdmin') === '1';
 
@@ -2418,6 +2603,20 @@ body.admin-mode .smart-menu-tools{display:none}
     callBtnLabel.textContent = 'Call us' + (contactData.phoneDisplay ? ' · ' + contactData.phoneDisplay : '');
     messengerBtn.href = 'https://m.me/' + encodeURIComponent(contactData.messenger || '');
     directionsBtn.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(contactData.mapsQuery || '');
+
+    const mapEmbed = document.getElementById('visitMapEmbed');
+    if (mapEmbed) mapEmbed.src = 'https://www.google.com/maps?q=' + encodeURIComponent(contactData.mapsQuery || '') + '&output=embed';
+
+    const fb = contactData.facebook || 'https://web.facebook.com/profile.php?id=61592274440938';
+    const ig = contactData.instagram || 'https://www.instagram.com/_solacafe_/';
+    ['footerFacebookLink','socialFacebook'].forEach(id => { const el = document.getElementById(id); if (el) el.href = fb; });
+    ['footerInstagramLink','socialInstagram'].forEach(id => { const el = document.getElementById(id); if (el) el.href = ig; });
+    const socialFb = document.getElementById('socialFacebook');
+    const socialIg = document.getElementById('socialInstagram');
+    if (socialFb) socialFb.hidden = false;
+    if (socialIg) socialIg.hidden = false;
+
+    fetchWeather();
   }
 
   function renderContactAdminFields(){
@@ -2425,15 +2624,154 @@ body.admin-mode .smart-menu-tools{display:none}
     document.getElementById('editPhoneDial').value = contactData.phoneDial || '';
     document.getElementById('editMessenger').value = contactData.messenger || '';
     document.getElementById('editMapsQuery').value = contactData.mapsQuery || '';
+    document.getElementById('editFacebook').value = contactData.facebook || '';
+    document.getElementById('editInstagram').value = contactData.instagram || '';
   }
 
-  ['editPhoneDisplay','editPhoneDial','editMessenger','editMapsQuery'].forEach(id => {
-    const fieldMap = { editPhoneDisplay:'phoneDisplay', editPhoneDial:'phoneDial', editMessenger:'messenger', editMapsQuery:'mapsQuery' };
+  ['editPhoneDisplay','editPhoneDial','editMessenger','editMapsQuery','editFacebook','editInstagram'].forEach(id => {
+    const fieldMap = { editPhoneDisplay:'phoneDisplay', editPhoneDial:'phoneDial', editMessenger:'messenger', editMapsQuery:'mapsQuery', editFacebook:'facebook', editInstagram:'instagram' };
     document.getElementById(id).addEventListener('input', (e) => {
       contactData[fieldMap[id]] = e.target.value;
       applyContactLinks();
     });
     document.getElementById(id).addEventListener('blur', saveContactLocal);
+  });
+
+  // ---------- Weather (Open-Meteo, no API key needed) ----------
+  const WEATHER_CODES = {
+    0:['☀️','Clear sky'], 1:['🌤️','Mostly clear'], 2:['⛅','Partly cloudy'], 3:['☁️','Overcast'],
+    45:['🌫️','Foggy'], 48:['🌫️','Foggy'],
+    51:['🌦️','Light drizzle'], 53:['🌦️','Drizzle'], 55:['🌧️','Heavy drizzle'],
+    61:['🌧️','Light rain'], 63:['🌧️','Rain'], 65:['🌧️','Heavy rain'],
+    71:['🌨️','Light snow'], 73:['🌨️','Snow'], 75:['❄️','Heavy snow'],
+    80:['🌦️','Rain showers'], 81:['🌧️','Rain showers'], 82:['⛈️','Violent showers'],
+    95:['⛈️','Thunderstorm'], 96:['⛈️','Thunderstorm w/ hail'], 99:['⛈️','Thunderstorm w/ hail']
+  };
+  function parseLatLon(text){
+    const m = String(text||'').trim().match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+    if (!m) return null;
+    return { lat: Number(m[1]), lon: Number(m[2]) };
+  }
+  async function fetchWeather(){
+    const chip = document.getElementById('weatherChip');
+    if (!chip) return;
+    const coords = parseLatLon(contactData.mapsQuery) || { lat: 11.4878, lon: 122.9956 }; // Pilar, Capiz fallback
+    try{
+      const cacheKey = 'solaWeatherCache';
+      const cached = JSON.parse(sessionStorage.getItem(cacheKey) || 'null');
+      let data;
+      if (cached && cached.lat === coords.lat && cached.lon === coords.lon && (Date.now() - cached.time) < 30*60*1000){
+        data = cached.data;
+      } else {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude='+coords.lat+'&longitude='+coords.lon+'&current_weather=true');
+        if (!res.ok) throw new Error('weather fetch failed');
+        data = await res.json();
+        sessionStorage.setItem(cacheKey, JSON.stringify({ lat: coords.lat, lon: coords.lon, time: Date.now(), data }));
+      }
+      const cw = data.current_weather;
+      const meta = WEATHER_CODES[cw.weathercode] || ['🌡️','Weather'];
+      document.getElementById('weatherIcon').textContent = meta[0];
+      document.getElementById('weatherText').textContent = Math.round(cw.temperature) + '°C · ' + meta[1];
+      chip.hidden = false;
+    }catch(e){
+      chip.hidden = true;
+    }
+  }
+
+  // ---------- In-page QR code (links to this same page) ----------
+  function setSiteQrCode(){
+    const img = document.getElementById('siteQrCode');
+    if (!img) return;
+    const url = location.href.split('#')[0];
+    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=0&data=' + encodeURIComponent(url);
+  }
+
+  // ---------- GCash / Maya payment display ----------
+  function renderPaymentDisplay(){
+    const el = document.getElementById('paymentDisplay');
+    if (!el) return;
+    const methods = [];
+    if (siteSettings.gcashName || siteSettings.gcashNumber || siteSettings.gcashQr){
+      methods.push({ label:'GCash', name: siteSettings.gcashName, number: siteSettings.gcashNumber, qr: siteSettings.gcashQr });
+    }
+    if (siteSettings.mayaName || siteSettings.mayaNumber || siteSettings.mayaQr){
+      methods.push({ label:'Maya', name: siteSettings.mayaName, number: siteSettings.mayaNumber, qr: siteSettings.mayaQr });
+    }
+    el.innerHTML = methods.length ? methods.map(m =>
+      '<div class="payment-method">' +
+        (m.qr ? '<img class="payment-qr" src="'+escapeAttr(m.qr)+'" alt="'+escapeAttr(m.label)+' QR code">' : '') +
+        '<div><div class="payment-method-name">'+escapeHtml(m.label)+(m.name ? ' · '+escapeHtml(m.name) : '')+'</div>' +
+        (m.number ? '<div class="payment-method-number">'+escapeHtml(m.number)+'</div>' : '') +
+        '</div></div>'
+    ).join('') : '<p class="payment-empty">Cash accepted at the counter. GCash/Maya details coming soon.</p>';
+  }
+
+  function renderSiteSettingsAdmin(){
+    document.getElementById('editSkin').value = siteSettings.skin || 'default';
+    document.getElementById('editGcashName').value = siteSettings.gcashName || '';
+    document.getElementById('editGcashNumber').value = siteSettings.gcashNumber || '';
+    document.getElementById('editMayaName').value = siteSettings.mayaName || '';
+    document.getElementById('editMayaNumber').value = siteSettings.mayaNumber || '';
+    document.getElementById('gcashQrRemoveBtn').style.display = siteSettings.gcashQr ? '' : 'none';
+    document.getElementById('mayaQrRemoveBtn').style.display = siteSettings.mayaQr ? '' : 'none';
+  }
+
+  document.getElementById('editSkin').addEventListener('change', (e) => {
+    siteSettings.skin = e.target.value;
+    saveSiteSettingsLocal();
+    applySkin();
+  });
+  ['editGcashName','editGcashNumber','editMayaName','editMayaNumber'].forEach(id => {
+    const fieldMap = { editGcashName:'gcashName', editGcashNumber:'gcashNumber', editMayaName:'mayaName', editMayaNumber:'mayaNumber' };
+    document.getElementById(id).addEventListener('input', (e) => {
+      siteSettings[fieldMap[id]] = e.target.value;
+      renderPaymentDisplay();
+    });
+    document.getElementById(id).addEventListener('blur', saveSiteSettingsLocal);
+  });
+  document.getElementById('gcashQrFileInput').addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const statusEl = document.getElementById('gcashQrUploadStatus');
+    statusEl.textContent = 'Processing…';
+    try{
+      siteSettings.gcashQr = await resizeImageFile(file, 500, 0.8);
+      saveSiteSettingsLocal();
+      renderPaymentDisplay();
+      renderSiteSettingsAdmin();
+      statusEl.textContent = 'Saved.';
+    }catch(err){
+      statusEl.textContent = '';
+      alert('Could not read that image. Try a different file.');
+    }
+  });
+  document.getElementById('mayaQrFileInput').addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const statusEl = document.getElementById('mayaQrUploadStatus');
+    statusEl.textContent = 'Processing…';
+    try{
+      siteSettings.mayaQr = await resizeImageFile(file, 500, 0.8);
+      saveSiteSettingsLocal();
+      renderPaymentDisplay();
+      renderSiteSettingsAdmin();
+      statusEl.textContent = 'Saved.';
+    }catch(err){
+      statusEl.textContent = '';
+      alert('Could not read that image. Try a different file.');
+    }
+  });
+  document.getElementById('gcashQrRemoveBtn').addEventListener('click', () => {
+    siteSettings.gcashQr = null;
+    saveSiteSettingsLocal();
+    renderPaymentDisplay();
+    renderSiteSettingsAdmin();
+  });
+  document.getElementById('mayaQrRemoveBtn').addEventListener('click', () => {
+    siteSettings.mayaQr = null;
+    saveSiteSettingsLocal();
+    renderPaymentDisplay();
+    renderSiteSettingsAdmin();
   });
 
   document.getElementById('addPhotoBtn').addEventListener('click', () => {
@@ -2822,6 +3160,13 @@ body.admin-mode .smart-menu-tools{display:none}
       missing.push('CONTACT_DATA_START / CONTACT_DATA_END');
     }
 
+    const siteSettingsRe = /\/\*SITE_SETTINGS_START\*\/[\s\S]*?\/\*SITE_SETTINGS_END\*\//;
+    if (siteSettingsRe.test(out)) {
+      out = out.replace(siteSettingsRe, '/*SITE_SETTINGS_START*/' + JSON.stringify(siteSettings, null, 2) + '/*SITE_SETTINGS_END*/');
+    } else {
+      missing.push('SITE_SETTINGS_START / SITE_SETTINGS_END');
+    }
+
     return { html: out, missing };
   }
 
@@ -2850,11 +3195,38 @@ body.admin-mode .smart-menu-tools{display:none}
     alert('Downloaded index.html. Upload this file to your GitHub repo (replacing the current one) to publish these menu, gallery, and contact changes for every visitor.');
   });
 
+  // ---------- Light/Dark theme toggle (personal, saved on this device) ----------
+  function applyTheme(theme){
+    document.body.classList.toggle('theme-light', theme === 'light');
+    const btn = document.getElementById('themeToggle');
+    btn.textContent = theme === 'light' ? '☀️' : '🌙';
+    btn.setAttribute('aria-label', theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+  }
+  let currentTheme = 'dark';
+  try{ currentTheme = localStorage.getItem('solaTheme') || 'dark'; }catch(e){}
+  applyTheme(currentTheme);
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+    applyTheme(currentTheme);
+    try{ localStorage.setItem('solaTheme', currentTheme); }catch(e){}
+  });
+
+  // ---------- Offline fallback (service worker) ----------
+  if ('serviceWorker' in navigator){
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => { /* sw.js not uploaded yet — safe to ignore */ });
+    });
+  }
+
   if (isAdmin) document.body.classList.add('admin-mode');
+  applySkin();
   renderMenu();
   renderGallery();
   applyContactLinks();
   renderContactAdminFields();
+  renderSiteSettingsAdmin();
+  renderPaymentDisplay();
+  setSiteQrCode();
   renderAnnouncementAdmin();
   renderAnnouncement();
   renderDashboard();
