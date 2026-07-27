@@ -1886,12 +1886,12 @@ body.admin-mode .smart-menu-tools{display:none}
 
   // ANNOUNCEMENT_DATA_START — published together with menu/gallery/contact data.
   const DEFAULT_ANNOUNCEMENT = /*ANNOUNCEMENT_DATA_START*/{
-    "enabled": false,
-    "type": "general",
-    "title": "",
-    "message": "",
-    "expiresAt": ""
-  }/*ANNOUNCEMENT_DATA_END*/;
+  "enabled": false,
+  "type": "general",
+  "title": "",
+  "message": "",
+  "expiresAt": ""
+}/*ANNOUNCEMENT_DATA_END*/;
 
   const DEFAULT_MENU = /*MENU_DATA_START*/[
   {
@@ -1902,15 +1902,25 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Burger & Fries",
         "desc": "",
         "price": "₱49",
-        "studentPick": true
+        "studentPick": true,
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "image": null
       },
       {
         "name": "Street Food Platter",
         "desc": "Hotdog, kikiam, lumpiang shanghai, siomai, fries, fishball",
         "price": "₱85",
-        "bestseller": false
+        "bestseller": false,
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       }
-    ]
+    ],
+    "category": "Snack"
   },
   {
     "title": "Rice Meal",
@@ -1920,26 +1930,45 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Siomai Rice",
         "desc": "",
         "price": "₱35",
-        "studentPick": true
+        "studentPick": true,
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "image": null
       },
       {
         "name": "Chicken Pastil",
         "desc": "",
         "price": "₱29",
         "bestseller": false,
-        "studentPick": true
+        "studentPick": true,
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "image": null
       },
       {
         "name": "Gyoza w/ Rice",
         "desc": "",
-        "price": "₱39"
+        "price": "₱39",
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Chicken Poppers",
         "desc": "",
-        "price": "₱39"
+        "price": "₱39",
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       }
-    ]
+    ],
+    "category": "Rice Meal"
   },
   {
     "title": "Breakfast Meal",
@@ -1949,25 +1978,45 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Cornsilog",
         "desc": "",
         "price": "₱39",
-        "bestseller": false
+        "bestseller": false,
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Hotsilog",
         "desc": "",
-        "price": "₱39"
+        "price": "₱39",
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Cantonsilog",
         "desc": "",
-        "price": "₱35"
+        "price": "₱35",
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Batchoy",
         "desc": "Special / Ordinary",
         "price": "₱25 / ₱15",
-        "studentPick": true
+        "studentPick": true,
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "image": null
       }
-    ]
+    ],
+    "category": "Breakfast Meal"
   },
   {
     "title": "Iced Coffee",
@@ -1977,42 +2026,77 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Caramel Macchiato",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": false
+        "bestseller": false,
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Spanish Latte",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": true
+        "bestseller": true,
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Mocha",
         "desc": "",
-        "price": "₱25 / ₱35"
+        "price": "₱25 / ₱35",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Americano",
         "desc": "",
         "price": "₱25 / ₱35",
-        "studentPick": true
+        "studentPick": true,
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "image": null
       },
       {
         "name": "Strawberry Iced Latte",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": true
+        "bestseller": true,
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Dirty Matcha",
         "desc": "",
-        "price": "₱25 / ₱35"
+        "price": "₱25 / ₱35",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Oreo Coffee Latte",
         "desc": "",
-        "price": "₱25 / ₱35"
+        "price": "₱25 / ₱35",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       }
-    ]
+    ],
+    "category": "Iced Coffee"
   },
   {
     "title": "Fruit Soda",
@@ -2021,40 +2105,75 @@ body.admin-mode .smart-menu-tools{display:none}
       {
         "name": "Strawberry",
         "desc": "",
-        "price": "₱19 / ₱29"
+        "price": "₱19 / ₱29",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Blueberry",
         "desc": "",
-        "price": "₱19 / ₱29"
+        "price": "₱19 / ₱29",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Lemonade",
         "desc": "",
         "price": "₱19 / ₱29",
-        "studentPick": true
+        "studentPick": true,
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "image": null
       },
       {
         "name": "Lychee",
         "desc": "",
-        "price": "₱19 / ₱29"
+        "price": "₱19 / ₱29",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Green Apple",
         "desc": "",
-        "price": "₱25 / ₱39"
+        "price": "₱25 / ₱39",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Lychee Blueberry",
         "desc": "",
-        "price": "₱25 / ₱39"
+        "price": "₱25 / ₱39",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Blueberry Dirty",
         "desc": "",
-        "price": "₱25 / ₱39"
+        "price": "₱25 / ₱39",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       }
-    ]
+    ],
+    "category": "Fruit Soda"
   },
   {
     "title": "Non-Coffee",
@@ -2063,26 +2182,46 @@ body.admin-mode .smart-menu-tools{display:none}
       {
         "name": "Dark Chocolate",
         "desc": "",
-        "price": "₱25 / ₱35"
+        "price": "₱25 / ₱35",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Choco Berry",
         "desc": "",
-        "price": "₱25 / ₱35"
+        "price": "₱25 / ₱35",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Oreo Cream Latte",
         "desc": "",
-        "price": "₱25 / ₱35"
+        "price": "₱25 / ₱35",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Milo Dinosaur",
         "desc": "",
         "price": "₱25 / ₱35",
         "bestseller": true,
-        "studentPick": true
+        "studentPick": true,
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "image": null
       }
-    ]
+    ],
+    "category": "Non-Coffee"
   }
 ]/*MENU_DATA_END*/;
 
