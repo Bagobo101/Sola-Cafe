@@ -1886,12 +1886,12 @@ body.admin-mode .smart-menu-tools{display:none}
 
   // ANNOUNCEMENT_DATA_START — published together with menu/gallery/contact data.
   const DEFAULT_ANNOUNCEMENT = /*ANNOUNCEMENT_DATA_START*/{
-  "enabled": false,
-  "type": "general",
-  "title": "",
-  "message": "",
-  "expiresAt": ""
-}/*ANNOUNCEMENT_DATA_END*/;
+    "enabled": false,
+    "type": "general",
+    "title": "",
+    "message": "",
+    "expiresAt": ""
+  }/*ANNOUNCEMENT_DATA_END*/;
 
   const DEFAULT_MENU = /*MENU_DATA_START*/[
   {
@@ -1902,25 +1902,15 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Burger & Fries",
         "desc": "",
         "price": "₱49",
-        "status": "sold-out",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "studentPick": true
       },
       {
         "name": "Street Food Platter",
         "desc": "Hotdog, kikiam, lumpiang shanghai, siomai, fries, fishball",
         "price": "₱85",
-        "bestseller": false,
-        "status": "sold-out",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "bestseller": false
       }
-    ],
-    "category": "Snack"
+    ]
   },
   {
     "title": "Rice Meal",
@@ -1930,45 +1920,26 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Siomai Rice",
         "desc": "",
         "price": "₱35",
-        "status": "sold-out",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "studentPick": true
       },
       {
         "name": "Chicken Pastil",
         "desc": "",
         "price": "₱29",
         "bestseller": false,
-        "status": "sold-out",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "studentPick": true
       },
       {
         "name": "Gyoza w/ Rice",
         "desc": "",
-        "price": "₱39",
-        "status": "sold-out",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱39"
       },
       {
         "name": "Chicken Poppers",
         "desc": "",
-        "price": "₱39",
-        "status": "sold-out",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱39"
       }
-    ],
-    "category": "Rice Meal"
+    ]
   },
   {
     "title": "Breakfast Meal",
@@ -1978,45 +1949,25 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Cornsilog",
         "desc": "",
         "price": "₱39",
-        "bestseller": false,
-        "status": "sold-out",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "bestseller": false
       },
       {
         "name": "Hotsilog",
         "desc": "",
-        "price": "₱39",
-        "status": "sold-out",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱39"
       },
       {
         "name": "Cantonsilog",
         "desc": "",
-        "price": "₱35",
-        "status": "sold-out",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱35"
       },
       {
         "name": "Batchoy",
         "desc": "Special / Ordinary",
         "price": "₱25 / ₱15",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "studentPick": true
       }
-    ],
-    "category": "Breakfast Meal"
+    ]
   },
   {
     "title": "Iced Coffee",
@@ -2026,77 +1977,42 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Caramel Macchiato",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": false,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "bestseller": false
       },
       {
         "name": "Spanish Latte",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": true,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "bestseller": true
       },
       {
         "name": "Mocha",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Americano",
         "desc": "",
         "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "studentPick": true
       },
       {
         "name": "Strawberry Iced Latte",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": true,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "bestseller": true
       },
       {
         "name": "Dirty Matcha",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Oreo Coffee Latte",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱35"
       }
-    ],
-    "category": "Iced Coffee"
+    ]
   },
   {
     "title": "Fruit Soda",
@@ -2105,75 +2021,40 @@ body.admin-mode .smart-menu-tools{display:none}
       {
         "name": "Strawberry",
         "desc": "",
-        "price": "₱19 / ₱29",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱19 / ₱29"
       },
       {
         "name": "Blueberry",
         "desc": "",
-        "price": "₱19 / ₱29",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱19 / ₱29"
       },
       {
         "name": "Lemonade",
         "desc": "",
         "price": "₱19 / ₱29",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "studentPick": true
       },
       {
         "name": "Lychee",
         "desc": "",
-        "price": "₱19 / ₱29",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱19 / ₱29"
       },
       {
         "name": "Green Apple",
         "desc": "",
-        "price": "₱25 / ₱39",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱39"
       },
       {
         "name": "Lychee Blueberry",
         "desc": "",
-        "price": "₱25 / ₱39",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱39"
       },
       {
         "name": "Blueberry Dirty",
         "desc": "",
-        "price": "₱25 / ₱39",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱39"
       }
-    ],
-    "category": "Fruit Soda"
+    ]
   },
   {
     "title": "Non-Coffee",
@@ -2182,56 +2063,26 @@ body.admin-mode .smart-menu-tools{display:none}
       {
         "name": "Dark Chocolate",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Choco Berry",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Oreo Cream Latte",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Milo Dinosaur",
         "desc": "",
         "price": "₱25 / ₱35",
         "bestseller": true,
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
-      },
-      {
-        "name": "Strawberry Matcha",
-        "desc": "",
-        "price": "₱25 / 35",
-        "status": "available",
-        "stock": 10,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "studentPick": true
       }
-    ],
-    "category": "Non-Coffee"
+    ]
   }
 ]/*MENU_DATA_END*/;
 
@@ -2287,7 +2138,13 @@ body.admin-mode .smart-menu-tools{display:none}
       items: Array.isArray(group.items) ? group.items.map(item => ({
         ...item,
         status: ['available','sold-out','not-available','coming-soon'].includes(item.status) ? item.status : 'available',
-        stock: Number.isFinite(Number(item.stock)) ? Math.max(0, Number(item.stock)) : null,
+        // Number(null) and Number('') both equal 0, which used to silently
+        // turn "not tracked" (null) stock into a real 0 count on every
+        // reload — re-triggering the sold-out auto-sync below forever.
+        // Treat null/undefined/'' as "not tracked" explicitly, first.
+        stock: (item.stock === null || item.stock === undefined || item.stock === '')
+          ? null
+          : (Number.isFinite(Number(item.stock)) ? Math.max(0, Number(item.stock)) : null),
         lowStockAt: Number.isFinite(Number(item.lowStockAt)) ? Math.max(0, Number(item.lowStockAt)) : 3,
         studentPick: !!item.studentPick,
         image: item.image || null
@@ -2770,7 +2627,15 @@ body.admin-mode .smart-menu-tools{display:none}
         menuData[+el.dataset.gi].items[+el.dataset.ii].studentPick=el.checked; saveMenuLocal(); renderMenu();
       }));
       container.querySelectorAll('.admin-status-select').forEach(el => el.addEventListener('change', () => {
-        menuData[+el.dataset.gi].items[+el.dataset.ii].status=el.value; saveMenuLocal(); renderMenu();
+        const item = menuData[+el.dataset.gi].items[+el.dataset.ii];
+        item.status = el.value;
+        // Marking something Available while its stock count is still stuck
+        // at 0 would just get auto-flipped back to Sold Out on next reload
+        // (see syncInventoryStatus). Clear it to "not tracked" instead, so
+        // the manual choice actually sticks — admin can re-enter a real
+        // count afterward if they want stock tracking back on.
+        if (item.status === 'available' && item.stock === 0) item.stock = null;
+        saveMenuLocal(); renderMenu();
       }));
       container.querySelectorAll('.stock-input').forEach(el => el.addEventListener('change', () => {
         const item=menuData[+el.dataset.gi].items[+el.dataset.ii];
@@ -3648,10 +3513,22 @@ body.admin-mode .smart-menu-tools{display:none}
     try{ localStorage.setItem('solaTheme', currentTheme); }catch(e){}
   });
 
-  // ---------- Offline fallback (service worker) ----------
+  // ---------- Service worker cleanup ----------
+  // There is no sw.js in this site. If a browser previously installed one
+  // (e.g. from an earlier version of this page), it can keep serving a
+  // stale cached copy of the site forever, ignoring new publishes, until
+  // it's unregistered. This actively removes any such leftover worker and
+  // its caches so every visitor always gets the live version.
   if ('serviceWorker' in navigator){
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js').catch(() => { /* sw.js not uploaded yet — safe to ignore */ });
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        regs.forEach(reg => reg.unregister());
+      }).catch(() => {});
+      if (window.caches){
+        caches.keys().then(names => {
+          names.forEach(name => caches.delete(name));
+        }).catch(() => {});
+      }
     });
   }
 
