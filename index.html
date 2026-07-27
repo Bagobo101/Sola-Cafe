@@ -1238,6 +1238,7 @@ body.admin-mode .announcement-admin{display:block}
 .menu-item-price.is-status{font-size:11px;letter-spacing:.06em;text-transform:uppercase}
 .admin-status-select{width:100%;max-width:170px;margin-top:7px;padding:7px 8px;border:1px solid var(--line,#ccc);background:#fff;font:inherit}
 .admin-status-label{display:block;font-size:11px;font-weight:700;margin-top:8px}
+.admin-field-note{font-size:11.5px;color:var(--text-dim);line-height:1.5;margin-top:6px}
 @media(max-width:700px){
   .announcement-wrap{padding:0 16px}
   .announcement-card{grid-template-columns:auto 1fr}
@@ -1709,11 +1710,13 @@ body.admin-mode .smart-menu-tools{display:none}
         <div id="siteSettingsAdminEdit" class="contact-admin-edit">
           <label class="admin-status-label">Seasonal skin (site-wide)</label>
           <select id="editSkin" class="admin-status-select">
+            <option value="auto">🔁 Auto (live weather + calendar)</option>
             <option value="default">🟤 Default cozy</option>
             <option value="rainy">🌧️ Rainy season</option>
             <option value="christmas">🎄 Christmas</option>
             <option value="summer">☀️ Summer</option>
           </select>
+          <p class="admin-field-note">Auto switches to rainy on a live rainy/stormy forecast, Christmas in December, and summer in Mar–May — otherwise it stays on the default cozy look. Pick any other option to lock the site to that skin regardless of weather or date.</p>
           <label>GCash name<input type="text" id="editGcashName" class="admin-input" placeholder="Juan Dela Cruz"></label>
           <label>GCash number<input type="text" id="editGcashNumber" class="admin-input" placeholder="0917 000 0000"></label>
           <div style="display:flex; align-items:center; gap:8px; margin-top:4px; flex-wrap:wrap;">
@@ -2117,7 +2120,7 @@ body.admin-mode .smart-menu-tools{display:none}
 
   // SITE_SETTINGS_START — seasonal skin + payment info, site-wide (published for every visitor).
   const DEFAULT_SITE_SETTINGS = /*SITE_SETTINGS_START*/{
-  "skin": "default",
+  "skin": "auto",
   "gcashName": "",
   "gcashNumber": "",
   "gcashQr": null,
@@ -2218,10 +2221,35 @@ body.admin-mode .smart-menu-tools{display:none}
     try{ localStorage.setItem('solaSiteSettings', JSON.stringify(siteSettings)); }catch(e){}
   }
 
+  // Weather code last seen from fetchWeather() — null until the first
+  // successful weather check. Used only when siteSettings.skin === 'auto'.
+  let lastWeatherCode = null;
+  const RAINY_WEATHER_CODES = [51,53,55,61,63,65,80,81,82,95,96,99];
+
+  function getSeasonSkin(){
+    const month = new Date().getMonth(); // 0 = January
+    if (month === 11) return 'christmas';           // December
+    if (month >= 2 && month <= 4) return 'summer';  // March–May
+    return 'default';
+  }
+
+  /**
+   * Decides which skin should actually be showing right now.
+   * A manual admin pick (anything other than "auto") always wins outright.
+   * In "auto" mode: live rain/storm beats the calendar, calendar beats
+   * plain default, so a rainy afternoon in December shows rain, not tinsel.
+   */
+  function getEffectiveSkin(){
+    if (siteSettings.skin && siteSettings.skin !== 'auto') return siteSettings.skin;
+    if (lastWeatherCode !== null && RAINY_WEATHER_CODES.includes(lastWeatherCode)) return 'rainy';
+    return getSeasonSkin();
+  }
+
   function applySkin(){
     document.body.classList.remove('skin-rainy','skin-christmas','skin-summer');
-    if (siteSettings.skin && siteSettings.skin !== 'default'){
-      document.body.classList.add('skin-' + siteSettings.skin);
+    const effective = getEffectiveSkin();
+    if (effective && effective !== 'default'){
+      document.body.classList.add('skin-' + effective);
     }
   }
 
@@ -2926,6 +2954,8 @@ body.admin-mode .smart-menu-tools{display:none}
       document.getElementById('weatherIcon').textContent = meta[0];
       document.getElementById('weatherText').textContent = Math.round(cw.temperature) + '°C · ' + meta[1];
       chip.hidden = false;
+      lastWeatherCode = cw.weathercode;
+      applySkin();
     }catch(e){
       chip.hidden = true;
     }
@@ -2962,7 +2992,7 @@ body.admin-mode .smart-menu-tools{display:none}
   }
 
   function renderSiteSettingsAdmin(){
-    document.getElementById('editSkin').value = siteSettings.skin || 'default';
+    document.getElementById('editSkin').value = siteSettings.skin || 'auto';
     document.getElementById('editGcashName').value = siteSettings.gcashName || '';
     document.getElementById('editGcashNumber').value = siteSettings.gcashNumber || '';
     document.getElementById('editMayaName').value = siteSettings.mayaName || '';
