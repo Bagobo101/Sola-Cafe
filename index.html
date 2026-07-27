@@ -1133,6 +1133,17 @@
     padding: 5px 11px;
     margin-bottom: 12px;
   }
+  .weather-pairing{
+    display:flex; align-items:center; gap:7px;
+    font-size: 13px;
+    color: var(--text-dim);
+    background: var(--cream-deep);
+    border: 1px dashed var(--panel-line);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin: -2px 0 14px;
+  }
+  .weather-pairing span{ color: var(--espresso); }
   .visit-map{
     width: 100%;
     height: 180px;
@@ -1196,6 +1207,8 @@
   .footer-row a:hover{ color: #F0B979; }
   .footer-row .admin-link{ color: #D9C4A4; }
   .footer-row .admin-link:hover{ color: #F0B979; }
+  .site-version-tag{ opacity:0.55; font-family:'IBM Plex Mono', monospace; font-size:11px; margin-left:6px; }
+  .site-version-badge{ font-size:14px; }
   .footer-social{ display:flex; gap:14px; align-items:center; }
   .social-icon-link{ color:#D9C4A4; display:flex; }
   .social-icon-link svg{ width:19px; height:19px; }
@@ -1330,6 +1343,19 @@ body.admin-mode .smart-menu-tools{display:none}
 .smart-combo-note{font-size:12px;opacity:.7;margin-top:7px}
 @media(max-width:800px){.dashboard-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.dashboard-grid{grid-template-columns:1fr}.dashboard-panel{padding:16px;margin:8px auto}.dashboard-list-row{grid-template-columns:1fr}}
+
+.audit-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-bottom:1px solid var(--panel-line);color:var(--text)}
+.audit-detail{color:var(--text-dim)}
+.audit-meta{flex-shrink:0;font-family:'IBM Plex Mono', monospace;font-size:11px;color:var(--text-dim)}
+
+.feedback-row{padding:12px 0;border-bottom:1px solid var(--panel-line)}
+.feedback-row-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.feedback-row p{margin-top:6px;color:var(--text);line-height:1.5}
+
+.feedback-form label{display:block;font-size:12px;font-weight:700;margin-top:14px;margin-bottom:5px;color:var(--caramel-deep)}
+.feedback-form label:first-child{margin-top:0}
+.feedback-form input,.feedback-form textarea{width:100%;box-sizing:border-box;padding:10px 11px;border-radius:8px;border:1px solid var(--panel-line);background:var(--panel);color:var(--text);font:inherit}
+.feedback-form textarea{min-height:96px;resize:vertical}
 
 </style>
 </head>
@@ -1542,9 +1568,16 @@ body.admin-mode .smart-menu-tools{display:none}
           <button type="button" class="dashboard-tab" data-tab="inventory">Inventory</button>
           <button type="button" class="dashboard-tab" data-tab="students">Student Picks</button>
           <button type="button" class="dashboard-tab" data-tab="popular">Popular</button>
+          <button type="button" class="dashboard-tab" data-tab="feedback">✉️ Feedback</button>
+          <button type="button" class="dashboard-tab" data-tab="audit">Audit Log</button>
         </div>
 
         <div class="dashboard-tab-content active" data-tab-content="overview">
+          <div class="dashboard-section">
+            <h3>Published Version</h3>
+            <p class="smart-combo-note">Bumps automatically every time you use "Publish live" or "Download instead" below.</p>
+            <div id="dashboardVersionInfo" class="site-version-badge"></div>
+          </div>
           <div class="dashboard-section">
             <h3>Active Announcement</h3>
             <div id="dashboardAnnouncement"></div>
@@ -1576,6 +1609,24 @@ body.admin-mode .smart-menu-tools{display:none}
             <p class="smart-combo-note">Counts how many times visitors have tapped an item on the live menu (stored on their own device).</p>
             <div id="dashboardPopular" class="dashboard-list"></div>
             <button type="button" id="resetPopularityBtn" class="admin-toolbar-btn" style="margin-top:12px;">Reset stats</button>
+          </div>
+        </div>
+
+        <div class="dashboard-tab-content" data-tab-content="feedback">
+          <div class="dashboard-section">
+            <h3>✉️ Visitor Feedback</h3>
+            <p class="smart-combo-note">This list only shows feedback submitted from this device. Once the Google Form is set up below (Site Settings section), every visitor's feedback also lands in your linked Google Sheet — that's your real, shared feedback record.</p>
+            <div id="dashboardFeedback" class="dashboard-list"></div>
+            <button type="button" id="clearFeedbackBtn" class="admin-toolbar-btn" style="margin-top:12px;">Clear feedback</button>
+          </div>
+        </div>
+
+        <div class="dashboard-tab-content" data-tab-content="audit">
+          <div class="dashboard-section">
+            <h3>Audit Log</h3>
+            <p class="smart-combo-note">A simple record of admin actions taken on this device — sign-ins, publishes, menu edits, and more.</p>
+            <div id="dashboardAuditLog" class="dashboard-list"></div>
+            <button type="button" id="clearAuditLogBtn" class="admin-toolbar-btn" style="margin-top:12px;">Clear log</button>
           </div>
         </div>
       </div>
@@ -1659,6 +1710,7 @@ body.admin-mode .smart-menu-tools{display:none}
       <div class="visit-cell">
         <h3>HOURS</h3>
         <div id="weatherChip" class="weather-chip" hidden><span id="weatherIcon">🌤️</span> <span id="weatherText"></span></div>
+        <div id="weatherPairing" class="weather-pairing" hidden>☕ <span id="weatherPairingText"></span></div>
         <div class="hours-row"><span>Mon – Fri</span><span>6:00 AM – 6:00 PM</span></div>
         <div class="hours-row"><span>Sat – Sun</span><span>Closed</span></div>
         <div class="hours-row"><span>Kitchen closes</span><span>5:30 PM</span></div>
@@ -1671,6 +1723,10 @@ body.admin-mode .smart-menu-tools{display:none}
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M4 5c0-.6.4-1 1-1h2.6c.5 0 .9.3 1 .8l.8 3.2c.1.4 0 .9-.4 1.2L7.6 10.4a12 12 0 0 0 6 6l1.2-1.4c.3-.3.8-.5 1.2-.4l3.2.8c.5.1.8.5.8 1V19c0 .6-.4 1-1 1h-1.5C9.4 20 4 14.6 4 8V5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
             <span id="callBtnLabel">Call us</span>
           </a>
+          <button type="button" id="openFeedbackBtn" class="contact-btn" aria-label="Send feedback to Sola Café">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M4 6.5c0-.6.4-1 1-1h14c.6 0 1 .4 1 1v11c0 .6-.4 1-1 1H5c-.6 0-1-.4-1-1v-11Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="m4.5 7 7.5 5.8L19.5 7" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            Send feedback
+          </button>
           <a id="messengerBtn" href="#" target="_blank" rel="noopener" class="contact-btn" aria-label="Message Sola Café on Messenger">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M12 3C7 3 3 6.7 3 11.3c0 2.6 1.3 4.9 3.4 6.4V21l3.1-1.7c.8.2 1.6.3 2.5.3 5 0 9-3.7 9-8.3S17 3 12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="m7.5 12.8 3-3.2 2.4 1.9 2.9-3.2-3 3.3-2.4-1.9-2.9 3.1Z" fill="currentColor"/></svg>
             Message us
@@ -1731,15 +1787,41 @@ body.admin-mode .smart-menu-tools{display:none}
             <button type="button" class="admin-toolbar-btn" id="mayaQrRemoveBtn">Remove QR</button>
           </div>
           <div class="gallery-upload-status" id="mayaQrUploadStatus"></div>
+
+          <label class="admin-status-label" style="margin-top:16px;">Feedback Google Form</label>
+          <p class="admin-field-note">Feedback sent from the "Send feedback" button on Visit is submitted straight into this Google Form's linked Sheet — that Sheet is your real shared feedback database (visible to you from any device, not just this one). Get these three values from your form's "Get pre-filled link" option.</p>
+          <label>Form ID (the long code from the form's link)<input type="text" id="editFeedbackFormId" class="admin-input" placeholder="1FAIpQLSe..."></label>
+          <label>Name field entry ID<input type="text" id="editFeedbackNameEntry" class="admin-input" placeholder="1950425852"></label>
+          <label>Message field entry ID<input type="text" id="editFeedbackMessageEntry" class="admin-input" placeholder="198389755"></label>
+          <button type="button" id="testFeedbackFormBtn" class="admin-toolbar-btn" style="margin-top:8px;">Send a test entry</button>
         </div>
       </div>
     </div>
   </section>
+
+  <div id="feedbackOverlay" class="dashboard-overlay" aria-hidden="true">
+    <div class="dashboard-panel" style="max-width:480px;">
+      <div class="dashboard-head">
+        <div>
+          <div class="eyebrow">We'd love to hear from you</div>
+          <h2 style="margin:5px 0 0;">✉️ Send Feedback</h2>
+        </div>
+        <button type="button" id="closeFeedbackBtn" class="dashboard-close" aria-label="Close feedback form">×</button>
+      </div>
+      <div class="feedback-form">
+        <label for="feedbackName">Name (optional)</label>
+        <input type="text" id="feedbackName" placeholder="Your name">
+        <label for="feedbackMessage">Your feedback</label>
+        <textarea id="feedbackMessage" placeholder="Tell us what you think..."></textarea>
+        <button type="button" id="submitFeedbackBtn" class="admin-toolbar-btn admin-toolbar-btn-primary" style="margin-top:14px;">Send feedback</button>
+      </div>
+    </div>
+  </div>
 </main>
 
 <footer>
   <div class="wrap footer-row">
-    <div>© 2026 Sola Café</div>
+    <div>© 2026 Sola Café <span id="siteVersionInfo" class="site-version-tag"></span></div>
     <div class="footer-social" id="footerSocial">
       <a id="socialFacebook" href="#" target="_blank" rel="noopener" class="social-icon-link" aria-label="Sola Café on Facebook" hidden>
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.6h2.6l.4-3h-3v-1.9c0-.9.2-1.5 1.5-1.5h1.6V4.3C15.9 4.2 15 4.1 14 4.1c-2.2 0-3.7 1.3-3.7 3.8v2.1H7.7v3H10.3V21h3.2Z"/></svg>
@@ -1886,12 +1968,12 @@ body.admin-mode .smart-menu-tools{display:none}
 
   // ANNOUNCEMENT_DATA_START — published together with menu/gallery/contact data.
   const DEFAULT_ANNOUNCEMENT = /*ANNOUNCEMENT_DATA_START*/{
-    "enabled": false,
-    "type": "general",
-    "title": "",
-    "message": "",
-    "expiresAt": ""
-  }/*ANNOUNCEMENT_DATA_END*/;
+  "enabled": false,
+  "type": "general",
+  "title": "",
+  "message": "",
+  "expiresAt": ""
+}/*ANNOUNCEMENT_DATA_END*/;
 
   const DEFAULT_MENU = /*MENU_DATA_START*/[
   {
@@ -1902,15 +1984,25 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Burger & Fries",
         "desc": "",
         "price": "₱49",
-        "studentPick": true
+        "studentPick": true,
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "image": null
       },
       {
         "name": "Street Food Platter",
         "desc": "Hotdog, kikiam, lumpiang shanghai, siomai, fries, fishball",
         "price": "₱85",
-        "bestseller": false
+        "bestseller": false,
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       }
-    ]
+    ],
+    "category": "Snack"
   },
   {
     "title": "Rice Meal",
@@ -1920,26 +2012,45 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Siomai Rice",
         "desc": "",
         "price": "₱35",
-        "studentPick": true
+        "studentPick": true,
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "image": null
       },
       {
         "name": "Chicken Pastil",
         "desc": "",
         "price": "₱29",
         "bestseller": false,
-        "studentPick": true
+        "studentPick": true,
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "image": null
       },
       {
         "name": "Gyoza w/ Rice",
         "desc": "",
-        "price": "₱39"
+        "price": "₱39",
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Chicken Poppers",
         "desc": "",
-        "price": "₱39"
+        "price": "₱39",
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       }
-    ]
+    ],
+    "category": "Rice Meal"
   },
   {
     "title": "Breakfast Meal",
@@ -1949,25 +2060,45 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Cornsilog",
         "desc": "",
         "price": "₱39",
-        "bestseller": false
+        "bestseller": false,
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Hotsilog",
         "desc": "",
-        "price": "₱39"
+        "price": "₱39",
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Cantonsilog",
         "desc": "",
-        "price": "₱35"
+        "price": "₱35",
+        "status": "sold-out",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Batchoy",
         "desc": "Special / Ordinary",
         "price": "₱25 / ₱15",
-        "studentPick": true
+        "studentPick": true,
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "image": null
       }
-    ]
+    ],
+    "category": "Breakfast Meal"
   },
   {
     "title": "Iced Coffee",
@@ -1977,42 +2108,77 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Caramel Macchiato",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": false
+        "bestseller": false,
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Spanish Latte",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": true
+        "bestseller": true,
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Mocha",
         "desc": "",
-        "price": "₱25 / ₱35"
+        "price": "₱25 / ₱35",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Americano",
         "desc": "",
         "price": "₱25 / ₱35",
-        "studentPick": true
+        "studentPick": true,
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "image": null
       },
       {
         "name": "Strawberry Iced Latte",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": true
+        "bestseller": true,
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Dirty Matcha",
         "desc": "",
-        "price": "₱25 / ₱35"
+        "price": "₱25 / ₱35",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Oreo Coffee Latte",
         "desc": "",
-        "price": "₱25 / ₱35"
+        "price": "₱25 / ₱35",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       }
-    ]
+    ],
+    "category": "Iced Coffee"
   },
   {
     "title": "Fruit Soda",
@@ -2021,40 +2187,75 @@ body.admin-mode .smart-menu-tools{display:none}
       {
         "name": "Strawberry",
         "desc": "",
-        "price": "₱19 / ₱29"
+        "price": "₱19 / ₱29",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Blueberry",
         "desc": "",
-        "price": "₱19 / ₱29"
+        "price": "₱19 / ₱29",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Lemonade",
         "desc": "",
         "price": "₱19 / ₱29",
-        "studentPick": true
+        "studentPick": true,
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "image": null
       },
       {
         "name": "Lychee",
         "desc": "",
-        "price": "₱19 / ₱29"
+        "price": "₱19 / ₱29",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Green Apple",
         "desc": "",
-        "price": "₱25 / ₱39"
+        "price": "₱25 / ₱39",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Lychee Blueberry",
         "desc": "",
-        "price": "₱25 / ₱39"
+        "price": "₱25 / ₱39",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Blueberry Dirty",
         "desc": "",
-        "price": "₱25 / ₱39"
+        "price": "₱25 / ₱39",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       }
-    ]
+    ],
+    "category": "Fruit Soda"
   },
   {
     "title": "Non-Coffee",
@@ -2063,26 +2264,46 @@ body.admin-mode .smart-menu-tools{display:none}
       {
         "name": "Dark Chocolate",
         "desc": "",
-        "price": "₱25 / ₱35"
+        "price": "₱25 / ₱35",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Choco Berry",
         "desc": "",
-        "price": "₱25 / ₱35"
+        "price": "₱25 / ₱35",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Oreo Cream Latte",
         "desc": "",
-        "price": "₱25 / ₱35"
+        "price": "₱25 / ₱35",
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "studentPick": false,
+        "image": null
       },
       {
         "name": "Milo Dinosaur",
         "desc": "",
         "price": "₱25 / ₱35",
         "bestseller": true,
-        "studentPick": true
+        "studentPick": true,
+        "status": "available",
+        "stock": null,
+        "lowStockAt": 3,
+        "image": null
       }
-    ]
+    ],
+    "category": "Non-Coffee"
   }
 ]/*MENU_DATA_END*/;
 
@@ -2126,8 +2347,17 @@ body.admin-mode .smart-menu-tools{display:none}
   "gcashQr": null,
   "mayaName": "",
   "mayaNumber": "",
-  "mayaQr": null
+  "mayaQr": null,
+  "feedbackFormId": "1FAIpQLSergsopli8mxDFT9-h2lKqPyQkneNHm9PeCkLqKN1usAZj8_g",
+  "feedbackNameEntry": "1950425852",
+  "feedbackMessageEntry": "198389755"
 }/*SITE_SETTINGS_END*/;
+
+  // SITE_VERSION_START — stamped automatically every time you Publish or Download.
+  const DEFAULT_SITE_VERSION = /*SITE_VERSION_START*/{
+  "version": 1,
+  "updatedAt": "2026-07-27T00:00:00.000Z"
+}/*SITE_VERSION_END*/;
 
 
   function normalizeMenuData(data){
@@ -2227,6 +2457,20 @@ body.admin-mode .smart-menu-tools{display:none}
     try{ localStorage.setItem('solaSiteSettings', JSON.stringify(siteSettings)); }catch(e){}
   }
 
+  function loadSiteVersion(){
+    return JSON.parse(JSON.stringify(DEFAULT_SITE_VERSION));
+  }
+
+  function renderVersionInfo(){
+    const d = new Date(siteVersion.updatedAt);
+    const shortLabel = isNaN(d.getTime()) ? '' : d.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
+    const longLabel = isNaN(d.getTime()) ? 'unknown' : d.toLocaleString(undefined, { year:'numeric', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+    const footerEl = document.getElementById('siteVersionInfo');
+    if (footerEl) footerEl.textContent = 'v' + siteVersion.version + (shortLabel ? ' · updated ' + shortLabel : '');
+    const dashEl = document.getElementById('dashboardVersionInfo');
+    if (dashEl) dashEl.innerHTML = '<strong>Version ' + siteVersion.version + '</strong><br><span style="color:var(--text-dim); font-size:12.5px;">Last published ' + longLabel + '</span>';
+  }
+
   // Weather code last seen from fetchWeather() — null until the first
   // successful weather check. Used only when siteSettings.skin === 'auto'.
   let lastWeatherCode = null;
@@ -2289,6 +2533,72 @@ body.admin-mode .smart-menu-tools{display:none}
       .map(([key]) => key);
   }
 
+  // ---------- Simple admin audit log (stored on this device only) ----------
+  function loadAuditLog(){
+    try{
+      const saved = localStorage.getItem('solaAuditLog');
+      if (saved) return JSON.parse(saved);
+    }catch(e){ /* ignore corrupt local data */ }
+    return [];
+  }
+  function saveAuditLogLocal(){
+    try{ localStorage.setItem('solaAuditLog', JSON.stringify(auditLog)); }catch(e){}
+  }
+  function logAudit(action, detail){
+    auditLog.unshift({ time: Date.now(), action, detail: detail || '' });
+    if (auditLog.length > 200) auditLog.length = 200; // keep the log lightweight
+    saveAuditLogLocal();
+    renderAuditLog();
+  }
+
+  // ---------- Visitor feedback (stored on this device only) ----------
+  function loadFeedback(){
+    try{
+      const saved = localStorage.getItem('solaFeedback');
+      if (saved) return JSON.parse(saved);
+    }catch(e){ /* ignore corrupt local data */ }
+    return [];
+  }
+  function saveFeedbackLocal(){
+    try{ localStorage.setItem('solaFeedback', JSON.stringify(feedbackData)); }catch(e){}
+  }
+
+  function submitFeedbackToGoogleForm(name, message){
+    if (!siteSettings.feedbackFormId || !siteSettings.feedbackNameEntry || !siteSettings.feedbackMessageEntry) return false;
+    try{
+      const iframeName = 'feedbackTargetFrame';
+      let iframe = document.querySelector('iframe[name="'+iframeName+'"]');
+      if (!iframe){
+        iframe = document.createElement('iframe');
+        iframe.name = iframeName;
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+      }
+      const form = document.createElement('form');
+      form.action = 'https://docs.google.com/forms/d/e/' + siteSettings.feedbackFormId + '/formResponse';
+      form.method = 'POST';
+      form.target = iframeName;
+      form.style.display = 'none';
+
+      const nameField = document.createElement('input');
+      nameField.name = 'entry.' + siteSettings.feedbackNameEntry;
+      nameField.value = name || 'Anonymous';
+      form.appendChild(nameField);
+
+      const messageField = document.createElement('input');
+      messageField.name = 'entry.' + siteSettings.feedbackMessageEntry;
+      messageField.value = message || '';
+      form.appendChild(messageField);
+
+      document.body.appendChild(form);
+      form.submit();
+      setTimeout(() => form.remove(), 1000);
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
+
   function escapeHtml(str){
     return String(str == null ? '' : str)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -2303,7 +2613,10 @@ body.admin-mode .smart-menu-tools{display:none}
   let galleryData = loadGallery();
   let contactData = loadContact();
   let siteSettings = loadSiteSettings();
+  let siteVersion = loadSiteVersion();
   let popularityData = loadPopularity();
+  let auditLog = loadAuditLog();
+  let feedbackData = loadFeedback();
   let isAdmin = sessionStorage.getItem('solaAdmin') === '1';
 
   function getStatusMeta(status){
@@ -2584,6 +2897,7 @@ body.admin-mode .smart-menu-tools{display:none}
           group.items.push({ name:'New item', desc:'', price:'₱0', status:'available', stock:null, lowStockAt:3, studentPick:false });
           saveMenuLocal();
           renderMenu();
+          logAudit('Added menu item', 'to "'+group.title+'"');
         });
         groupEl.appendChild(addItemBtn);
 
@@ -2594,6 +2908,7 @@ body.admin-mode .smart-menu-tools{display:none}
         delGroupBtn.addEventListener('click', () => {
           if (confirm('Delete the "'+group.title+'" group and everything in it?')){
             menuData.splice(gi,1); saveMenuLocal(); renderMenu();
+            logAudit('Deleted menu group', group.title);
           }
         });
         groupEl.appendChild(delGroupBtn);
@@ -2624,7 +2939,9 @@ body.admin-mode .smart-menu-tools{display:none}
         menuData[+el.dataset.gi].items[+el.dataset.ii].bestseller=el.checked; saveMenuLocal(); renderMenu();
       }));
       container.querySelectorAll('.admin-student-check').forEach(el => el.addEventListener('change', () => {
-        menuData[+el.dataset.gi].items[+el.dataset.ii].studentPick=el.checked; saveMenuLocal(); renderMenu();
+        const item = menuData[+el.dataset.gi].items[+el.dataset.ii];
+        item.studentPick=el.checked; saveMenuLocal(); renderMenu();
+        logAudit('Toggled Student Pick', item.name + (item.studentPick ? ' (on)' : ' (off)'));
       }));
       container.querySelectorAll('.admin-status-select').forEach(el => el.addEventListener('change', () => {
         const item = menuData[+el.dataset.gi].items[+el.dataset.ii];
@@ -2636,6 +2953,7 @@ body.admin-mode .smart-menu-tools{display:none}
         // count afterward if they want stock tracking back on.
         if (item.status === 'available' && item.stock === 0) item.stock = null;
         saveMenuLocal(); renderMenu();
+        logAudit('Changed item status', item.name + ' → ' + getStatusMeta(item.status).short);
       }));
       container.querySelectorAll('.stock-input').forEach(el => el.addEventListener('change', () => {
         const item=menuData[+el.dataset.gi].items[+el.dataset.ii];
@@ -2675,7 +2993,11 @@ body.admin-mode .smart-menu-tools{display:none}
       }));
       container.querySelectorAll('.admin-del-btn').forEach(el => el.addEventListener('click', () => {
         const gi=+el.dataset.gi, ii=+el.dataset.ii;
-        if(confirm('Remove "'+menuData[gi].items[ii].name+'"?')){menuData[gi].items.splice(ii,1);saveMenuLocal();renderMenu();}
+        const itemName = menuData[gi].items[ii].name;
+        if(confirm('Remove "'+itemName+'"?')){
+          menuData[gi].items.splice(ii,1);saveMenuLocal();renderMenu();
+          logAudit('Removed menu item', itemName);
+        }
       }));
     }
 
@@ -2947,6 +3269,64 @@ body.admin-mode .smart-menu-tools{display:none}
     if (!m) return null;
     return { lat: Number(m[1]), lon: Number(m[2]) };
   }
+
+  // ---------- Weather → Coffee pairing ----------
+  // Suggests one of our own iced coffees based on the live conditions. Each
+  // rule lists its best-fit drinks by name; the first one that's actually on
+  // the live menu and available wins, so a sold-out pick quietly falls
+  // through to the next-best suggestion instead of recommending something
+  // customers can't order.
+  const WEATHER_PAIRING_RULES = [
+    {
+      test: cw => RAINY_WEATHER_CODES.includes(cw.weathercode),
+      note: 'rainy out — something rich and cozy fits the mood',
+      picks: ['Mocha', 'Dirty Matcha', 'Oreo Coffee Latte', 'Spanish Latte']
+    },
+    {
+      test: cw => cw.temperature >= 29,
+      note: 'hot out — go bright and extra cold',
+      picks: ['Strawberry Iced Latte', 'Caramel Macchiato', 'Americano']
+    },
+    {
+      test: cw => [2,3,45,48].includes(cw.weathercode) || cw.temperature < 24,
+      note: 'cool and cloudy — a cozy classic works well',
+      picks: ['Spanish Latte', 'Caramel Macchiato', 'Mocha']
+    }
+  ];
+  const WEATHER_PAIRING_DEFAULT = { note: 'any time is a good time for coffee', picks: ['Americano', 'Caramel Macchiato', 'Spanish Latte'] };
+
+  function findAvailableItemByName(name){
+    for (const group of menuData){
+      for (const item of group.items){
+        if (item.name && item.name.toLowerCase() === name.toLowerCase() && item.status === 'available') return item;
+      }
+    }
+    return null;
+  }
+
+  function getWeatherPairing(cw){
+    const rule = WEATHER_PAIRING_RULES.find(r => r.test(cw)) || WEATHER_PAIRING_DEFAULT;
+    const picks = rule.picks || WEATHER_PAIRING_DEFAULT.picks;
+    for (const name of picks){
+      const item = findAvailableItemByName(name);
+      if (item) return { item, note: rule.note || WEATHER_PAIRING_DEFAULT.note };
+    }
+    // None of the rule's picks are currently available — fall back to any
+    // available coffee item rather than showing nothing.
+    const anyCoffee = getAllMenuItems().find(({item,group}) => /coffee/i.test(group.category || group.title || '') && item.status === 'available');
+    if (anyCoffee) return { item: anyCoffee.item, note: rule.note || WEATHER_PAIRING_DEFAULT.note };
+    return null;
+  }
+
+  function renderWeatherPairing(cw){
+    const el = document.getElementById('weatherPairing');
+    const textEl = document.getElementById('weatherPairingText');
+    if (!el || !textEl) return;
+    const pairing = getWeatherPairing(cw);
+    if (!pairing){ el.hidden = true; return; }
+    textEl.textContent = 'Pairs well with ' + pairing.item.name + ' — ' + pairing.note;
+    el.hidden = false;
+  }
   async function fetchWeather(){
     const chip = document.getElementById('weatherChip');
     if (!chip) return;
@@ -2973,8 +3353,11 @@ body.admin-mode .smart-menu-tools{display:none}
       chip.hidden = false;
       lastWeatherCode = cw.weathercode;
       applySkin();
+      renderWeatherPairing(cw);
     }catch(e){
       chip.hidden = true;
+      const pairing = document.getElementById('weatherPairing');
+      if (pairing) pairing.hidden = true;
     }
   }
 
@@ -3016,12 +3399,16 @@ body.admin-mode .smart-menu-tools{display:none}
     document.getElementById('editMayaNumber').value = siteSettings.mayaNumber || '';
     document.getElementById('gcashQrRemoveBtn').style.display = siteSettings.gcashQr ? '' : 'none';
     document.getElementById('mayaQrRemoveBtn').style.display = siteSettings.mayaQr ? '' : 'none';
+    document.getElementById('editFeedbackFormId').value = siteSettings.feedbackFormId || '';
+    document.getElementById('editFeedbackNameEntry').value = siteSettings.feedbackNameEntry || '';
+    document.getElementById('editFeedbackMessageEntry').value = siteSettings.feedbackMessageEntry || '';
   }
 
   document.getElementById('editSkin').addEventListener('change', (e) => {
     siteSettings.skin = e.target.value;
     saveSiteSettingsLocal();
     applySkin();
+    logAudit('Changed seasonal skin', e.target.value);
   });
   ['editGcashName','editGcashNumber','editMayaName','editMayaNumber'].forEach(id => {
     const fieldMap = { editGcashName:'gcashName', editGcashNumber:'gcashNumber', editMayaName:'mayaName', editMayaNumber:'mayaNumber' };
@@ -3030,6 +3417,18 @@ body.admin-mode .smart-menu-tools{display:none}
       renderPaymentDisplay();
     });
     document.getElementById(id).addEventListener('blur', saveSiteSettingsLocal);
+  });
+  ['editFeedbackFormId','editFeedbackNameEntry','editFeedbackMessageEntry'].forEach(id => {
+    const fieldMap = { editFeedbackFormId:'feedbackFormId', editFeedbackNameEntry:'feedbackNameEntry', editFeedbackMessageEntry:'feedbackMessageEntry' };
+    document.getElementById(id).addEventListener('input', (e) => {
+      siteSettings[fieldMap[id]] = e.target.value.replace(/^entry\./,'').trim();
+    });
+    document.getElementById(id).addEventListener('blur', saveSiteSettingsLocal);
+  });
+  document.getElementById('testFeedbackFormBtn').addEventListener('click', () => {
+    if (!siteSettings.feedbackFormId){ alert('Enter a Form ID first.'); return; }
+    submitFeedbackToGoogleForm('Test from admin panel', 'This is a test entry — check your Google Sheet to confirm it arrived, then delete this row.');
+    alert('Test entry sent. Check your Google Form\'s linked Sheet in a few seconds to confirm it showed up.');
   });
   document.getElementById('gcashQrFileInput').addEventListener('change', async (e) => {
     const file = e.target.files && e.target.files[0];
@@ -3146,7 +3545,8 @@ body.admin-mode .smart-menu-tools{display:none}
       ['🟢',counts.available,'Available'],
       ['🟡',counts.low,'Low Stock'],
       ['🟠',counts['sold-out'],'Sold Out'],
-      ['🔴',counts['not-available'],'Not Available']
+      ['🔴',counts['not-available'],'Not Available'],
+      ['✉️',feedbackData.length,'Feedback']
     ].map(x => '<div class="dashboard-card"><div class="dashboard-card-value">'+x[0]+' '+x[1]+'</div><div class="dashboard-card-label">'+x[2]+'</div></div>').join('');
 
     const ann = document.getElementById('dashboardAnnouncement');
@@ -3176,6 +3576,7 @@ body.admin-mode .smart-menu-tools{display:none}
       item.stock=(item.stock===null?0:item.stock)+amount;
       if(item.status==='sold-out') item.status='available';
       saveMenuLocal(); renderMenu();
+      logAudit('Restocked item', item.name + ' +' + amount);
     }));
 
     const students = document.getElementById('dashboardStudents');
@@ -3197,6 +3598,25 @@ body.admin-mode .smart-menu-tools{display:none}
         return '<div class="dashboard-list-row"><span>🔥 <strong>'+escapeHtml(item.name)+'</strong> <small>('+escapeHtml(group.title)+')</small></span><span>'+count+' tap'+(count===1?'':'s')+'</span></div>';
       }).join('') : '<div style="opacity:.65;">No taps recorded yet. Counts build up as visitors tap items on the live menu.</div>';
     }
+
+    renderFeedbackDashboard();
+    renderAuditLog();
+  }
+
+  function renderFeedbackDashboard(){
+    const el = document.getElementById('dashboardFeedback');
+    if (!el) return;
+    el.innerHTML = feedbackData.length ? feedbackData.map(entry =>
+      '<div class="feedback-row"><div class="feedback-row-head"><strong>'+escapeHtml(entry.name || 'Anonymous')+'</strong><span class="audit-meta">'+escapeHtml(new Date(entry.time).toLocaleString())+'</span></div><p>'+escapeHtml(entry.message)+'</p></div>'
+    ).join('') : '<div style="opacity:.65;">No feedback yet. Visitors can send some from the "Send feedback" button on the Visit section.</div>';
+  }
+
+  function renderAuditLog(){
+    const el = document.getElementById('dashboardAuditLog');
+    if (!el) return;
+    el.innerHTML = auditLog.length ? auditLog.map(entry =>
+      '<div class="audit-row"><div><strong>'+escapeHtml(entry.action)+'</strong>'+(entry.detail ? ' <span class="audit-detail">— '+escapeHtml(entry.detail)+'</span>' : '')+'</div><div class="audit-meta">'+escapeHtml(new Date(entry.time).toLocaleString())+'</div></div>'
+    ).join('') : '<div style="opacity:.65;">No admin activity recorded yet.</div>';
   }
 
   function openDashboard(){
@@ -3227,6 +3647,49 @@ body.admin-mode .smart-menu-tools{display:none}
     }
   });
 
+  document.getElementById('clearFeedbackBtn').addEventListener('click', () => {
+    if (!confirm('Clear all stored feedback on this device? This cannot be undone.')) return;
+    feedbackData = [];
+    saveFeedbackLocal();
+    renderDashboard();
+  });
+
+  document.getElementById('clearAuditLogBtn').addEventListener('click', () => {
+    if (!confirm('Clear the admin activity log on this device? This cannot be undone.')) return;
+    auditLog = [];
+    saveAuditLogLocal();
+    renderAuditLog();
+  });
+
+  // ---------- Feedback overlay (visitor-facing) ----------
+  function closeFeedbackOverlay(){
+    const overlay = document.getElementById('feedbackOverlay');
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden','true');
+  }
+  document.getElementById('openFeedbackBtn').addEventListener('click', () => {
+    document.getElementById('feedbackName').value = '';
+    document.getElementById('feedbackMessage').value = '';
+    const overlay = document.getElementById('feedbackOverlay');
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden','false');
+  });
+  document.getElementById('closeFeedbackBtn').addEventListener('click', closeFeedbackOverlay);
+  document.getElementById('feedbackOverlay').addEventListener('click', e => {
+    if (e.target.id === 'feedbackOverlay') closeFeedbackOverlay();
+  });
+  document.getElementById('submitFeedbackBtn').addEventListener('click', () => {
+    const message = document.getElementById('feedbackMessage').value.trim();
+    if (!message){ alert('Please write a message before sending.'); return; }
+    const name = document.getElementById('feedbackName').value.trim();
+    feedbackData.unshift({ time: Date.now(), name, message });
+    saveFeedbackLocal();
+    const sentToForm = submitFeedbackToGoogleForm(name, message);
+    renderDashboard();
+    closeFeedbackOverlay();
+    alert(sentToForm ? 'Thanks for the feedback! ✉️' : 'Thanks for the feedback! ✉️ (Saved on this device only — ask the café to finish setting up their feedback form.)');
+  });
+
   document.getElementById('announcementDismiss').addEventListener('click', () => {
     const key = 'solaAnnouncementDismissed:' + [announcementData.type, announcementData.title, announcementData.message, announcementData.expiresAt].join('|');
     sessionStorage.setItem(key, '1');
@@ -3241,6 +3704,7 @@ body.admin-mode .smart-menu-tools{display:none}
     announcementData.expiresAt = document.getElementById('announcementExpires').value;
     saveAnnouncementLocal();
     renderAnnouncement();
+    logAudit('Saved announcement', announcementData.title || '(untitled)');
     alert('Announcement saved locally. Click Publish live to make it visible to everyone.');
   });
 
@@ -3267,6 +3731,7 @@ body.admin-mode .smart-menu-tools{display:none}
     menuData.forEach(group => group.items.forEach(item => item.status = 'available'));
     saveMenuLocal();
     renderMenu();
+    logAudit('Marked all items available');
   });
 
   document.getElementById('clearAnnouncementBtn').addEventListener('click', () => {
@@ -3275,6 +3740,7 @@ body.admin-mode .smart-menu-tools{display:none}
     saveAnnouncementLocal();
     renderAnnouncementAdmin();
     renderAnnouncement();
+    logAudit('Cleared announcement');
   });
 
   function setAdminMode(on){
@@ -3286,6 +3752,7 @@ body.admin-mode .smart-menu-tools{display:none}
     renderMenu();
     renderGallery();
     renderContactAdminFields();
+    logAudit(on ? 'Signed in to admin' : 'Signed out of admin');
   }
 
   document.getElementById('adminToggle').addEventListener('click', async () => {
@@ -3317,6 +3784,7 @@ body.admin-mode .smart-menu-tools{display:none}
     menuData.push({ title: 'New Group', desc: '', items: [{ name: 'New item', desc: '', price: '₱0' }] });
     saveMenuLocal();
     renderMenu();
+    logAudit('Added menu group', 'New Group');
   });
 
   document.getElementById('resetMenuBtn').addEventListener('click', () => {
@@ -3333,6 +3801,7 @@ body.admin-mode .smart-menu-tools{display:none}
       renderGallery();
       applyContactLinks();
       renderContactAdminFields();
+      logAudit('Reset local changes', 'menu, gallery, and contact info reverted to published version');
     }
   });
 
@@ -3420,6 +3889,7 @@ body.admin-mode .smart-menu-tools{display:none}
         throw new Error('GitHub rejected the update (status ' + putRes.status + '): ' + (errBody.message || 'unknown error'));
       }
 
+      logAudit('Published to GitHub', 'menu, availability, announcement, gallery, and contact info');
       alert('Published! GitHub Pages usually takes about a minute to rebuild — refresh the live site shortly to see your changes.');
     } catch(err){
       alert('Could not publish: ' + err.message);
@@ -3432,6 +3902,16 @@ body.admin-mode .smart-menu-tools{display:none}
   function injectAllData(html){
     let out = html;
     const missing = [];
+
+    siteVersion = { version: (Number(siteVersion.version) || 0) + 1, updatedAt: new Date().toISOString() };
+    renderVersionInfo();
+
+    const versionRe = /\/\*SITE_VERSION_START\*\/[\s\S]*?\/\*SITE_VERSION_END\*\//;
+    if (versionRe.test(out)) {
+      out = out.replace(versionRe, '/*SITE_VERSION_START*/' + JSON.stringify(siteVersion, null, 2) + '/*SITE_VERSION_END*/');
+    } else {
+      missing.push('SITE_VERSION_START / SITE_VERSION_END');
+    }
 
     const menuRe = /\/\*MENU_DATA_START\*\/[\s\S]*?\/\*MENU_DATA_END\*\//;
     if (menuRe.test(out)) {
@@ -3494,6 +3974,7 @@ body.admin-mode .smart-menu-tools{display:none}
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
+    logAudit('Downloaded site file', 'index.html');
     alert('Downloaded index.html. Upload this file to your GitHub repo (replacing the current one) to publish these menu, gallery, and contact changes for every visitor.');
   });
 
@@ -3544,6 +4025,7 @@ body.admin-mode .smart-menu-tools{display:none}
   renderAnnouncementAdmin();
   renderAnnouncement();
   renderDashboard();
+  renderVersionInfo();
 
   // Recheck the weather periodically for visitors who leave the tab open —
   // otherwise the temperature/condition (and any auto rainy-skin switch)
