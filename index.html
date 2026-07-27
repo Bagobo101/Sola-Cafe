@@ -1886,12 +1886,12 @@ body.admin-mode .smart-menu-tools{display:none}
 
   // ANNOUNCEMENT_DATA_START — published together with menu/gallery/contact data.
   const DEFAULT_ANNOUNCEMENT = /*ANNOUNCEMENT_DATA_START*/{
-  "enabled": false,
-  "type": "general",
-  "title": "",
-  "message": "",
-  "expiresAt": ""
-}/*ANNOUNCEMENT_DATA_END*/;
+    "enabled": false,
+    "type": "general",
+    "title": "",
+    "message": "",
+    "expiresAt": ""
+  }/*ANNOUNCEMENT_DATA_END*/;
 
   const DEFAULT_MENU = /*MENU_DATA_START*/[
   {
@@ -1902,25 +1902,15 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Burger & Fries",
         "desc": "",
         "price": "₱49",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "studentPick": true
       },
       {
         "name": "Street Food Platter",
         "desc": "Hotdog, kikiam, lumpiang shanghai, siomai, fries, fishball",
         "price": "₱85",
-        "bestseller": false,
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "bestseller": false
       }
-    ],
-    "category": "Snack"
+    ]
   },
   {
     "title": "Rice Meal",
@@ -1930,45 +1920,26 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Siomai Rice",
         "desc": "",
         "price": "₱35",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "studentPick": true
       },
       {
         "name": "Chicken Pastil",
         "desc": "",
         "price": "₱29",
         "bestseller": false,
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "studentPick": true
       },
       {
         "name": "Gyoza w/ Rice",
         "desc": "",
-        "price": "₱39",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱39"
       },
       {
         "name": "Chicken Poppers",
         "desc": "",
-        "price": "₱39",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱39"
       }
-    ],
-    "category": "Rice Meal"
+    ]
   },
   {
     "title": "Breakfast Meal",
@@ -1978,45 +1949,25 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Cornsilog",
         "desc": "",
         "price": "₱39",
-        "bestseller": false,
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "bestseller": false
       },
       {
         "name": "Hotsilog",
         "desc": "",
-        "price": "₱39",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱39"
       },
       {
         "name": "Cantonsilog",
         "desc": "",
-        "price": "₱35",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱35"
       },
       {
         "name": "Batchoy",
         "desc": "Special / Ordinary",
         "price": "₱25 / ₱15",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "studentPick": true
       }
-    ],
-    "category": "Breakfast Meal"
+    ]
   },
   {
     "title": "Iced Coffee",
@@ -2026,77 +1977,42 @@ body.admin-mode .smart-menu-tools{display:none}
         "name": "Caramel Macchiato",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": false,
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "bestseller": false
       },
       {
         "name": "Spanish Latte",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": true,
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "bestseller": true
       },
       {
         "name": "Mocha",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Americano",
         "desc": "",
         "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "studentPick": true
       },
       {
         "name": "Strawberry Iced Latte",
         "desc": "",
         "price": "₱25 / ₱35",
-        "bestseller": true,
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "bestseller": true
       },
       {
         "name": "Dirty Matcha",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Oreo Coffee Latte",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱35"
       }
-    ],
-    "category": "Iced Coffee"
+    ]
   },
   {
     "title": "Fruit Soda",
@@ -2105,75 +2021,40 @@ body.admin-mode .smart-menu-tools{display:none}
       {
         "name": "Strawberry",
         "desc": "",
-        "price": "₱19 / ₱29",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱19 / ₱29"
       },
       {
         "name": "Blueberry",
         "desc": "",
-        "price": "₱19 / ₱29",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱19 / ₱29"
       },
       {
         "name": "Lemonade",
         "desc": "",
         "price": "₱19 / ₱29",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "studentPick": true
       },
       {
         "name": "Lychee",
         "desc": "",
-        "price": "₱19 / ₱29",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱19 / ₱29"
       },
       {
         "name": "Green Apple",
         "desc": "",
-        "price": "₱25 / ₱39",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱39"
       },
       {
         "name": "Lychee Blueberry",
         "desc": "",
-        "price": "₱25 / ₱39",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱39"
       },
       {
         "name": "Blueberry Dirty",
         "desc": "",
-        "price": "₱25 / ₱39",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱39"
       }
-    ],
-    "category": "Fruit Soda"
+    ]
   },
   {
     "title": "Non-Coffee",
@@ -2182,56 +2063,26 @@ body.admin-mode .smart-menu-tools{display:none}
       {
         "name": "Dark Chocolate",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Choco Berry",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Oreo Cream Latte",
         "desc": "",
-        "price": "₱25 / ₱35",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "price": "₱25 / ₱35"
       },
       {
         "name": "Milo Dinosaur",
         "desc": "",
         "price": "₱25 / ₱35",
         "bestseller": true,
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
-      },
-      {
-        "name": "Strawberry Matchs",
-        "desc": "",
-        "price": "₱25 / 35",
-        "status": "available",
-        "stock": 0,
-        "lowStockAt": 3,
-        "studentPick": false,
-        "image": null
+        "studentPick": true
       }
-    ],
-    "category": "Non-Coffee"
+    ]
   }
 ]/*MENU_DATA_END*/;
 
@@ -3090,7 +2941,10 @@ body.admin-mode .smart-menu-tools{display:none}
       const cacheKey = 'solaWeatherCache';
       const cached = JSON.parse(sessionStorage.getItem(cacheKey) || 'null');
       let data;
-      if (cached && cached.lat === coords.lat && cached.lon === coords.lon && (Date.now() - cached.time) < 30*60*1000){
+      // Kept in sync with WEATHER_REFRESH_MS below — a stale cache should
+      // always be just about to expire by the time the next recheck fires.
+      const WEATHER_CACHE_MS = 15 * 60 * 1000;
+      if (cached && cached.lat === coords.lat && cached.lon === coords.lon && (Date.now() - cached.time) < WEATHER_CACHE_MS){
         data = cached.data;
       } else {
         const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude='+coords.lat+'&longitude='+coords.lon+'&current_weather=true');
@@ -3664,6 +3518,24 @@ body.admin-mode .smart-menu-tools{display:none}
   renderAnnouncementAdmin();
   renderAnnouncement();
   renderDashboard();
+
+  // Recheck the weather periodically for visitors who leave the tab open —
+  // otherwise the temperature/condition (and any auto rainy-skin switch)
+  // would only ever update on a full page reload. Skipped while the tab
+  // is in the background so it doesn't spend a visitor's data unnecessarily.
+  const WEATHER_REFRESH_MS = 15 * 60 * 1000;
+  setInterval(() => {
+    if (!document.hidden) fetchWeather();
+  }, WEATHER_REFRESH_MS);
+
+  let tabHiddenAt = null;
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden){
+      tabHiddenAt = Date.now();
+    } else if (tabHiddenAt && (Date.now() - tabHiddenAt) > WEATHER_REFRESH_MS){
+      fetchWeather();
+    }
+  });
 </script>
 
 </body>
