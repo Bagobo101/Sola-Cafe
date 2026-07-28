@@ -1582,6 +1582,54 @@ body.admin-mode .announcement-admin{display:block}
 }
 
 
+/* ===== SOUNDTRACK ("What's playing right now") ===== */
+.soundtrack-wrap{max-width:640px;margin:0 auto}
+.soundtrack-card{
+  position:relative; display:flex; gap:16px; align-items:center;
+  padding:22px 24px; border-radius:14px;
+  border:1px solid var(--panel-line); background:var(--panel);
+  box-shadow:var(--panel-shadow);
+}
+.soundtrack-note-icon{font-size:28px; line-height:1}
+.soundtrack-live-dot{
+  width:8px; height:8px; border-radius:50%;
+  background: var(--moss); box-shadow:0 0 8px 1px rgba(143,179,122,0.6);
+  display:inline-block; margin-right:6px;
+  animation: soundtrackPulse 1.6s ease-in-out infinite;
+}
+@keyframes soundtrackPulse{
+  0%,100%{ opacity:1; }
+  50%{ opacity:.35; }
+}
+.soundtrack-kicker{font-size:11px; letter-spacing:.12em; text-transform:uppercase; font-weight:700; color:var(--caramel-deep); opacity:.9; display:flex; align-items:center; margin-bottom:5px}
+.soundtrack-song{margin:0 0 2px; font-size:19px; color:var(--espresso)}
+.soundtrack-artist{margin:0; color:var(--text-dim)}
+.soundtrack-vibe-badge{
+  display:inline-flex; align-items:center; gap:5px; margin-top:10px;
+  padding:5px 11px; border-radius:999px; font-size:12px; font-weight:600;
+  background:rgba(227,161,92,0.14); color:var(--caramel-deep); border:1px solid var(--caramel);
+}
+.soundtrack-listen-link{
+  margin-top:12px; display:inline-flex; align-items:center; gap:6px;
+  font-size:13px; font-weight:700; color:var(--caramel-deep); text-decoration:none;
+}
+.soundtrack-listen-link:hover{ text-decoration:underline; }
+.soundtrack-empty{padding:22px 24px; border-radius:14px; border:1px dashed var(--panel-line); background:var(--cream-deep); color:var(--text-dim); text-align:center}
+.soundtrack-admin{display:none; margin:22px auto 0; max-width:640px; padding:18px; border-radius:12px; border:1px dashed var(--panel-line); background:var(--cream-deep)}
+body.admin-mode .soundtrack-admin{display:block}
+.soundtrack-admin-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.soundtrack-admin-grid .full{grid-column:1/-1}
+.soundtrack-admin label{display:block; font-size:12px; font-weight:700; margin-bottom:5px; color:var(--caramel-deep)}
+.soundtrack-admin input,.soundtrack-admin select{width:100%; box-sizing:border-box; padding:10px 11px; border-radius:8px; border:1px solid var(--panel-line); background:var(--panel); color:var(--text); font:inherit}
+.soundtrack-admin-actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
+.soundtrack-suggest-row{display:flex; gap:8px; align-items:center; margin-top:4px}
+.soundtrack-suggest-hint{font-size:12px; color:var(--text-dim)}
+@media(max-width:700px){
+  .soundtrack-card{flex-direction:column; align-items:flex-start; text-align:left}
+  .soundtrack-admin-grid{grid-template-columns:1fr}
+  .soundtrack-admin-grid .full{grid-column:auto}
+}
+
 /* ===== PHASE 3: SMART CAFE SYSTEM ===== */
 .smart-menu-tools{
   display:none;margin:0 0 24px;padding:18px 20px;border-radius:14px;
@@ -1698,6 +1746,7 @@ body.admin-mode .smart-menu-tools{display:none}
       <li><a href="#menu">Menu</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#soundtrack">Sound</a></li>
       <li><a href="#visit">Visit</a></li>
     </ul>
     <div class="nav-actions">
@@ -1716,6 +1765,7 @@ body.admin-mode .smart-menu-tools{display:none}
       <li><a href="#menu">Menu</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#soundtrack">Sound</a></li>
       <li><a href="#visit">Visit</a></li>
     </ul>
   </div>
@@ -1845,7 +1895,7 @@ body.admin-mode .smart-menu-tools{display:none}
       <button type="button" id="markAllAvailableBtn" class="admin-toolbar-btn">Mark all available</button>
       <button type="button" id="clearAnnouncementBtn" class="admin-toolbar-btn">Clear announcement</button>
       <button type="button" id="printTentBtn" class="admin-toolbar-btn">🪧 Print table tent</button>
-      <div class="admin-toolbar-note">"Publish live" pushes straight to your GitHub repo — no download needed. It saves the menu, availability, announcement, gallery, and contact info together, and needs a one-time GitHub personal access token (Contents: Read and write, scoped to this repo).</div>
+      <div class="admin-toolbar-note">"Publish live" pushes straight to your GitHub repo — no download needed. It saves the menu, availability, announcement, gallery, contact info, and soundtrack together, and needs a one-time GitHub personal access token (Contents: Read and write, scoped to this repo).</div>
     </div>
 
     <div id="tableTentPrint" class="table-tent-print">
@@ -1943,6 +1993,7 @@ body.admin-mode .smart-menu-tools{display:none}
           <button type="button" class="dashboard-tab" data-tab="inventory">Inventory</button>
           <button type="button" class="dashboard-tab" data-tab="students">Student Picks</button>
           <button type="button" class="dashboard-tab" data-tab="popular">Popular</button>
+          <button type="button" class="dashboard-tab" data-tab="soundtrack">🎵 Soundtrack</button>
           <button type="button" class="dashboard-tab" data-tab="searchlog">🔍 Searches</button>
           <button type="button" class="dashboard-tab" data-tab="feedback">✉️ Feedback</button>
           <button type="button" class="dashboard-tab" data-tab="audit">Audit Log</button>
@@ -1985,6 +2036,19 @@ body.admin-mode .smart-menu-tools{display:none}
             <p class="smart-combo-note">Counts how many times visitors have tapped an item on the live menu (stored on their own device).</p>
             <div id="dashboardPopular" class="dashboard-list"></div>
             <button type="button" id="resetPopularityBtn" class="admin-toolbar-btn" style="margin-top:12px;">Reset stats</button>
+          </div>
+        </div>
+
+        <div class="dashboard-tab-content" data-tab-content="soundtrack">
+          <div class="dashboard-section">
+            <h3>Currently Set</h3>
+            <div id="dashboardSoundtrackNow"></div>
+          </div>
+          <div class="dashboard-section">
+            <h3>Most Played</h3>
+            <p class="smart-combo-note">Counts how many times each song has been set as "Now Playing" (stored on this device).</p>
+            <div id="dashboardSoundtrackHistory" class="dashboard-list"></div>
+            <button type="button" id="resetSoundtrackHistoryBtn" class="admin-toolbar-btn" style="margin-top:12px;">Reset stats</button>
           </div>
         </div>
 
@@ -2087,6 +2151,69 @@ body.admin-mode .smart-menu-tools{display:none}
         <div class="gallery-lightbox-caption" id="galleryLightboxCaption"></div>
       </div>
       <button type="button" class="gallery-lightbox-nav gallery-lightbox-next" id="galleryLightboxNext" aria-label="Next photo">›</button>
+    </div>
+  </section>
+
+  <section id="soundtrack" class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">On the Speakers</div>
+        <h2>Sound</h2>
+      </div>
+      <p class="section-note">What's playing behind the espresso machine right now.</p>
+    </div>
+
+    <div class="soundtrack-wrap">
+      <div id="soundtrackCard" class="soundtrack-card" hidden>
+        <div class="soundtrack-note-icon" aria-hidden="true">🎵</div>
+        <div>
+          <div class="soundtrack-kicker"><span class="soundtrack-live-dot" aria-hidden="true"></span>Now Playing</div>
+          <h3 id="soundtrackSong" class="soundtrack-song"></h3>
+          <p id="soundtrackArtist" class="soundtrack-artist"></p>
+          <div id="soundtrackVibeBadge" class="soundtrack-vibe-badge" hidden></div>
+          <br>
+          <a id="soundtrackLink" class="soundtrack-listen-link" href="#" target="_blank" rel="noopener" hidden>🎧 Listen to this one</a>
+        </div>
+      </div>
+      <div id="soundtrackEmpty" class="soundtrack-empty" hidden>🎵 Nothing queued up right now — ask us what we're into today.</div>
+    </div>
+
+    <div id="soundtrackAdmin" class="soundtrack-admin">
+      <div class="eyebrow">Soundtrack Manager</div>
+      <h3 style="margin:6px 0 14px;">Tell visitors what's playing</h3>
+      <div class="soundtrack-admin-grid">
+        <div>
+          <label for="soundtrackEnabled">Show on site</label>
+          <select id="soundtrackEnabled">
+            <option value="enabled">Enabled</option>
+            <option value="disabled">Disabled</option>
+          </select>
+        </div>
+        <div>
+          <label for="soundtrackVibeInput">Vibe tag</label>
+          <input id="soundtrackVibeInput" type="text" placeholder="e.g. Lo-fi lunch">
+        </div>
+        <div>
+          <label for="soundtrackSongInput">Song title</label>
+          <input id="soundtrackSongInput" type="text" placeholder="Song title">
+        </div>
+        <div>
+          <label for="soundtrackArtistInput">Artist</label>
+          <input id="soundtrackArtistInput" type="text" placeholder="Artist name">
+        </div>
+        <div class="full">
+          <label for="soundtrackLinkInput">Listen link (Spotify, YouTube, etc — optional)</label>
+          <input id="soundtrackLinkInput" type="text" placeholder="https://open.spotify.com/track/...">
+        </div>
+      </div>
+      <div class="soundtrack-suggest-row">
+        <button type="button" id="soundtrackSuggestBtn" class="admin-toolbar-btn">🕒 Suggest vibe for right now</button>
+        <span class="soundtrack-suggest-hint">Fills the vibe tag based on the time of day — review before saving.</span>
+      </div>
+      <div class="soundtrack-admin-actions">
+        <button type="button" id="saveSoundtrackBtn" class="admin-toolbar-btn admin-toolbar-btn-primary">Save now playing</button>
+        <button type="button" id="clearSoundtrackBtn" class="admin-toolbar-btn">Clear / hide</button>
+      </div>
     </div>
   </section>
 
@@ -2221,7 +2348,7 @@ body.admin-mode .smart-menu-tools{display:none}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.8" cy="7.2" r="0.9" fill="currentColor" stroke="none"/></svg>
       </a>
     </div>
-    <div><a href="#menu">Menu</a> &nbsp;·&nbsp; <a href="#about">About</a> &nbsp;·&nbsp; <a href="#gallery">Gallery</a> &nbsp;·&nbsp; <a href="#visit">Visit</a> &nbsp;·&nbsp; <button type="button" id="adminToggle" class="admin-link">Admin</button></div>
+    <div><a href="#menu">Menu</a> &nbsp;·&nbsp; <a href="#about">About</a> &nbsp;·&nbsp; <a href="#gallery">Gallery</a> &nbsp;·&nbsp; <a href="#soundtrack">Sound</a> &nbsp;·&nbsp; <a href="#visit">Visit</a> &nbsp;·&nbsp; <button type="button" id="adminToggle" class="admin-link">Admin</button></div>
   </div>
 </footer>
 
@@ -2550,7 +2677,7 @@ body.admin-mode .smart-menu-tools{display:none}
         "desc": "",
         "price": "₱35",
         "studentPick": true,
-        "status": "available",
+        "status": "sold-out",
         "stock": null,
         "lowStockAt": 3,
         "image": null
@@ -2629,7 +2756,7 @@ body.admin-mode .smart-menu-tools{display:none}
         "desc": "Special / Ordinary",
         "price": "₱25 / ₱15",
         "studentPick": true,
-        "status": "sold-out",
+        "status": "available",
         "stock": null,
         "lowStockAt": 3,
         "image": null
@@ -2892,9 +3019,18 @@ body.admin-mode .smart-menu-tools{display:none}
 
   // SITE_VERSION_START — stamped automatically every time you Publish or Download.
   const DEFAULT_SITE_VERSION = /*SITE_VERSION_START*/{
-  "version": 2,
-  "updatedAt": "2026-07-28T06:36:48.253Z"
+  "version": 1,
+  "updatedAt": "2026-07-27T00:00:00.000Z"
 }/*SITE_VERSION_END*/;
+
+  // SOUNDTRACK_DATA_START — published together with the rest of the site data.
+  const DEFAULT_SOUNDTRACK = /*SOUNDTRACK_DATA_START*/{
+  "enabled": false,
+  "song": "",
+  "artist": "",
+  "link": "",
+  "vibe": ""
+}/*SOUNDTRACK_DATA_END*/;
 
 
   function normalizeMenuData(data){
@@ -2996,6 +3132,113 @@ body.admin-mode .smart-menu-tools{display:none}
 
   function loadSiteVersion(){
     return JSON.parse(JSON.stringify(DEFAULT_SITE_VERSION));
+  }
+
+  function loadSoundtrack(){
+    try{
+      const saved = localStorage.getItem('solaSoundtrack');
+      if (saved) return { ...JSON.parse(JSON.stringify(DEFAULT_SOUNDTRACK)), ...JSON.parse(saved) };
+    }catch(e){ /* ignore corrupt local data */ }
+    return JSON.parse(JSON.stringify(DEFAULT_SOUNDTRACK));
+  }
+
+  function saveSoundtrackLocal(){
+    try{ localStorage.setItem('solaSoundtrack', JSON.stringify(soundtrackData)); }catch(e){}
+  }
+
+  // Local-only "most played" tally — same spirit as popularityData/searchLog:
+  // stored per-device, not published to GitHub, purely an admin insight.
+  function loadSoundtrackHistory(){
+    try{
+      const saved = localStorage.getItem('solaSoundtrackHistory');
+      if (saved) return JSON.parse(saved);
+    }catch(e){ /* ignore corrupt local data */ }
+    return {};
+  }
+
+  function saveSoundtrackHistoryLocal(){
+    try{ localStorage.setItem('solaSoundtrackHistory', JSON.stringify(soundtrackHistory)); }catch(e){}
+  }
+
+  function bumpSoundtrackHistory(song, artist){
+    const key = (song || '').trim() + '::' + (artist || '').trim();
+    if (key === '::') return;
+    const existing = soundtrackHistory[key] || { song, artist, count: 0, lastPlayed: null };
+    existing.song = song;
+    existing.artist = artist;
+    existing.count += 1;
+    existing.lastPlayed = new Date().toISOString();
+    soundtrackHistory[key] = existing;
+    saveSoundtrackHistoryLocal();
+  }
+
+  // Suggests a vibe tag from the time of day — an admin convenience only;
+  // it never overwrites anything until "Suggest vibe" is actually clicked.
+  function suggestVibeForTime(){
+    const h = new Date().getHours();
+    if (h < 10) return '🌅 Acoustic morning';
+    if (h < 14) return '☀️ Lo-fi lunch';
+    if (h < 17) return '🍃 Chill afternoon';
+    return '🌆 Jazz wind-down';
+  }
+
+  function soundtrackIsActive(){
+    return !!(soundtrackData.enabled && soundtrackData.song && soundtrackData.artist);
+  }
+
+  function renderSoundtrack(){
+    const card = document.getElementById('soundtrackCard');
+    const empty = document.getElementById('soundtrackEmpty');
+    if (!card || !empty) return;
+    const active = soundtrackIsActive();
+    card.hidden = !active;
+    empty.hidden = active;
+    if (!active) return;
+
+    document.getElementById('soundtrackSong').textContent = soundtrackData.song;
+    document.getElementById('soundtrackArtist').textContent = soundtrackData.artist;
+
+    const badge = document.getElementById('soundtrackVibeBadge');
+    if (soundtrackData.vibe){
+      badge.textContent = soundtrackData.vibe;
+      badge.hidden = false;
+    } else {
+      badge.hidden = true;
+    }
+
+    const link = document.getElementById('soundtrackLink');
+    if (soundtrackData.link){
+      link.href = soundtrackData.link;
+      link.hidden = false;
+    } else {
+      link.hidden = true;
+    }
+  }
+
+  function renderSoundtrackAdmin(){
+    const enabledEl = document.getElementById('soundtrackEnabled');
+    if (!enabledEl) return;
+    enabledEl.value = soundtrackData.enabled ? 'enabled' : 'disabled';
+    document.getElementById('soundtrackSongInput').value = soundtrackData.song || '';
+    document.getElementById('soundtrackArtistInput').value = soundtrackData.artist || '';
+    document.getElementById('soundtrackLinkInput').value = soundtrackData.link || '';
+    document.getElementById('soundtrackVibeInput').value = soundtrackData.vibe || '';
+  }
+
+  function renderSoundtrackDashboard(){
+    const nowEl = document.getElementById('dashboardSoundtrackNow');
+    if (nowEl){
+      nowEl.innerHTML = soundtrackIsActive()
+        ? '<strong>🎵 '+escapeHtml(soundtrackData.song)+'</strong> — '+escapeHtml(soundtrackData.artist)+(soundtrackData.vibe ? ' <span class="audit-meta">· '+escapeHtml(soundtrackData.vibe)+'</span>' : '')
+        : '<span style="opacity:.65;">Nothing set right now.</span>';
+    }
+    const histEl = document.getElementById('dashboardSoundtrackHistory');
+    if (histEl){
+      const ranked = Object.values(soundtrackHistory).sort((a,b) => b.count - a.count).slice(0, 10);
+      histEl.innerHTML = ranked.length ? ranked.map(entry =>
+        '<div class="dashboard-list-row"><span>🎵 <strong>'+escapeHtml(entry.song)+'</strong> <small>('+escapeHtml(entry.artist)+')</small></span><span>'+entry.count+' play'+(entry.count===1?'':'s')+'</span></div>'
+      ).join('') : '<div style="opacity:.65;">No songs saved yet.</div>';
+    }
   }
 
   function renderVersionInfo(){
@@ -3208,6 +3451,8 @@ body.admin-mode .smart-menu-tools{display:none}
   let lastSearchResultCount = 0;
   let auditLog = loadAuditLog();
   let feedbackData = loadFeedback();
+  let soundtrackData = loadSoundtrack();
+  let soundtrackHistory = loadSoundtrackHistory();
   let isAdmin = sessionStorage.getItem('solaAdmin') === '1';
 
   function getStatusMeta(status){
@@ -4247,6 +4492,7 @@ body.admin-mode .smart-menu-tools{display:none}
 
     renderFeedbackDashboard();
     renderAuditLog();
+    renderSoundtrackDashboard();
   }
 
   function renderFeedbackDashboard(){
@@ -4431,6 +4677,47 @@ body.admin-mode .smart-menu-tools{display:none}
     logAudit('Cleared announcement');
   });
 
+  document.getElementById('soundtrackSuggestBtn').addEventListener('click', () => {
+    document.getElementById('soundtrackVibeInput').value = suggestVibeForTime();
+  });
+
+  document.getElementById('saveSoundtrackBtn').addEventListener('click', () => {
+    const song = document.getElementById('soundtrackSongInput').value.trim();
+    const artist = document.getElementById('soundtrackArtistInput').value.trim();
+    if (!song || !artist){
+      alert('Add both a song title and an artist before saving.');
+      return;
+    }
+    soundtrackData = {
+      enabled: document.getElementById('soundtrackEnabled').value === 'enabled',
+      song, artist,
+      link: document.getElementById('soundtrackLinkInput').value.trim(),
+      vibe: document.getElementById('soundtrackVibeInput').value.trim()
+    };
+    saveSoundtrackLocal();
+    bumpSoundtrackHistory(song, artist);
+    renderSoundtrack();
+    renderSoundtrackDashboard();
+    logAudit('Updated now playing', song + ' — ' + artist);
+  });
+
+  document.getElementById('clearSoundtrackBtn').addEventListener('click', () => {
+    if (!confirm('Clear the soundtrack card and hide it from visitors?')) return;
+    soundtrackData = { enabled:false, song:'', artist:'', link:'', vibe:'' };
+    saveSoundtrackLocal();
+    renderSoundtrackAdmin();
+    renderSoundtrack();
+    logAudit('Cleared soundtrack');
+  });
+
+  document.getElementById('resetSoundtrackHistoryBtn').addEventListener('click', () => {
+    if (!confirm('Clear the "most played" soundtrack stats on this device?')) return;
+    soundtrackHistory = {};
+    saveSoundtrackHistoryLocal();
+    renderSoundtrackDashboard();
+    logAudit('Reset soundtrack stats');
+  });
+
   function setAdminMode(on){
     isAdmin = on;
     document.body.classList.toggle('admin-mode', on);
@@ -4440,6 +4727,7 @@ body.admin-mode .smart-menu-tools{display:none}
     renderMenu();
     renderGallery();
     renderContactAdminFields();
+    renderSoundtrackAdmin();
     logAudit(on ? 'Signed in to admin' : 'Signed out of admin');
   }
 
@@ -4637,6 +4925,13 @@ body.admin-mode .smart-menu-tools{display:none}
       missing.push('SITE_SETTINGS_START / SITE_SETTINGS_END');
     }
 
+    const soundtrackRe = /\/\*SOUNDTRACK_DATA_START\*\/[\s\S]*?\/\*SOUNDTRACK_DATA_END\*\//;
+    if (soundtrackRe.test(out)) {
+      out = out.replace(soundtrackRe, '/*SOUNDTRACK_DATA_START*/' + JSON.stringify(soundtrackData, null, 2) + '/*SOUNDTRACK_DATA_END*/');
+    } else {
+      missing.push('SOUNDTRACK_DATA_START / SOUNDTRACK_DATA_END');
+    }
+
     return { html: out, missing };
   }
 
@@ -4720,6 +5015,8 @@ body.admin-mode .smart-menu-tools{display:none}
   setSiteQrCode();
   renderAnnouncementAdmin();
   renderAnnouncement();
+  renderSoundtrackAdmin();
+  renderSoundtrack();
   renderDashboard();
   renderVersionInfo();
 
