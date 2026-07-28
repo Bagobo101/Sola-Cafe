@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
 <title>Sola Café — Coffee for the early risers</title>
-<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Bagobo101/Sola-Café/main/logo-removebg-preview.png">
-<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Bagobo101/Sola-Café/main/logo-removebg-preview.png">
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Bagobo101/Sola-Cafe/main/logo-removebg-preview.png">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Bagobo101/Sola-Cafe/main/logo-removebg-preview.png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#E3A15C">
 <meta name="description" content="Sola Café — coffee for the early risers. Fresh brews, pastries, and a cozy spot to study or catch up, open Mon–Fri, 6AM–6PM.">
@@ -14,12 +14,12 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Sola Café — Coffee for the early risers">
 <meta property="og:description" content="Fresh brews, pastries, and a cozy spot to study or catch up, open Mon–Fri, 6AM–6PM.">
-<meta property="og:image" content="https://raw.githubusercontent.com/Bagobo101/Sola-Café/main/logo-removebg-preview.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Bagobo101/Sola-Cafe/main/logo-removebg-preview.png">
 <meta property="og:url" content="https://bagobo101.github.io/Sola-Caf%C3%A9/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Sola Café — Coffee for the early risers">
 <meta name="twitter:description" content="Fresh brews, pastries, and a cozy spot to study or catch up, open Mon–Fri, 6AM–6PM.">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/Bagobo101/Sola-Café/main/logo-removebg-preview.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Bagobo101/Sola-Cafe/main/logo-removebg-preview.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;0,9..144,700;1,9..144,450;1,9..144,600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -2232,12 +2232,38 @@ body.admin-mode .smart-menu-tools{display:none}
     </div>
     <div class="visit-grid">
       <div class="visit-cell">
-        <h3>HOURS</h3>
+        <h3>HOURS <span class="status-dot" id="hoursStatusDot" aria-hidden="true"></span><span id="hoursStatusText" class="hours-status-text">Checking hours…</span></h3>
         <div id="weatherChip" class="weather-chip" hidden><span id="weatherIcon">🌤️</span> <span id="weatherText"></span></div>
         <div id="weatherPairing" class="weather-pairing" hidden>☕ <span id="weatherPairingText"></span></div>
-        <div class="hours-row"><span>Mon – Fri</span><span>6:00 AM – 6:00 PM</span></div>
-        <div class="hours-row"><span>Sat – Sun</span><span>Closed</span></div>
-        <div class="hours-row"><span>Kitchen closes</span><span>5:30 PM</span></div>
+        <div class="hours-row"><span>Mon – Fri</span><span id="hoursWeekdayRow">6:00 AM – 6:00 PM</span></div>
+        <div class="hours-row"><span>Sat – Sun</span><span id="hoursWeekendRow">Closed</span></div>
+        <div class="hours-row"><span>Kitchen closes</span><span id="hoursKitchenRow">5:30 PM</span></div>
+        <p id="hoursHolidayNote" class="hours-holiday-note" hidden></p>
+
+        <div id="hoursAdminEdit" class="contact-admin-edit">
+          <label class="admin-status-label" style="margin-top:0;">Weekly hours</label>
+          <label>Mon–Fri opens<input type="time" id="editWeekdayOpen" class="admin-input"></label>
+          <label>Mon–Fri closes<input type="time" id="editWeekdayClose" class="admin-input"></label>
+          <label>Kitchen closes<input type="time" id="editKitchenCloses" class="admin-input"></label>
+          <label class="admin-status-label">Sat–Sun</label>
+          <select id="editWeekendMode" class="admin-status-select">
+            <option value="closed">Closed</option>
+            <option value="custom">Open custom hours</option>
+          </select>
+          <label>Sat–Sun opens<input type="time" id="editWeekendOpen" class="admin-input"></label>
+          <label>Sat–Sun closes<input type="time" id="editWeekendClose" class="admin-input"></label>
+          <button type="button" id="saveHoursBtn" class="admin-toolbar-btn admin-toolbar-btn-primary" style="margin-top:8px;">Save hours</button>
+
+          <label class="admin-status-label" style="margin-top:18px;">Holiday / one-off override</label>
+          <p class="admin-field-note">Set a single date to override the schedule above — for holidays, closures, or special hours. Leave the date blank to remove the override.</p>
+          <label>Date<input type="date" id="editHolidayDate" class="admin-input"></label>
+          <select id="editHolidayClosed" class="admin-status-select">
+            <option value="closed">Closed that day</option>
+            <option value="open">Open as usual (just show a note)</option>
+          </select>
+          <label>Note shown to visitors<input type="text" id="editHolidayNote" class="admin-input" placeholder="Closed for Rizal Day"></label>
+          <button type="button" id="saveHolidayBtn" class="admin-toolbar-btn" style="margin-top:8px;">Save override</button>
+        </div>
       </div>
       <div class="visit-cell">
         <h3>LOCATION</h3>
@@ -2372,7 +2398,8 @@ body.admin-mode .smart-menu-tools{display:none}
     });
   });
 
-  // Day timeline: window is 6:00 AM to 6:00 PM, Monday through Friday.
+  // Day timeline: driven by hoursData (editable from the admin panel),
+  // with an optional one-off holiday override.
   function updateTimeline(){
     const now = new Date();
     const day = now.getDay(); // 0 = Sunday ... 6 = Saturday
@@ -2380,51 +2407,104 @@ body.admin-mode .smart-menu-tools{display:none}
     const m = now.getMinutes();
     const minutesNow = h * 60 + m;
 
-    const openStart = 6 * 60;   // 6:00 AM in minutes
-    const openEnd = 18 * 60;    // 6:00 PM in minutes
-    const totalWindow = openEnd - openStart; // 720 minutes
+    const openStart = timeToMinutes(hoursData.weekdayOpen);
+    const openEnd = timeToMinutes(hoursData.weekdayClose);
+    const totalWindow = openEnd - openStart;
 
     const isWeekday = day >= 1 && day <= 5;
-    const elapsed = minutesNow - openStart;
-    const isOpen = isWeekday && elapsed >= 0 && elapsed <= totalWindow;
+    const weekendOpenToday = !isWeekday && hoursData.weekendMode === 'custom' && hoursData.weekendOpen && hoursData.weekendClose;
+    const weekendStart = weekendOpenToday ? timeToMinutes(hoursData.weekendOpen) : 0;
+    const weekendEnd = weekendOpenToday ? timeToMinutes(hoursData.weekendClose) : 0;
+    const weekendWindow = weekendEnd - weekendStart;
+
+    const holidayToday = todayIsHoliday();
+    const holidayForcesClosed = holidayToday && hoursData.holidayClosed;
+
+    const elapsed = isWeekday ? (minutesNow - openStart) : (minutesNow - weekendStart);
+    const activeWindow = isWeekday ? totalWindow : weekendWindow;
+    const isOpen = !holidayForcesClosed && (isWeekday ? elapsed >= 0 && elapsed <= totalWindow : weekendOpenToday && elapsed >= 0 && elapsed <= weekendWindow);
 
     const dot = document.getElementById('statusDot');
     const text = document.getElementById('statusText');
     const fill = document.getElementById('timelineFill');
     const nowMarker = document.getElementById('timelineNow');
     const readout = document.getElementById('timelineReadout');
+    const hoursDot = document.getElementById('hoursStatusDot');
+    const hoursText = document.getElementById('hoursStatusText');
 
-    if (isOpen){
-      const pct = Math.min(100, Math.max(0, (elapsed / totalWindow) * 100));
-      fill.style.width = pct + '%';
-      nowMarker.style.left = pct + '%';
-      dot.classList.remove('closed');
-      text.textContent = 'Open now';
+    let statusLabel, readoutHtml;
 
-      const minsLeft = totalWindow - elapsed;
+    if (holidayForcesClosed){
+      statusLabel = 'Closed today';
+      readoutHtml = '<strong>Closed today' + (hoursData.holidayNote ? ' — ' + escapeHtml(hoursData.holidayNote) : '') + '.</strong>';
+    } else if (isOpen){
+      const pct = Math.min(100, Math.max(0, (elapsed / activeWindow) * 100));
+      if (fill) fill.style.width = pct + '%';
+      if (nowMarker) nowMarker.style.left = pct + '%';
+      statusLabel = 'Open now';
+      const minsLeft = activeWindow - elapsed;
       const hoursLeft = Math.floor(minsLeft / 60);
       const minsLeftRem = Math.round(minsLeft % 60);
-      readout.innerHTML = '<strong>Open now.</strong> Last call in ' + hoursLeft + 'h ' + minsLeftRem + 'm.';
+      readoutHtml = '<strong>Open now.</strong> Last call in ' + hoursLeft + 'h ' + minsLeftRem + 'm.';
     } else {
-      fill.style.width = '0%';
-      nowMarker.style.left = '0%';
-      dot.classList.add('closed');
+      if (fill) fill.style.width = '0%';
+      if (nowMarker) nowMarker.style.left = '0%';
 
       if (!isWeekday){
-        text.textContent = 'Closed — opens Monday';
-        readout.innerHTML = '<strong>Closed for the weekend.</strong> Doors open again Monday at 6:00 AM.';
+        statusLabel = 'Closed — opens Monday';
+        readoutHtml = '<strong>Closed for the weekend.</strong> Doors open again Monday at ' + formatTime12(hoursData.weekdayOpen) + '.';
       } else if (elapsed < 0){
-        text.textContent = 'Closed — opens 6AM';
-        readout.innerHTML = '<strong>Closed right now.</strong> Doors open at 6:00 AM.';
+        statusLabel = 'Closed — opens ' + formatTime12(hoursData.weekdayOpen);
+        readoutHtml = '<strong>Closed right now.</strong> Doors open at ' + formatTime12(hoursData.weekdayOpen) + '.';
       } else {
-        text.textContent = 'Closed — opens 6AM';
-        readout.innerHTML = '<strong>Closed for the day.</strong> Doors open again at 6:00 AM.';
+        statusLabel = 'Closed — opens ' + formatTime12(hoursData.weekdayOpen);
+        readoutHtml = '<strong>Closed for the day.</strong> Doors open again at ' + formatTime12(hoursData.weekdayOpen) + '.';
       }
+    }
+
+    [dot, hoursDot].forEach(el => { if (el) el.classList.toggle('closed', !isOpen); });
+    [text, hoursText].forEach(el => { if (el) el.textContent = statusLabel; });
+    if (readout) readout.innerHTML = readoutHtml;
+
+    renderHoursPanel(holidayToday);
+  }
+
+  function renderHoursPanel(holidayToday){
+    const weekdayRow = document.getElementById('hoursWeekdayRow');
+    const weekendRow = document.getElementById('hoursWeekendRow');
+    const kitchenRow = document.getElementById('hoursKitchenRow');
+    const holidayNote = document.getElementById('hoursHolidayNote');
+    if (!weekdayRow) return;
+
+    weekdayRow.textContent = formatTime12(hoursData.weekdayOpen) + ' – ' + formatTime12(hoursData.weekdayClose);
+    weekendRow.textContent = hoursData.weekendMode === 'custom' && hoursData.weekendOpen && hoursData.weekendClose
+      ? formatTime12(hoursData.weekendOpen) + ' – ' + formatTime12(hoursData.weekendClose)
+      : 'Closed';
+    kitchenRow.textContent = formatTime12(hoursData.kitchenCloses);
+
+    if (holidayToday && hoursData.holidayNote){
+      holidayNote.textContent = '📌 ' + hoursData.holidayNote;
+      holidayNote.hidden = false;
+    } else {
+      holidayNote.hidden = true;
     }
   }
 
-  updateTimeline();
-  setInterval(updateTimeline, 60000);
+  function renderHoursAdmin(){
+    const openEl = document.getElementById('editWeekdayOpen');
+    if (!openEl) return;
+    openEl.value = hoursData.weekdayOpen;
+    document.getElementById('editWeekdayClose').value = hoursData.weekdayClose;
+    document.getElementById('editKitchenCloses').value = hoursData.kitchenCloses;
+    document.getElementById('editWeekendMode').value = hoursData.weekendMode;
+    document.getElementById('editWeekendOpen').value = hoursData.weekendOpen;
+    document.getElementById('editWeekendClose').value = hoursData.weekendClose;
+    document.getElementById('editHolidayDate').value = hoursData.holidayDate;
+    document.getElementById('editHolidayClosed').value = hoursData.holidayClosed ? 'closed' : 'open';
+    document.getElementById('editHolidayNote').value = hoursData.holidayNote;
+  }
+
+  // updateTimeline() is invoked later, once hoursData/DEFAULT_HOURS are defined below.
 
   // Sticky "Menu" shortcut (mobile only): show once the hero has scrolled
   // out of view, hide again once the real #menu section is on screen.
@@ -2683,7 +2763,7 @@ body.admin-mode .smart-menu-tools{display:none}
         "desc": "",
         "price": "₱35",
         "studentPick": true,
-        "status": "available",
+        "status": "sold-out",
         "stock": null,
         "lowStockAt": 3,
         "image": null
@@ -2762,7 +2842,7 @@ body.admin-mode .smart-menu-tools{display:none}
         "desc": "Special / Ordinary",
         "price": "₱25 / ₱15",
         "studentPick": true,
-        "status": "sold-out",
+        "status": "available",
         "stock": null,
         "lowStockAt": 3,
         "image": null
@@ -3025,9 +3105,22 @@ body.admin-mode .smart-menu-tools{display:none}
 
   // SITE_VERSION_START — stamped automatically every time you Publish or Download.
   const DEFAULT_SITE_VERSION = /*SITE_VERSION_START*/{
-  "version": 3,
-  "updatedAt": "2026-07-28T09:22:33.502Z"
+  "version": 1,
+  "updatedAt": "2026-07-27T00:00:00.000Z"
 }/*SITE_VERSION_END*/;
+
+  // HOURS_DATA_START — published together with the rest of the site data.
+  const DEFAULT_HOURS = /*HOURS_DATA_START*/{
+  "weekdayOpen": "06:00",
+  "weekdayClose": "18:00",
+  "kitchenCloses": "17:30",
+  "weekendMode": "closed",
+  "weekendOpen": "",
+  "weekendClose": "",
+  "holidayDate": "",
+  "holidayClosed": true,
+  "holidayNote": ""
+}/*HOURS_DATA_END*/;
 
   // SOUNDTRACK_DATA_START — published together with the rest of the site data.
   const DEFAULT_SOUNDTRACK = /*SOUNDTRACK_DATA_START*/{
@@ -3134,6 +3227,44 @@ body.admin-mode .smart-menu-tools{display:none}
 
   function saveSiteSettingsLocal(){
     try{ localStorage.setItem('solaSiteSettings', JSON.stringify(siteSettings)); }catch(e){}
+  }
+
+  function loadHours(){
+    try{
+      const saved = localStorage.getItem('solaHours');
+      if (saved) return { ...JSON.parse(JSON.stringify(DEFAULT_HOURS)), ...JSON.parse(saved) };
+    }catch(e){ /* ignore corrupt local data */ }
+    return JSON.parse(JSON.stringify(DEFAULT_HOURS));
+  }
+
+  function saveHoursLocal(){
+    try{ localStorage.setItem('solaHours', JSON.stringify(hoursData)); }catch(e){}
+  }
+
+  // "06:00" -> "6:00 AM"
+  function formatTime12(hhmm){
+    if (!hhmm || hhmm.indexOf(':') === -1) return '';
+    const [hStr, mStr] = hhmm.split(':');
+    let h = parseInt(hStr, 10);
+    const m = mStr.padStart(2, '0');
+    const suffix = h >= 12 ? 'PM' : 'AM';
+    h = h % 12; if (h === 0) h = 12;
+    return h + ':' + m + ' ' + suffix;
+  }
+
+  // "06:00" -> 360 (minutes since midnight)
+  function timeToMinutes(hhmm){
+    if (!hhmm || hhmm.indexOf(':') === -1) return 0;
+    const [h, m] = hhmm.split(':').map(Number);
+    return (h * 60) + (m || 0);
+  }
+
+  function todayIsHoliday(){
+    if (!hoursData.holidayDate) return false;
+    const today = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const todayStr = today.getFullYear() + '-' + pad(today.getMonth()+1) + '-' + pad(today.getDate());
+    return hoursData.holidayDate === todayStr;
   }
 
   function loadSiteVersion(){
@@ -3502,6 +3633,7 @@ body.admin-mode .smart-menu-tools{display:none}
   let feedbackData = loadFeedback();
   let soundtrackData = loadSoundtrack();
   let soundtrackHistory = loadSoundtrackHistory();
+  let hoursData = loadHours();
   let isAdmin = sessionStorage.getItem('solaAdmin') === '1';
 
   function getStatusMeta(status){
@@ -5066,6 +5198,8 @@ body.admin-mode .smart-menu-tools{display:none}
   renderAnnouncement();
   renderSoundtrackAdmin();
   renderSoundtrack();
+  updateTimeline();
+  setInterval(updateTimeline, 60000);
   renderDashboard();
   renderVersionInfo();
 
