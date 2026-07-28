@@ -1614,6 +1614,11 @@ body.admin-mode .announcement-admin{display:block}
   font-size:13px; font-weight:700; color:var(--caramel-deep); text-decoration:none;
 }
 .soundtrack-listen-link:hover{ text-decoration:underline; }
+.soundtrack-player{margin-top:14px; border-radius:10px; overflow:hidden; max-width:420px}
+.soundtrack-player iframe{display:block; width:100%; border:0}
+.soundtrack-player.player-spotify iframe{height:152px}
+.soundtrack-player.player-youtube{position:relative; aspect-ratio:16/9; height:auto}
+.soundtrack-player.player-youtube iframe{position:absolute; inset:0; width:100%; height:100%}
 .soundtrack-empty{padding:22px 24px; border-radius:14px; border:1px dashed var(--panel-line); background:var(--cream-deep); color:var(--text-dim); text-align:center}
 .soundtrack-admin{display:none; margin:22px auto 0; max-width:640px; padding:18px; border-radius:12px; border:1px dashed var(--panel-line); background:var(--cream-deep)}
 body.admin-mode .soundtrack-admin{display:block}
@@ -2171,6 +2176,7 @@ body.admin-mode .smart-menu-tools{display:none}
           <h3 id="soundtrackSong" class="soundtrack-song"></h3>
           <p id="soundtrackArtist" class="soundtrack-artist"></p>
           <div id="soundtrackVibeBadge" class="soundtrack-vibe-badge" hidden></div>
+          <div id="soundtrackPlayer" class="soundtrack-player" hidden></div>
           <br>
           <a id="soundtrackLink" class="soundtrack-listen-link" href="#" target="_blank" rel="noopener" hidden>🎧 Listen to this one</a>
         </div>
@@ -2202,7 +2208,7 @@ body.admin-mode .smart-menu-tools{display:none}
           <input id="soundtrackArtistInput" type="text" placeholder="Artist name">
         </div>
         <div class="full">
-          <label for="soundtrackLinkInput">Listen link (Spotify, YouTube, etc — optional)</label>
+          <label for="soundtrackLinkInput">Spotify or YouTube link (optional — embeds a player automatically)</label>
           <input id="soundtrackLinkInput" type="text" placeholder="https://open.spotify.com/track/...">
         </div>
       </div>
@@ -2677,7 +2683,7 @@ body.admin-mode .smart-menu-tools{display:none}
         "desc": "",
         "price": "₱35",
         "studentPick": true,
-        "status": "available",
+        "status": "sold-out",
         "stock": null,
         "lowStockAt": 3,
         "image": null
@@ -2756,7 +2762,7 @@ body.admin-mode .smart-menu-tools{display:none}
         "desc": "Special / Ordinary",
         "price": "₱25 / ₱15",
         "studentPick": true,
-        "status": "sold-out",
+        "status": "available",
         "stock": null,
         "lowStockAt": 3,
         "image": null
@@ -3019,17 +3025,17 @@ body.admin-mode .smart-menu-tools{display:none}
 
   // SITE_VERSION_START — stamped automatically every time you Publish or Download.
   const DEFAULT_SITE_VERSION = /*SITE_VERSION_START*/{
-  "version": 2,
-  "updatedAt": "2026-07-28T07:08:21.463Z"
+  "version": 1,
+  "updatedAt": "2026-07-27T00:00:00.000Z"
 }/*SITE_VERSION_END*/;
 
   // SOUNDTRACK_DATA_START — published together with the rest of the site data.
   const DEFAULT_SOUNDTRACK = /*SOUNDTRACK_DATA_START*/{
-  "enabled": true,
-  "song": "Christian lo-fi playlist",
-  "artist": "Berederine",
-  "link": "https://youtu.be/P-XnYn3FUq4?si=Z3YChGpE_NdDNh-G",
-  "vibe": "🍃 Chill afternoon"
+  "enabled": false,
+  "song": "",
+  "artist": "",
+  "link": "",
+  "vibe": ""
 }/*SOUNDTRACK_DATA_END*/;
 
 
@@ -3182,6 +3188,33 @@ body.admin-mode .smart-menu-tools{display:none}
     return '🌆 Jazz wind-down';
   }
 
+  // Recognizes Spotify and YouTube links and turns them into an embeddable
+  // player. Returns null for anything else, which falls back to a plain
+  // "Listen" link instead of a broken/blank embed.
+  function getSoundtrackEmbed(link){
+    if (!link) return null;
+
+    const spotifyMatch = link.match(/open\.spotify\.com\/(track|album|playlist|episode|show)\/([a-zA-Z0-9]+)/);
+    if (spotifyMatch){
+      return {
+        type: 'spotify',
+        src: 'https://open.spotify.com/embed/' + spotifyMatch[1] + '/' + spotifyMatch[2],
+        label: 'Open in Spotify'
+      };
+    }
+
+    const ytMatch = link.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/|music\.youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{6,})/);
+    if (ytMatch){
+      return {
+        type: 'youtube',
+        src: 'https://www.youtube.com/embed/' + ytMatch[1],
+        label: 'Open in YouTube'
+      };
+    }
+
+    return null;
+  }
+
   function soundtrackIsActive(){
     return !!(soundtrackData.enabled && soundtrackData.song && soundtrackData.artist);
   }
@@ -3207,10 +3240,26 @@ body.admin-mode .smart-menu-tools{display:none}
     }
 
     const link = document.getElementById('soundtrackLink');
-    if (soundtrackData.link){
+    const player = document.getElementById('soundtrackPlayer');
+    const embed = getSoundtrackEmbed(soundtrackData.link);
+
+    player.className = 'soundtrack-player';
+    if (embed){
+      player.innerHTML = '<iframe src="' + escapeAttr(embed.src) + '" loading="lazy" allow="encrypted-media; autoplay; clipboard-write; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+      player.classList.add('player-' + embed.type);
+      player.hidden = false;
       link.href = soundtrackData.link;
+      link.textContent = '🎧 ' + embed.label;
+      link.hidden = false;
+    } else if (soundtrackData.link){
+      player.innerHTML = '';
+      player.hidden = true;
+      link.href = soundtrackData.link;
+      link.textContent = '🎧 Listen to this one';
       link.hidden = false;
     } else {
+      player.innerHTML = '';
+      player.hidden = true;
       link.hidden = true;
     }
   }
