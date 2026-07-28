@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>Page not found — Sola Café</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Bagobo101/Sola-Café/main/logo-removebg-preview.png">
+<meta name="theme-color" content="#E3A15C">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;0,9..144,700;1,9..144,450;1,9..144,600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: dark;
+    --cream:        #15100B;
+    --bg-deep:      #0A0705;
+    --espresso:     #F4E7D3;
+    --text:         var(--espresso);
+    --text-dim:     #AE9576;
+    --panel:        #211810;
+    --panel-line:   #3C2C1C;
+    --caramel:      #E3A15C;
+    --caramel-deep: #F0B979;
+    --caramel-btn-hover: #C97D3A;
+    --panel-shadow: 0 16px 36px -16px rgba(0,0,0,0.65), 0 0 0 1px rgba(227,161,92,0.05), 0 1px 0 rgba(244,231,211,0.04) inset;
+  }
+  body.theme-light{
+    color-scheme: light;
+    --cream:        #FBF3E7;
+    --bg-deep:      #2A1D13;
+    --espresso:     #3B2A1D;
+    --text:         var(--espresso);
+    --text-dim:     #7C6650;
+    --panel:        #FFFFFF;
+    --panel-line:   #E7D6BC;
+    --caramel:      #C97D3A;
+    --caramel-deep: #A8611F;
+    --caramel-btn-hover: #8F5119;
+    --panel-shadow: 0 16px 36px -16px rgba(60,40,20,0.16), 0 0 0 1px rgba(201,125,58,0.08), 0 1px 0 rgba(255,255,255,0.7) inset;
+  }
+  *{ box-sizing: border-box; }
+  html,body{ height: 100%; }
+  body{
+    margin: 0;
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Public Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .card{
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 20px;
+    box-shadow: var(--panel-shadow);
+    padding: 44px 32px 36px;
+  }
+  .cup{
+    font-size: 52px;
+    line-height: 1;
+    margin-bottom: 6px;
+    display: inline-block;
+    animation: wobble 3.2s ease-in-out infinite;
+  }
+  @keyframes wobble{
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-6deg); }
+  }
+  .code{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--caramel-deep);
+    margin: 14px 0 4px;
+  }
+  h1{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(24px, 5vw, 30px);
+    margin: 0 0 14px;
+  }
+  p{
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-dim);
+    margin: 0 0 28px;
+  }
+  .actions{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  a.btn{
+    display: block;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 13px 18px;
+    border-radius: 12px;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  a.btn:active{ transform: scale(0.98); }
+  .btn-primary{
+    background: var(--caramel);
+    color: #FFF6E9;
+  }
+  .btn-primary:hover{ background: var(--caramel-btn-hover); }
+  .btn-secondary{
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--panel-line);
+  }
+  .btn-secondary:hover{ border-color: var(--caramel); color: var(--caramel-deep); }
+</style>
+</head>
+<body>
+  <div class="card">
+    <span class="cup" aria-hidden="true">☕</span>
+    <div class="code">ERROR 404</div>
+    <h1>This page must've stepped out for coffee.</h1>
+    <p>The page you're looking for doesn't exist, moved, or never brewed at all. Let's get you back somewhere warm.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="./">Back to home</a>
+      <a class="btn btn-secondary" href="./#menu">View the menu</a>
+    </div>
+  </div>
+  <script>
+    // Match whatever theme the visitor already chose on the main site,
+    // so this page doesn't jarringly flash the wrong mode.
+    try{
+      var theme = localStorage.getItem('solaTheme') || 'dark';
+      document.body.classList.toggle('theme-light', theme === 'light');
+    }catch(e){}
+  </script>
+</body>
+</html>
