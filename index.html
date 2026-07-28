@@ -698,6 +698,212 @@
     }
   }
 
+  /* ---------- One-thumb friendly admin panel (mobile) ----------
+     Bigger tap targets, full-width stacked fields, and 16px font on
+     inputs (iOS auto-zooms on focus below 16px, which is jarring when
+     editing one-handed). Also stacks each menu item's edit fields into
+     a single column instead of a cramped inline row. */
+  @media (max-width: 640px){
+    body.admin-mode .admin-input,
+    body.admin-mode .admin-status-select{
+      min-height: 44px;
+      font-size: 16px;
+      padding: 11px 12px;
+    }
+    body.admin-mode .menu-item{
+      flex-direction: column;
+      align-items: stretch !important;
+    }
+    body.admin-mode .menu-item .price-input{
+      width: 100%;
+      text-align: left;
+      margin-top: 4px;
+    }
+    body.admin-mode .menu-item .admin-del-btn{
+      align-self: flex-end;
+      margin-top: 6px;
+    }
+    body.admin-mode .admin-bestseller-label{
+      display: block;
+      padding: 6px 0;
+      font-size: 14px;
+    }
+    body.admin-mode select.admin-status-select{ max-width: none; }
+  }
+
+  /* Sticky one-thumb publish bar — pins the most-needed admin action
+     (Publish live) within thumb reach at the bottom of the screen on
+     mobile, so admins don't have to scroll back up to the toolbar
+     every time they make a change. Mirrors .sticky-menu-btn. */
+  .sticky-admin-bar{
+    display: none;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 40;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    background: var(--header-bg);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--panel-line);
+    gap: 10px;
+  }
+  body.admin-mode .sticky-admin-bar{ display: flex; }
+  .sticky-admin-bar button{
+    flex: 1;
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 13px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .sticky-admin-bar .sab-publish{
+    background: var(--caramel);
+    color: #FFF6E9;
+    border: 1px solid var(--caramel);
+  }
+  .sticky-admin-bar .sab-publish:hover{ background: var(--caramel-btn-hover); }
+  .sticky-admin-bar .sab-exit{
+    background: var(--cream);
+    color: var(--text);
+    border: 1px solid var(--panel-line);
+    flex: 0 0 auto;
+    padding: 13px 16px;
+  }
+  @media (min-width: 641px){
+    .sticky-admin-bar{ display: none !important; }
+  }
+  /* BUGFIX: without this, the fixed sticky-admin-bar sits on top of the
+     last ~65-90px of page content (footer, last admin buttons) instead
+     of pushing it up. Reserve that space at the bottom of the page
+     whenever the bar is actually shown. */
+  @media (max-width: 640px){
+    body.admin-mode{ padding-bottom: 78px; }
+  }
+
+  /* ---------- Add-to-home-screen banner ---------- */
+  .a2hs-banner{
+    display: none;
+    position: fixed;
+    left: 14px; right: 14px; bottom: 14px;
+    z-index: 45;
+    background: var(--panel);
+    border: 1px solid var(--caramel);
+    border-radius: 14px;
+    padding: 14px 16px;
+    box-shadow: var(--panel-shadow);
+    align-items: center;
+    gap: 12px;
+  }
+  .a2hs-banner.is-visible{ display: flex; }
+  .a2hs-banner .a2hs-icon{ font-size: 22px; flex-shrink: 0; }
+  .a2hs-banner .a2hs-text{ flex: 1; font-size: 13px; color: var(--text); line-height: 1.4; }
+  .a2hs-banner .a2hs-text strong{ display:block; font-family:'Fraunces', serif; font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+  .a2hs-banner button{
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    border-radius: 8px;
+    padding: 9px 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .a2hs-banner .a2hs-install{
+    background: var(--caramel);
+    color: #FFF6E9;
+    border: 1px solid var(--caramel);
+  }
+  .a2hs-banner .a2hs-install:hover{ background: var(--caramel-btn-hover); }
+  .a2hs-banner .a2hs-dismiss{
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 18px;
+    padding: 4px 6px;
+  }
+  @media (min-width: 641px){
+    .a2hs-banner{ left: auto; right: 22px; bottom: 22px; max-width: 360px; }
+  }
+  body.admin-mode .a2hs-banner{ display: none !important; }
+
+  /* ---------- Swipeable menu categories (mobile) ---------- */
+  .menu-groups-wrap{ position: relative; }
+  .menu-groups{
+    touch-action: pan-y;
+    transition: transform 0.22s ease, opacity 0.22s ease;
+  }
+  .menu-groups.is-swiping-out-left{ transform: translateX(-26px); opacity: 0; }
+  .menu-groups.is-swiping-out-right{ transform: translateX(26px); opacity: 0; }
+  .menu-groups.is-swiping-in{ transition: none; }
+
+  .swipe-hint{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--caramel-deep);
+    background: rgba(227,161,92,0.12);
+    border: 1px dashed var(--caramel);
+    border-radius: 999px;
+    padding: 10px 16px;
+    margin: -2px 0 20px;
+    transition: opacity 0.3s ease;
+  }
+  .swipe-hint .hint-arrow{
+    display: inline-block;
+    font-size: 15px;
+  }
+  .swipe-hint .hint-arrow-left{ animation: swipeHintNudgeLeft 1.3s ease-in-out infinite; }
+  .swipe-hint .hint-arrow-right{ animation: swipeHintNudgeRight 1.3s ease-in-out infinite; }
+  @keyframes swipeHintNudgeLeft{
+    0%, 100% { transform: translateX(0); opacity: 0.7; }
+    50% { transform: translateX(-5px); opacity: 1; }
+  }
+  @keyframes swipeHintNudgeRight{
+    0%, 100% { transform: translateX(0); opacity: 0.7; }
+    50% { transform: translateX(5px); opacity: 1; }
+  }
+  @media (max-width: 760px){
+    .swipe-hint{ display: flex; }
+  }
+  body.admin-mode .swipe-hint{ display: none !important; }
+  @media (prefers-reduced-motion: reduce){
+    .swipe-hint .hint-arrow{ animation: none; }
+    .menu-groups{ transition: none; }
+  }
+
+  /* Directional flash — a brief chevron that flashes over the menu in
+     the direction just swiped, for immediate tactile-feeling feedback
+     beyond the (slower) content slide itself. */
+  .swipe-flash{
+    position: absolute;
+    top: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    font-size: 34px;
+    color: var(--caramel);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .swipe-flash.flash-left{ left: 4px; }
+  .swipe-flash.flash-right{ right: 4px; }
+  .swipe-flash.is-active.flash-left{ animation: swipeFlashLeft 0.45s ease-out; }
+  .swipe-flash.is-active.flash-right{ animation: swipeFlashRight 0.45s ease-out; }
+  @keyframes swipeFlashLeft{
+    0% { opacity: 0; transform: translateX(10px); }
+    35% { opacity: 0.9; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(-6px); }
+  }
+  @keyframes swipeFlashRight{
+    0% { opacity: 0; transform: translateX(-10px); }
+    35% { opacity: 0.9; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(6px); }
+  }
+
   /* Floating "Jump to menu" button — mobile only, appears once the hero
      has scrolled out of view and hides again once the real menu is on
      screen (no point floating a shortcut to a place you're already at). */
@@ -1404,6 +1610,18 @@ body.admin-mode .smart-menu-tools{display:none}
   <span aria-hidden="true">☕</span> Menu
 </a>
 
+<div id="stickyAdminBar" class="sticky-admin-bar">
+  <button type="button" id="sabPublishBtn" class="sab-publish">Publish live</button>
+  <button type="button" id="sabExitBtn" class="sab-exit">Exit admin</button>
+</div>
+
+<div id="a2hsBanner" class="a2hs-banner" role="dialog" aria-label="Add Sola Café to your home screen">
+  <span class="a2hs-icon" aria-hidden="true">☕</span>
+  <span class="a2hs-text" id="a2hsText"><strong>Add Sola Café to your Home Screen</strong>Quick access, right from your phone — like an app.</span>
+  <button type="button" id="a2hsInstallBtn" class="a2hs-install">Add</button>
+  <button type="button" id="a2hsDismissBtn" class="a2hs-dismiss" aria-label="Dismiss">×</button>
+</div>
+
 <main id="top">
   <section class="hero wrap" style="border-top:none; padding-top:96px;">
     <div class="hero-grid">
@@ -1632,7 +1850,13 @@ body.admin-mode .smart-menu-tools{display:none}
       </div>
     </div>
 
-    <div class="menu-groups" id="menuGroups"></div>
+    <div class="swipe-hint" id="swipeHint"><span class="hint-arrow hint-arrow-left" aria-hidden="true">👈</span> Swipe to switch categories <span class="hint-arrow hint-arrow-right" aria-hidden="true">👉</span></div>
+
+    <div class="menu-groups-wrap">
+      <div class="menu-groups" id="menuGroups"></div>
+      <div class="swipe-flash flash-left" id="swipeFlashLeft" aria-hidden="true">‹</div>
+      <div class="swipe-flash flash-right" id="swipeFlashRight" aria-hidden="true">›</div>
+    </div>
 
     <div class="gallery-lightbox" id="itemPhotoModal" role="dialog" aria-modal="true" aria-label="Item photo">
       <div class="gallery-lightbox-figure">
@@ -1927,6 +2151,152 @@ body.admin-mode .smart-menu-tools{display:none}
 
     observer.observe(heroEl);
     observer.observe(menuEl);
+  })();
+
+  // Swipe gestures on the menu: swipe left/right anywhere over the menu
+  // groups to move to the next/previous category (mirrors tapping the
+  // category filter chips). Ignores swipes that start on something the
+  // user is clearly trying to interact with (links, buttons, editable
+  // fields), and skips entirely in admin mode where the area is full of
+  // editable inputs. Also hides the swipe hint after first successful use.
+  (function initMenuSwipe(){
+    const el = document.getElementById('menuGroups');
+    if (!el) return;
+    let startX = 0, startY = 0, tracking = false;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function flash(goingNext){
+      // Content slides in from the direction we're headed toward, so the
+      // flash chevron shows on that same edge — right edge for "next",
+      // left edge for "previous".
+      const flashEl = document.getElementById(goingNext ? 'swipeFlashRight' : 'swipeFlashLeft');
+      if (!flashEl) return;
+      flashEl.classList.remove('is-active');
+      void flashEl.offsetWidth; // restart the CSS animation
+      flashEl.classList.add('is-active');
+    }
+
+    el.addEventListener('touchstart', (e) => {
+      if (document.body.classList.contains('admin-mode')) return;
+      if (e.target.closest('a, button, input, textarea, select, [contenteditable="true"]')) { tracking = false; return; }
+      const t = e.changedTouches[0];
+      startX = t.clientX; startY = t.clientY; tracking = true;
+    }, { passive: true });
+
+    el.addEventListener('touchend', (e) => {
+      if (!tracking) return;
+      tracking = false;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      if (Math.abs(dx) < 55 || Math.abs(dx) < Math.abs(dy) * 1.4) return; // mostly-vertical or too-short: let it scroll
+
+      const goingNext = dx < 0; // swipe left = next category
+      const cats = getCategories();
+      const currentIndex = Math.max(0, cats.indexOf(smartFilters.category));
+      let nextIndex = goingNext ? currentIndex + 1 : currentIndex - 1;
+      if (nextIndex < 0) nextIndex = cats.length - 1;
+      if (nextIndex >= cats.length) nextIndex = 0;
+
+      flash(goingNext);
+
+      const applyChange = () => {
+        smartFilters.category = cats[nextIndex];
+        renderCategoryFilters();
+        renderMenu();
+
+        const activeChip = document.querySelector('#categoryFilters .smart-filter.active');
+        if (activeChip) activeChip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      };
+
+      if (prefersReducedMotion){
+        applyChange();
+      } else {
+        // Slide the old category out, swap the content while off-screen,
+        // then slide the new category in from the opposite edge.
+        el.classList.add(goingNext ? 'is-swiping-out-left' : 'is-swiping-out-right');
+        setTimeout(() => {
+          applyChange();
+          // Instantly jump the fresh content to the opposite edge with
+          // transitions off, then re-enable transitions and release the
+          // "off-screen" position on the next two frames so the browser
+          // actually animates the slide back to center instead of
+          // snapping straight there.
+          el.classList.remove('is-swiping-out-left', 'is-swiping-out-right');
+          el.classList.add('is-swiping-in', goingNext ? 'is-swiping-out-right' : 'is-swiping-out-left');
+          void el.offsetWidth; // commit the instant "start from the other side" position
+          requestAnimationFrame(() => {
+            el.classList.remove('is-swiping-in'); // transitions back on, still parked off-screen
+            requestAnimationFrame(() => {
+              el.classList.remove('is-swiping-out-left', 'is-swiping-out-right'); // now animates in
+            });
+          });
+        }, 200);
+      }
+
+      const hint = document.getElementById('swipeHint');
+      if (hint) { hint.style.opacity = '0'; setTimeout(() => { hint.style.display = 'none'; }, 300); }
+    }, { passive: true });
+  })();
+
+  // Add-to-Home-Screen prompt. Chrome/Android fire `beforeinstallprompt`,
+  // which we intercept so we can show our own on-brand banner instead of
+  // the generic browser mini-bar, then trigger the real prompt on tap.
+  // iOS Safari never fires that event, so we detect iOS + "not already
+  // installed" and show instructions instead, since there's no
+  // programmatic install there. Dismissal is remembered so it doesn't
+  // nag on every visit.
+  (function initAddToHomeScreen(){
+    const banner = document.getElementById('a2hsBanner');
+    const textEl = document.getElementById('a2hsText');
+    const installBtn = document.getElementById('a2hsInstallBtn');
+    const dismissBtn = document.getElementById('a2hsDismissBtn');
+    if (!banner || !installBtn || !dismissBtn) return;
+
+    const DISMISS_KEY = 'solaA2hsDismissedAt';
+    const dismissedAt = Number(localStorage.getItem(DISMISS_KEY) || 0);
+    const daysSinceDismiss = (Date.now() - dismissedAt) / 86400000;
+    if (dismissedAt && daysSinceDismiss < 21) return; // re-offer after ~3 weeks, not every visit
+
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    if (isStandalone) return; // already installed
+
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+
+    function showBanner(){ requestAnimationFrame(() => banner.classList.add('is-visible')); }
+    function dismiss(){
+      banner.classList.remove('is-visible');
+      localStorage.setItem(DISMISS_KEY, String(Date.now()));
+    }
+    dismissBtn.addEventListener('click', dismiss);
+
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      showBanner();
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt){
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        dismiss();
+      } else if (isIOS){
+        textEl.innerHTML = '<strong>Add to Home Screen</strong>Tap the Share icon <span aria-hidden="true">⬆️</span> below, then "Add to Home Screen".';
+        installBtn.style.display = 'none';
+      }
+    });
+
+    window.addEventListener('appinstalled', dismiss);
+
+    // iOS gets no beforeinstallprompt event at all, so offer the banner
+    // proactively (with tap-to-see-instructions) after a short delay,
+    // rather than waiting for an event that will never come.
+    if (isIOS){
+      setTimeout(showBanner, 4000);
+    }
   })();
 
   // =====================================================================
@@ -2348,15 +2718,15 @@ body.admin-mode .smart-menu-tools{display:none}
   "mayaName": "",
   "mayaNumber": "",
   "mayaQr": null,
-  "feedbackFormId": "1FAIpQLSc4iIt_PgFXMhx7GVU3jlP2JmmhQPJw3tV8cyzk526W4HWQ8A",
-  "feedbackNameEntry": "942751669",
-  "feedbackMessageEntry": "990833815"
+  "feedbackFormId": "1FAIpQLSergsopli8mxDFT9-h2lKqPyQkneNHm9PeCkLqKN1usAZj8_g",
+  "feedbackNameEntry": "1950425852",
+  "feedbackMessageEntry": "198389755"
 }/*SITE_SETTINGS_END*/;
 
   // SITE_VERSION_START — stamped automatically every time you Publish or Download.
   const DEFAULT_SITE_VERSION = /*SITE_VERSION_START*/{
-  "version": 3,
-  "updatedAt": "2026-07-27T09:33:48.071Z"
+  "version": 1,
+  "updatedAt": "2026-07-27T00:00:00.000Z"
 }/*SITE_VERSION_END*/;
 
 
@@ -3953,6 +4323,14 @@ body.admin-mode .smart-menu-tools{display:none}
   }
 
   document.getElementById('publishBtn').addEventListener('click', publishToGithub);
+
+  // Sticky one-thumb admin bar (mobile): just forwards to the real
+  // toolbar buttons so there's one source of truth for the actions.
+  document.getElementById('sabPublishBtn').addEventListener('click', publishToGithub);
+  document.getElementById('sabExitBtn').addEventListener('click', () => {
+    document.getElementById('adminToggle').click();
+  });
+
   document.getElementById('forgetTokenBtn').addEventListener('click', () => {
     sessionStorage.removeItem('solaGhToken');
     alert('Saved token cleared. You\'ll be asked to paste it again next time you publish.');
