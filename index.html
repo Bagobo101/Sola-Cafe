@@ -9,6 +9,17 @@
 <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Bagobo101/Sola-Café/main/logo-removebg-preview.png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#E3A15C">
+<meta name="description" content="Sola Café — coffee for the early risers. Fresh brews, pastries, and a cozy spot to study or catch up, open Mon–Fri, 6AM–6PM.">
+<link rel="canonical" href="https://bagobo101.github.io/Sola-Caf%C3%A9/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sola Café — Coffee for the early risers">
+<meta property="og:description" content="Fresh brews, pastries, and a cozy spot to study or catch up, open Mon–Fri, 6AM–6PM.">
+<meta property="og:image" content="https://raw.githubusercontent.com/Bagobo101/Sola-Café/main/logo-removebg-preview.png">
+<meta property="og:url" content="https://bagobo101.github.io/Sola-Caf%C3%A9/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sola Café — Coffee for the early risers">
+<meta name="twitter:description" content="Fresh brews, pastries, and a cozy spot to study or catch up, open Mon–Fri, 6AM–6PM.">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Bagobo101/Sola-Café/main/logo-removebg-preview.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;0,9..144,700;1,9..144,450;1,9..144,600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -780,6 +791,44 @@
     body.admin-mode{ padding-bottom: 78px; }
   }
 
+  /* ---------- Undo toast (admin deletes) ---------- */
+  .undo-toast{
+    position: fixed;
+    left: 14px; right: 14px; bottom: 90px;
+    z-index: 55;
+    background: var(--espresso);
+    color: var(--cream);
+    border-radius: 12px;
+    padding: 13px 14px 13px 16px;
+    box-shadow: var(--panel-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    font-family: 'Public Sans', sans-serif;
+    font-size: 13.5px;
+    transform: translateY(16px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.22s ease, opacity 0.22s ease;
+  }
+  .undo-toast.is-visible{ transform: translateY(0); opacity: 1; pointer-events: auto; }
+  .undo-toast #undoToastBtn{
+    background: var(--caramel);
+    color: #FFF6E9;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .undo-toast #undoToastBtn:hover{ background: var(--caramel-btn-hover); }
+  @media (min-width: 641px){
+    .undo-toast{ left: auto; right: 22px; bottom: 22px; max-width: 360px; }
+  }
+
   /* ---------- Add-to-home-screen banner ---------- */
   .a2hs-banner{
     display: none;
@@ -1245,6 +1294,59 @@
     .menu-group{ break-inside: avoid; }
   }
 
+  /* ---------- Printable table tent / poster ---------- */
+  /* On screen: always hidden — it only exists to be printed.
+     In print mode: everything else on the page hides (reusing the
+     same approach as Print Menu), and this becomes a 2x2 grid of
+     identical cards. They print as 4 separate table cards on one
+     sheet — cut along the dashed lines and place one per table,
+     rather than a folded single tent. */
+  .table-tent-print{ display:none; }
+  @media print{
+    body.print-tent-mode > *:not(#tableTentPrint){ display:none !important; }
+    body.print-tent-mode{ background:#fff !important; }
+    body.print-tent-mode #tableTentPrint{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      width:100vw;
+      height:100vh;
+      gap:0;
+    }
+    .table-tent-print .tent-panel{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      border:1px dashed #999;
+      padding:24px;
+      text-align:center;
+      page-break-inside:avoid;
+    }
+    .table-tent-print .tent-logo{
+      font-family:'Fraunces', serif;
+      font-size:22px;
+      font-weight:600;
+      color:#111;
+    }
+    .table-tent-print .tent-qr{ width:120px; height:120px; }
+    .table-tent-print .tent-scan{
+      font-family:'IBM Plex Mono', monospace;
+      font-size:11px;
+      letter-spacing:0.04em;
+      color:#555;
+    }
+    .table-tent-print .tent-special{
+      font-family:'Fraunces', serif;
+      font-style:italic;
+      font-size:14.5px;
+      color:#333;
+      max-width:230px;
+      line-height:1.4;
+    }
+  }
+
   /* ---------- Visit ---------- */
   .visit-grid{
     display:grid;
@@ -1441,6 +1543,19 @@ body.admin-mode .announcement-admin{display:block}
 .announcement-admin input,.announcement-admin textarea,.announcement-admin select{width:100%;box-sizing:border-box;padding:10px 11px;border-radius:8px;border:1px solid var(--panel-line);background:var(--panel);color:var(--text);font:inherit}
 .announcement-admin textarea{min-height:86px;resize:vertical}
 .announcement-admin-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.announcement-quick-presets{margin-top:16px;padding-top:16px;border-top:1px dashed var(--panel-line)}
+.announcement-quick-presets-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.weather-closure-suggestion{
+  display:block;
+  font-size:13px;
+  font-weight:600;
+  color:var(--caramel-deep);
+  background:rgba(227,161,92,0.12);
+  border:1px solid var(--caramel);
+  border-radius:10px;
+  padding:9px 12px;
+  margin-bottom:10px;
+}
 .announcement-preview{margin-top:14px}
 .availability-summary{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
 .availability-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid var(--panel-line);background:var(--panel);color:var(--text-dim);font-size:12px}
@@ -1615,6 +1730,11 @@ body.admin-mode .smart-menu-tools{display:none}
   <button type="button" id="sabExitBtn" class="sab-exit">Exit admin</button>
 </div>
 
+<div id="undoToast" class="undo-toast" role="status">
+  <span id="undoToastMsg"></span>
+  <button type="button" id="undoToastBtn">Undo</button>
+</div>
+
 <div id="a2hsBanner" class="a2hs-banner" role="dialog" aria-label="Add Sola Café to your home screen">
   <span class="a2hs-icon" aria-hidden="true">☕</span>
   <span class="a2hs-text" id="a2hsText"><strong>Add Sola Café to your Home Screen</strong>Quick access, right from your phone — like an app.</span>
@@ -1724,7 +1844,35 @@ body.admin-mode .smart-menu-tools{display:none}
       <button type="button" id="openDashboardBtn" class="admin-toolbar-btn">📊 Dashboard</button>
       <button type="button" id="markAllAvailableBtn" class="admin-toolbar-btn">Mark all available</button>
       <button type="button" id="clearAnnouncementBtn" class="admin-toolbar-btn">Clear announcement</button>
+      <button type="button" id="printTentBtn" class="admin-toolbar-btn">🪧 Print table tent</button>
       <div class="admin-toolbar-note">"Publish live" pushes straight to your GitHub repo — no download needed. It saves the menu, availability, announcement, gallery, and contact info together, and needs a one-time GitHub personal access token (Contents: Read and write, scoped to this repo).</div>
+    </div>
+
+    <div id="tableTentPrint" class="table-tent-print">
+      <div class="tent-panel">
+        <div class="tent-logo">☕ Sola Café</div>
+        <img class="tent-qr" alt="QR code to menu">
+        <div class="tent-scan">Scan for today's menu</div>
+        <div class="tent-special"></div>
+      </div>
+      <div class="tent-panel">
+        <div class="tent-logo">☕ Sola Café</div>
+        <img class="tent-qr" alt="QR code to menu">
+        <div class="tent-scan">Scan for today's menu</div>
+        <div class="tent-special"></div>
+      </div>
+      <div class="tent-panel">
+        <div class="tent-logo">☕ Sola Café</div>
+        <img class="tent-qr" alt="QR code to menu">
+        <div class="tent-scan">Scan for today's menu</div>
+        <div class="tent-special"></div>
+      </div>
+      <div class="tent-panel">
+        <div class="tent-logo">☕ Sola Café</div>
+        <img class="tent-qr" alt="QR code to menu">
+        <div class="tent-scan">Scan for today's menu</div>
+        <div class="tent-special"></div>
+      </div>
     </div>
 
 <div class="announcement-admin" id="announcementAdmin">
@@ -1760,6 +1908,15 @@ body.admin-mode .smart-menu-tools{display:none}
           <textarea id="announcementMessageInput" placeholder="Example: Spanish Latte is temporarily sold out. We'll update the menu when it's back."></textarea>
         </div>
       </div>
+      <div class="announcement-quick-presets">
+        <div class="eyebrow" style="margin-bottom:8px;">Quick presets</div>
+        <div id="weatherClosureSuggestion" class="weather-closure-suggestion" hidden>⛈️ Current weather looks severe — worth setting a closure notice?</div>
+        <div class="announcement-quick-presets-row">
+          <button type="button" id="weatherClosurePresetBtn" class="admin-toolbar-btn">⛈️ Weather closure</button>
+          <button type="button" id="powerOutagePresetBtn" class="admin-toolbar-btn">🔌 Power outage</button>
+        </div>
+        <div class="admin-toolbar-note">Fills in the fields below with a ready-made notice — review and adjust before saving/publishing.</div>
+      </div>
       <div class="announcement-admin-actions">
         <button type="button" id="saveAnnouncementBtn" class="admin-toolbar-btn admin-toolbar-btn-primary">Save announcement</button>
         <button type="button" id="previewAnnouncementBtn" class="admin-toolbar-btn">Preview</button>
@@ -1786,6 +1943,7 @@ body.admin-mode .smart-menu-tools{display:none}
           <button type="button" class="dashboard-tab" data-tab="inventory">Inventory</button>
           <button type="button" class="dashboard-tab" data-tab="students">Student Picks</button>
           <button type="button" class="dashboard-tab" data-tab="popular">Popular</button>
+          <button type="button" class="dashboard-tab" data-tab="searchlog">🔍 Searches</button>
           <button type="button" class="dashboard-tab" data-tab="feedback">✉️ Feedback</button>
           <button type="button" class="dashboard-tab" data-tab="audit">Audit Log</button>
         </div>
@@ -1827,6 +1985,15 @@ body.admin-mode .smart-menu-tools{display:none}
             <p class="smart-combo-note">Counts how many times visitors have tapped an item on the live menu (stored on their own device).</p>
             <div id="dashboardPopular" class="dashboard-list"></div>
             <button type="button" id="resetPopularityBtn" class="admin-toolbar-btn" style="margin-top:12px;">Reset stats</button>
+          </div>
+        </div>
+
+        <div class="dashboard-tab-content" data-tab-content="searchlog">
+          <div class="dashboard-section">
+            <h3>Recent Menu Searches</h3>
+            <p class="smart-combo-note">What visitors typed into the menu search (stored on their own device). "No results" rows are worth a look — that's a real request for something you don't have listed.</p>
+            <div id="dashboardSearchLog" class="dashboard-list"></div>
+            <button type="button" id="resetSearchLogBtn" class="admin-toolbar-btn" style="margin-top:12px;">Clear log</button>
           </div>
         </div>
 
@@ -2718,15 +2885,15 @@ body.admin-mode .smart-menu-tools{display:none}
   "mayaName": "",
   "mayaNumber": "",
   "mayaQr": null,
-  "feedbackFormId": "1FAIpQLSc4iIt_PgFXMhx7GVU3jlP2JmmhQPJw3tV8cyzk526W4HWQ8A",
-  "feedbackNameEntry": "942751669",
-  "feedbackMessageEntry": "990833815"
+  "feedbackFormId": "1FAIpQLSergsopli8mxDFT9-h2lKqPyQkneNHm9PeCkLqKN1usAZj8_g",
+  "feedbackNameEntry": "1950425852",
+  "feedbackMessageEntry": "198389755"
 }/*SITE_SETTINGS_END*/;
 
   // SITE_VERSION_START — stamped automatically every time you Publish or Download.
   const DEFAULT_SITE_VERSION = /*SITE_VERSION_START*/{
-  "version": 4,
-  "updatedAt": "2026-07-28T01:04:32.065Z"
+  "version": 1,
+  "updatedAt": "2026-07-27T00:00:00.000Z"
 }/*SITE_VERSION_END*/;
 
 
@@ -2903,6 +3070,33 @@ body.admin-mode .smart-menu-tools{display:none}
       .map(([key]) => key);
   }
 
+  // ---------- Search terms log (this device only — see dashboard note) ----------
+  // Logs what visitors type into the menu search, and whether it found
+  // anything, so the admin can spot "people keep searching for X and we
+  // don't have it" patterns. Like popularity tracking, this only sees
+  // taps/searches made on whichever device is running the site at the
+  // time — it's not a cross-visitor analytics platform, since the site
+  // has no backend to aggregate to. Genuinely useful on a shared counter
+  // tablet; less so if every customer is on their own phone.
+  function loadSearchLog(){
+    try{
+      const saved = localStorage.getItem('solaSearchLog');
+      if (saved) return JSON.parse(saved);
+    }catch(e){ /* ignore corrupt local data */ }
+    return [];
+  }
+  function saveSearchLogLocal(){
+    try{ localStorage.setItem('solaSearchLog', JSON.stringify(searchLog)); }catch(e){}
+  }
+  function logSearchTerm(term, resultCount){
+    term = term.trim();
+    if (!term) return;
+    searchLog.unshift({ time: Date.now(), term, resultCount });
+    if (searchLog.length > 150) searchLog.length = 150;
+    saveSearchLogLocal();
+    renderDashboard();
+  }
+
   // ---------- Simple admin audit log (stored on this device only) ----------
   function loadAuditLog(){
     try{
@@ -2919,6 +3113,31 @@ body.admin-mode .smart-menu-tools{display:none}
     if (auditLog.length > 200) auditLog.length = 200; // keep the log lightweight
     saveAuditLogLocal();
     renderAuditLog();
+  }
+
+  // ---------- Undo toast ----------
+  // Used for admin deletes that are risky to lose (menu items, gallery
+  // photos): the removal happens immediately (no blocking confirm()
+  // dialog to tap through on a phone), but a toast offers a few seconds
+  // to put it back. Only the most recent delete can be undone — a
+  // second delete before acting on the toast replaces it, same as most
+  // "Undo" snackbars behave elsewhere.
+  let undoToastTimer = null;
+  function showUndoToast(message, onUndo){
+    const toast = document.getElementById('undoToast');
+    const msgEl = document.getElementById('undoToastMsg');
+    const btn = document.getElementById('undoToastBtn');
+    if (!toast || !msgEl || !btn) return;
+    msgEl.textContent = message;
+    toast.classList.add('is-visible');
+    clearTimeout(undoToastTimer);
+    const hide = () => toast.classList.remove('is-visible');
+    btn.onclick = () => {
+      clearTimeout(undoToastTimer);
+      hide();
+      onUndo();
+    };
+    undoToastTimer = setTimeout(hide, 6000);
   }
 
   // ---------- Visitor feedback (stored on this device only) ----------
@@ -2985,6 +3204,8 @@ body.admin-mode .smart-menu-tools{display:none}
   let siteSettings = loadSiteSettings();
   let siteVersion = loadSiteVersion();
   let popularityData = loadPopularity();
+  let searchLog = loadSearchLog();
+  let lastSearchResultCount = 0;
   let auditLog = loadAuditLog();
   let feedbackData = loadFeedback();
   let isAdmin = sessionStorage.getItem('solaAdmin') === '1';
@@ -3212,7 +3433,7 @@ body.admin-mode .smart-menu-tools{display:none}
               '<input type="number" min="0" class="admin-input low-stock-input" value="'+(item.lowStockAt ?? 3)+'" data-gi="'+gi+'" data-ii="'+ii+'">' +
               '<label class="admin-status-label">Photo (optional)</label>' +
               '<div style="display:flex; align-items:center; gap:8px; margin-top:4px; flex-wrap:wrap;">' +
-                (item.image ? '<img class="menu-item-thumb" src="'+escapeAttr(item.image)+'" alt="">' : '') +
+                (item.image ? '<img class="menu-item-thumb" src="'+escapeAttr(item.image)+'" alt="'+escapeAttr(item.name||'Menu item photo')+'" loading="lazy">' : '') +
                 '<label class="gallery-upload-btn">' +
                   (item.image ? 'Replace photo' : 'Upload from device') +
                   '<input type="file" accept="image/*" class="item-photo-file-input" data-gi="'+gi+'" data-ii="'+ii+'" hidden>' +
@@ -3233,7 +3454,7 @@ body.admin-mode .smart-menu-tools{display:none}
             ? '<span class="low-stock-badge">Only '+item.stock+' left</span>' : '';
           const statusBadge = item.status !== 'available' ? '<span class="menu-item-status '+meta.cls+'">'+meta.short+'</span>' : '';
           const price = item.status === 'available' ? escapeHtml(item.price) : '<span class="menu-item-price is-status">'+meta.short+'</span>';
-          const thumb = item.image ? '<img class="menu-item-thumb" src="'+escapeAttr(item.image)+'" alt="">' : '';
+          const thumb = item.image ? '<img class="menu-item-thumb" src="'+escapeAttr(item.image)+'" alt="'+escapeAttr(item.name||'Menu item photo')+'" loading="lazy">' : '';
           itemEl.dataset.itemKey = itemKey;
           if (item.image) itemEl.classList.add('has-photo');
           itemEl.innerHTML =
@@ -3363,15 +3584,20 @@ body.admin-mode .smart-menu-tools{display:none}
       }));
       container.querySelectorAll('.admin-del-btn').forEach(el => el.addEventListener('click', () => {
         const gi=+el.dataset.gi, ii=+el.dataset.ii;
-        const itemName = menuData[gi].items[ii].name;
-        if(confirm('Remove "'+itemName+'"?')){
-          menuData[gi].items.splice(ii,1);saveMenuLocal();renderMenu();
-          logAudit('Removed menu item', itemName);
-        }
+        const removedItem = menuData[gi].items[ii];
+        menuData[gi].items.splice(ii,1);
+        saveMenuLocal();renderMenu();
+        logAudit('Removed menu item', removedItem.name);
+        showUndoToast('Removed "'+removedItem.name+'"', () => {
+          menuData[gi].items.splice(ii,0,removedItem);
+          saveMenuLocal(); renderMenu();
+          logAudit('Restored menu item', removedItem.name);
+        });
       }));
     }
 
     renderAvailabilitySummary();
+    lastSearchResultCount = visibleCount;
     updateSmartResultsNote(visibleCount);
     renderDashboard();
   }
@@ -3387,7 +3613,7 @@ body.admin-mode .smart-menu-tools{display:none}
       if (isAdmin){
         el.className = 'gallery-item is-editing';
         el.innerHTML =
-          (item.image ? '<img class="gallery-preview" src="'+escapeAttr(item.image)+'" alt="">' : '') +
+          (item.image ? '<img class="gallery-preview" src="'+escapeAttr(item.image)+'" alt="'+escapeAttr(item.caption||'Gallery photo')+'" loading="lazy">' : '') +
           '<label class="gallery-upload-btn">' +
             (item.image ? 'Replace photo' : 'Upload from device') +
             '<input type="file" accept="image/*" class="gallery-file-input" data-gi="'+gi+'" hidden>' +
@@ -3400,7 +3626,7 @@ body.admin-mode .smart-menu-tools{display:none}
         el.className = 'gallery-item';
         el.dataset.galleryIndex = gi;
         el.innerHTML =
-          '<img src="'+escapeAttr(item.image)+'" alt="'+escapeAttr(item.caption||'Photo of Sola Café')+'">' +
+          '<img src="'+escapeAttr(item.image)+'" alt="'+escapeAttr(item.caption||'Photo of Sola Café')+'" loading="lazy">' +
           (item.caption ? '<span class="gallery-caption">'+escapeHtml(item.caption)+'</span>' : '');
       } else {
         el.className = 'gallery-item is-placeholder';
@@ -3444,9 +3670,15 @@ body.admin-mode .smart-menu-tools{display:none}
       grid.querySelectorAll('.admin-del-btn').forEach(elBtn => {
         elBtn.addEventListener('click', () => {
           const gi = +elBtn.dataset.gi;
+          const removed = galleryData[gi];
           galleryData.splice(gi, 1);
           saveGalleryLocal();
           renderGallery();
+          showUndoToast('Removed photo'+(removed.caption ? ': "'+removed.caption+'"' : ''), () => {
+            galleryData.splice(gi, 0, removed);
+            saveGalleryLocal();
+            renderGallery();
+          });
         });
       });
     } else {
@@ -3724,11 +3956,22 @@ body.admin-mode .smart-menu-tools{display:none}
       lastWeatherCode = cw.weathercode;
       applySkin();
       renderWeatherPairing(cw);
+      renderWeatherClosureSuggestion(cw.weathercode);
     }catch(e){
       chip.hidden = true;
       const pairing = document.getElementById('weatherPairing');
       if (pairing) pairing.hidden = true;
     }
+  }
+
+  // Thunderstorm and violent-rain WMO codes — see RAINY_WEATHER_CODES
+  // above for the broader "might rain" set used for drink pairings;
+  // this narrower list is specifically "bad enough to consider closing".
+  const SEVERE_WEATHER_CODES = [65, 82, 95, 96, 99];
+  function renderWeatherClosureSuggestion(weathercode){
+    const note = document.getElementById('weatherClosureSuggestion');
+    if (!note) return;
+    note.hidden = !SEVERE_WEATHER_CODES.includes(weathercode);
   }
 
   // ---------- In-page QR code (links to this same page) ----------
@@ -3853,9 +4096,15 @@ body.admin-mode .smart-menu-tools{display:none}
 
 
 
+  let searchLogDebounce = null;
   document.getElementById('menuSearch').addEventListener('input', e => {
     smartFilters.search = e.target.value;
     renderMenu();
+    clearTimeout(searchLogDebounce);
+    const term = e.target.value;
+    if (term.trim()){
+      searchLogDebounce = setTimeout(() => logSearchTerm(term, lastSearchResultCount), 800);
+    }
   });
   document.querySelectorAll('.smart-budget').forEach(btn => btn.addEventListener('click', () => {
     smartFilters.budget = Number(btn.dataset.budget);
@@ -3896,6 +4145,24 @@ body.admin-mode .smart-menu-tools{display:none}
       window.removeEventListener('afterprint', restore);
     };
     window.addEventListener('afterprint', restore);
+    setTimeout(() => window.print(), 50);
+  });
+
+  document.getElementById('printTentBtn').addEventListener('click', () => {
+    const qrImg = document.getElementById('siteQrCode');
+    const qrSrc = qrImg && qrImg.src ? qrImg.src : '';
+    const specialText = announcementIsActive() && (announcementData.title || announcementData.message)
+      ? (announcementData.title || announcementData.message)
+      : 'Fresh coffee, always.';
+    document.querySelectorAll('#tableTentPrint .tent-qr').forEach(img => { img.src = qrSrc; });
+    document.querySelectorAll('#tableTentPrint .tent-special').forEach(el => { el.textContent = specialText; });
+
+    document.body.classList.add('print-tent-mode');
+    const cleanup = () => {
+      document.body.classList.remove('print-tent-mode');
+      window.removeEventListener('afterprint', cleanup);
+    };
+    window.addEventListener('afterprint', cleanup);
     setTimeout(() => window.print(), 50);
   });
 
@@ -3969,6 +4236,15 @@ body.admin-mode .smart-menu-tools{display:none}
       }).join('') : '<div style="opacity:.65;">No taps recorded yet. Counts build up as visitors tap items on the live menu.</div>';
     }
 
+    const searchLogEl = document.getElementById('dashboardSearchLog');
+    if (searchLogEl){
+      searchLogEl.innerHTML = searchLog.length ? searchLog.map(entry =>
+        '<div class="dashboard-list-row"><span>"'+escapeHtml(entry.term)+'"</span><span>'+
+        (entry.resultCount === 0 ? '<strong style="color:var(--caramel-deep);">No results</strong>' : entry.resultCount+' result'+(entry.resultCount===1?'':'s'))+
+        ' <small>· '+escapeHtml(new Date(entry.time).toLocaleDateString())+'</small></span></div>'
+      ).join('') : '<div style="opacity:.65;">No searches logged yet.</div>';
+    }
+
     renderFeedbackDashboard();
     renderAuditLog();
   }
@@ -4013,6 +4289,14 @@ body.admin-mode .smart-menu-tools{display:none}
     if (confirm('Clear all popularity tap counts? This cannot be undone.')){
       popularityData = {};
       savePopularityLocal();
+      renderDashboard();
+    }
+  });
+
+  document.getElementById('resetSearchLogBtn').addEventListener('click', () => {
+    if (confirm('Clear the search terms log? This cannot be undone.')){
+      searchLog = [];
+      saveSearchLogLocal();
       renderDashboard();
     }
   });
@@ -4076,6 +4360,40 @@ body.admin-mode .smart-menu-tools{display:none}
     renderAnnouncement();
     logAudit('Saved announcement', announcementData.title || '(untitled)');
     alert('Announcement saved locally. Click Publish live to make it visible to everyone.');
+  });
+
+  // ---------- Quick presets: weather closure / power outage ----------
+  // Fill the announcement form fields (without saving yet) so the admin
+  // can still glance them over or tweak wording before hitting Save.
+  // Defaults the expiry to end-of-today, since these are meant to be
+  // short-lived notices, not permanent fixtures.
+  function endOfTodayLocalISO(){
+    const d = new Date();
+    d.setHours(23, 59, 0, 0);
+    const pad = n => String(n).padStart(2, '0');
+    return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  }
+  function applyAnnouncementPreset(preset){
+    document.getElementById('announcementEnabled').value = 'enabled';
+    document.getElementById('announcementType').value = 'urgent';
+    document.getElementById('announcementTitleInput').value = preset.title;
+    document.getElementById('announcementMessageInput').value = preset.message;
+    document.getElementById('announcementExpires').value = endOfTodayLocalISO();
+    document.getElementById('announcementTitleInput').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  document.getElementById('weatherClosurePresetBtn').addEventListener('click', () => {
+    applyAnnouncementPreset({
+      title: 'Closed due to weather',
+      message: "We're closed today because of the weather — staying safe and dry. We'll be back as soon as conditions clear. Thanks for understanding!"
+    });
+  });
+
+  document.getElementById('powerOutagePresetBtn').addEventListener('click', () => {
+    applyAnnouncementPreset({
+      title: 'Running on limited power',
+      message: "We're currently dealing with a power interruption. Some drinks may be unavailable and service might be slower than usual — thanks for your patience!"
+    });
   });
 
   document.getElementById('previewAnnouncementBtn').addEventListener('click', () => {
