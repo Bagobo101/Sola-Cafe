@@ -2770,7 +2770,7 @@ body.admin-mode .smart-menu-tools{display:none}
         "desc": "",
         "price": "₱35",
         "studentPick": true,
-        "status": "sold-out",
+        "status": "available",
         "stock": null,
         "lowStockAt": 3,
         "image": null
@@ -3112,8 +3112,8 @@ body.admin-mode .smart-menu-tools{display:none}
 
   // SITE_VERSION_START — stamped automatically every time you Publish or Download.
   const DEFAULT_SITE_VERSION = /*SITE_VERSION_START*/{
-  "version": 5,
-  "updatedAt": "2026-07-29T08:20:52.067Z"
+  "version": 3,
+  "updatedAt": "2026-07-29T02:41:52.286Z"
 }/*SITE_VERSION_END*/;
 
   // HOURS_DATA_START — published together with the rest of the site data.
@@ -3131,11 +3131,11 @@ body.admin-mode .smart-menu-tools{display:none}
 
   // SOUNDTRACK_DATA_START — published together with the rest of the site data.
   const DEFAULT_SOUNDTRACK = /*SOUNDTRACK_DATA_START*/{
-  "enabled": true,
-  "song": "elevation worship but it's lofi | christian lofi playlist for study, prayer, work or chill",
-  "artist": "LowlyFM",
-  "link": "https://youtu.be/5BYgBh5ejK4?si=OAlydu3eIlccTssS",
-  "vibe": "🍃 Chill afternoon"
+  "enabled": false,
+  "song": "",
+  "artist": "",
+  "link": "",
+  "vibe": ""
 }/*SOUNDTRACK_DATA_END*/;
 
 
@@ -3167,11 +3167,18 @@ body.admin-mode .smart-menu-tools{display:none}
   }
 
 
+  // Populated by fetchPublishedData() below, from data.json in the repo.
+  // This is what lets menu/gallery/announcement/etc. updates show up for
+  // visitors instantly on refresh, without needing a full site rebuild —
+  // only this small JSON file needs to change, not the whole page.
+  let remoteData = null;
+
   function loadAnnouncement(){
     try{
       const saved = localStorage.getItem('solaAnnouncement');
       if (saved) return { ...JSON.parse(JSON.stringify(DEFAULT_ANNOUNCEMENT)), ...JSON.parse(saved) };
     }catch(e){}
+    if (remoteData && remoteData.announcement) return { ...JSON.parse(JSON.stringify(DEFAULT_ANNOUNCEMENT)), ...JSON.parse(JSON.stringify(remoteData.announcement)) };
     return JSON.parse(JSON.stringify(DEFAULT_ANNOUNCEMENT));
   }
 
@@ -3193,6 +3200,7 @@ body.admin-mode .smart-menu-tools{display:none}
       const saved = localStorage.getItem('solaMenuData');
       if (saved) return JSON.parse(saved);
     }catch(e){ /* ignore corrupt local data */ }
+    if (remoteData && remoteData.menu) return JSON.parse(JSON.stringify(remoteData.menu));
     return JSON.parse(JSON.stringify(DEFAULT_MENU));
   }
 
@@ -3205,6 +3213,7 @@ body.admin-mode .smart-menu-tools{display:none}
       const saved = localStorage.getItem('solaGalleryData');
       if (saved) return JSON.parse(saved);
     }catch(e){ /* ignore corrupt local data */ }
+    if (remoteData && remoteData.gallery) return JSON.parse(JSON.stringify(remoteData.gallery));
     return JSON.parse(JSON.stringify(DEFAULT_GALLERY));
   }
 
@@ -3217,6 +3226,7 @@ body.admin-mode .smart-menu-tools{display:none}
       const saved = localStorage.getItem('solaContactData');
       if (saved) return { ...JSON.parse(JSON.stringify(DEFAULT_CONTACT)), ...JSON.parse(saved) };
     }catch(e){ /* ignore corrupt local data */ }
+    if (remoteData && remoteData.contact) return { ...JSON.parse(JSON.stringify(DEFAULT_CONTACT)), ...JSON.parse(JSON.stringify(remoteData.contact)) };
     return JSON.parse(JSON.stringify(DEFAULT_CONTACT));
   }
 
@@ -3229,6 +3239,7 @@ body.admin-mode .smart-menu-tools{display:none}
       const saved = localStorage.getItem('solaSiteSettings');
       if (saved) return { ...JSON.parse(JSON.stringify(DEFAULT_SITE_SETTINGS)), ...JSON.parse(saved) };
     }catch(e){ /* ignore corrupt local data */ }
+    if (remoteData && remoteData.siteSettings) return { ...JSON.parse(JSON.stringify(DEFAULT_SITE_SETTINGS)), ...JSON.parse(JSON.stringify(remoteData.siteSettings)) };
     return JSON.parse(JSON.stringify(DEFAULT_SITE_SETTINGS));
   }
 
@@ -3241,6 +3252,7 @@ body.admin-mode .smart-menu-tools{display:none}
       const saved = localStorage.getItem('solaHours');
       if (saved) return { ...JSON.parse(JSON.stringify(DEFAULT_HOURS)), ...JSON.parse(saved) };
     }catch(e){ /* ignore corrupt local data */ }
+    if (remoteData && remoteData.hours) return { ...JSON.parse(JSON.stringify(DEFAULT_HOURS)), ...JSON.parse(JSON.stringify(remoteData.hours)) };
     return JSON.parse(JSON.stringify(DEFAULT_HOURS));
   }
 
@@ -3275,6 +3287,7 @@ body.admin-mode .smart-menu-tools{display:none}
   }
 
   function loadSiteVersion(){
+    if (remoteData && remoteData.version) return JSON.parse(JSON.stringify(remoteData.version));
     return JSON.parse(JSON.stringify(DEFAULT_SITE_VERSION));
   }
 
@@ -3283,6 +3296,7 @@ body.admin-mode .smart-menu-tools{display:none}
       const saved = localStorage.getItem('solaSoundtrack');
       if (saved) return { ...JSON.parse(JSON.stringify(DEFAULT_SOUNDTRACK)), ...JSON.parse(saved) };
     }catch(e){ /* ignore corrupt local data */ }
+    if (remoteData && remoteData.soundtrack) return { ...JSON.parse(JSON.stringify(DEFAULT_SOUNDTRACK)), ...JSON.parse(JSON.stringify(remoteData.soundtrack)) };
     return JSON.parse(JSON.stringify(DEFAULT_SOUNDTRACK));
   }
 
@@ -3703,21 +3717,31 @@ body.admin-mode .smart-menu-tools{display:none}
     return escapeHtml(str).replace(/"/g,'&quot;');
   }
 
-  let menuData = normalizeMenuData(loadMenu());
-  menuData.forEach(group => group.items.forEach(item => syncInventoryStatus(item)));
-  let announcementData = loadAnnouncement();
-  let galleryData = loadGallery();
-  let contactData = loadContact();
-  let siteSettings = loadSiteSettings();
-  let siteVersion = loadSiteVersion();
+  let menuData, announcementData, galleryData, contactData, siteSettings, siteVersion, soundtrackData, hoursData;
+
+  // Populates the *published* data variables above from (in priority order)
+  // this device's local unpublished admin draft, then the fetched data.json,
+  // then the baked-in defaults. Called once immediately on load (so the page
+  // paints right away), then again after fetchPublishedData() resolves.
+  function applyLoadedData(){
+    menuData = normalizeMenuData(loadMenu());
+    menuData.forEach(group => group.items.forEach(item => syncInventoryStatus(item)));
+    announcementData = loadAnnouncement();
+    galleryData = loadGallery();
+    contactData = loadContact();
+    siteSettings = loadSiteSettings();
+    siteVersion = loadSiteVersion();
+    soundtrackData = loadSoundtrack();
+    hoursData = loadHours();
+  }
+  applyLoadedData();
+
   let popularityData = loadPopularity();
   let searchLog = loadSearchLog();
   let lastSearchResultCount = 0;
   let auditLog = loadAuditLog();
   let feedbackData = loadFeedback();
-  let soundtrackData = loadSoundtrack();
   let soundtrackHistory = loadSoundtrackHistory();
-  let hoursData = loadHours();
   let isAdmin = sessionStorage.getItem('solaAdmin') === '1';
 
   function getStatusMeta(status){
@@ -5078,7 +5102,11 @@ body.admin-mode .smart-menu-tools{display:none}
   // =====================================================================
   const GITHUB_OWNER = "bagobo101";
   const GITHUB_REPO = "Sola-Cafe";
-  const GITHUB_FILE_PATH = "index.html";
+  // Menu/gallery/announcement/contact/hours/soundtrack data now lives in this
+  // separate small JSON file instead of being baked into index.html. This is
+  // what "Publish live" writes to — a tiny file, not the whole ~1MB page —
+  // so publishing is fast and every visitor's page can pick it up on refresh.
+  const DATA_FILE_PATH = "data.json";
 
   function utf8ToBase64(str){
     return btoa(unescape(encodeURIComponent(str)));
@@ -5099,6 +5127,24 @@ body.admin-mode .smart-menu-tools{display:none}
       if (token) sessionStorage.setItem('solaGhToken', token.trim());
     }
     return token ? token.trim() : token;
+  }
+
+  // Bundles all the "published" data (menu, gallery, announcement, contact,
+  // hours, soundtrack, version) into the small object that gets written to
+  // data.json. index.html itself doesn't need to change for any of this.
+  function buildDataPayload(){
+    siteVersion = { version: (Number(siteVersion.version) || 0) + 1, updatedAt: new Date().toISOString() };
+    renderVersionInfo();
+    return {
+      version: siteVersion,
+      menu: normalizeMenuData(menuData),
+      gallery: galleryData,
+      announcement: announcementData,
+      contact: contactData,
+      siteSettings: siteSettings,
+      soundtrack: soundtrackData,
+      hours: hoursData
+    };
   }
 
   async function publishToGithub(){
@@ -5122,92 +5168,53 @@ body.admin-mode .smart-menu-tools{display:none}
       const repoInfo = await repoRes.json();
       const branch = repoInfo.default_branch || 'main';
 
-      // We use the Git Data API (refs/commits/trees/blobs) instead of the
-      // simpler Contents API, because the Contents API refuses to read (or
-      // reliably write) files over 1MB, and this page has grown past that.
-      // The Git Data API supports files up to 100MB.
-      const refRes = await fetch(apiBase + '/git/ref/heads/' + branch, { headers });
-      if (!refRes.ok) throw new Error('Could not read the "' + branch + '" branch ref (status ' + refRes.status + ').');
-      const refInfo = await refRes.json();
-      const currentCommitSha = refInfo.object.sha;
-
-      const commitRes = await fetch(apiBase + '/git/commits/' + currentCommitSha, { headers });
-      if (!commitRes.ok) throw new Error('Could not read the latest commit (status ' + commitRes.status + ').');
-      const commitInfo = await commitRes.json();
-      const rootTreeSha = commitInfo.tree.sha;
-
-      const treeRes = await fetch(apiBase + '/git/trees/' + rootTreeSha + '?recursive=1', { headers });
-      if (!treeRes.ok) throw new Error('Could not read the repo file tree (status ' + treeRes.status + ').');
-      const treeInfo = await treeRes.json();
-      const fileEntry = (treeInfo.tree || []).find(entry => entry.path === GITHUB_FILE_PATH);
-      if (!fileEntry) throw new Error('Could not find ' + GITHUB_FILE_PATH + ' in the repo tree.');
-
-      const blobRes = await fetch(apiBase + '/git/blobs/' + fileEntry.sha, { headers });
-      if (!blobRes.ok) throw new Error('Could not read the current ' + GITHUB_FILE_PATH + ' contents (status ' + blobRes.status + ').');
-      const blobInfo = await blobRes.json();
-      const currentHtml = base64ToUtf8(blobInfo.content);
-      const { html: updatedHtml, missing } = injectAllData(currentHtml);
-
-      if (missing.length){
+      // data.json is small, so the simple Contents API (unlike the Git Data
+      // API index.html needed) works fine here: read it (to get its sha, if
+      // it already exists) then write the new version in one PUT.
+      const dataPayload = buildDataPayload();
+      const encodedPath = DATA_FILE_PATH.split('/').map(encodeURIComponent).join('/');
+      const payloadJson = JSON.stringify(dataPayload, null, 2);
+      const payloadBytes = new TextEncoder().encode(payloadJson).length;
+      if (payloadBytes > 900000){
         throw new Error(
-          'Could not find these markers in the live ' + GITHUB_FILE_PATH + ': ' + missing.join('; ') +
-          '. The live file on GitHub is missing (or has altered) these comment markers, so nothing was published. ' +
-          'Open index.html in your ' + GITHUB_OWNER + '/' + GITHUB_REPO + ' repo and check for them.'
+          'This update is ' + (payloadBytes / 1024 / 1024).toFixed(2) + 'MB — too close to GitHub\'s 1MB limit for this file. ' +
+          'This is almost always caused by a photo uploaded directly (stored as embedded image data) instead of linked by URL. ' +
+          'Try using an image link (e.g. from Imgur or Google Drive) instead of uploading the photo file directly, then publish again.'
         );
       }
 
-      const newBlobRes = await fetch(apiBase + '/git/blobs', {
-        method: 'POST',
-        headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
-        body: JSON.stringify({ content: utf8ToBase64(updatedHtml), encoding: 'base64' })
-      });
-      if (!newBlobRes.ok){
-        const errBody = await newBlobRes.json().catch(() => ({}));
-        throw new Error('GitHub rejected the new file content (status ' + newBlobRes.status + '): ' + (errBody.message || 'unknown error'));
+      let existingSha = null;
+      const getRes = await fetch(apiBase + '/contents/' + encodedPath + '?ref=' + branch, { headers });
+      if (getRes.ok){
+        const existingInfo = await getRes.json();
+        existingSha = existingInfo.sha;
+      } else if (getRes.status !== 404){
+        throw new Error('Could not check for an existing ' + DATA_FILE_PATH + ' (status ' + getRes.status + ').');
       }
-      const newBlobInfo = await newBlobRes.json();
+      // A 404 just means data.json doesn't exist in the repo yet — this
+      // publish will create it for the first time, which is expected.
 
-      const newTreeRes = await fetch(apiBase + '/git/trees', {
-        method: 'POST',
-        headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
-        body: JSON.stringify({
-          base_tree: rootTreeSha,
-          tree: [{ path: GITHUB_FILE_PATH, mode: '100644', type: 'blob', sha: newBlobInfo.sha }]
-        })
-      });
-      if (!newTreeRes.ok){
-        const errBody = await newTreeRes.json().catch(() => ({}));
-        throw new Error('GitHub rejected the updated file tree (status ' + newTreeRes.status + '): ' + (errBody.message || 'unknown error'));
-      }
-      const newTreeInfo = await newTreeRes.json();
+      const putBody = {
+        message: existingSha
+          ? 'Update menu, availability, announcement, gallery, and contact info via admin panel'
+          : 'Add data.json for menu, availability, announcement, gallery, and contact info',
+        content: utf8ToBase64(payloadJson),
+        branch: branch
+      };
+      if (existingSha) putBody.sha = existingSha;
 
-      const newCommitRes = await fetch(apiBase + '/git/commits', {
-        method: 'POST',
+      const putRes = await fetch(apiBase + '/contents/' + encodedPath, {
+        method: 'PUT',
         headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
-        body: JSON.stringify({
-          message: 'Update menu, availability, announcement, gallery, and contact info via admin panel',
-          tree: newTreeInfo.sha,
-          parents: [currentCommitSha]
-        })
+        body: JSON.stringify(putBody)
       });
-      if (!newCommitRes.ok){
-        const errBody = await newCommitRes.json().catch(() => ({}));
-        throw new Error('GitHub rejected the new commit (status ' + newCommitRes.status + '): ' + (errBody.message || 'unknown error'));
-      }
-      const newCommitInfo = await newCommitRes.json();
-
-      const updateRefRes = await fetch(apiBase + '/git/refs/heads/' + branch, {
-        method: 'PATCH',
-        headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
-        body: JSON.stringify({ sha: newCommitInfo.sha })
-      });
-      if (!updateRefRes.ok){
-        const errBody = await updateRefRes.json().catch(() => ({}));
-        throw new Error('GitHub rejected updating the branch (status ' + updateRefRes.status + '): ' + (errBody.message || 'unknown error'));
+      if (!putRes.ok){
+        const errBody = await putRes.json().catch(() => ({}));
+        throw new Error('GitHub rejected the update (status ' + putRes.status + '): ' + (errBody.message || 'unknown error'));
       }
 
       logAudit('Published to GitHub', 'menu, availability, announcement, gallery, and contact info');
-      alert('Published! GitHub Pages usually takes about a minute to rebuild — refresh the live site shortly to see your changes.');
+      alert('Published! This only updates a small data file, so it should show up for visitors within moments of refreshing — no full site rebuild needed.');
     } catch(err){
       alert('Could not publish: ' + err.message);
     } finally {
@@ -5216,65 +5223,6 @@ body.admin-mode .smart-menu-tools{display:none}
     }
   }
 
-  function injectAllData(html){
-    let out = html;
-    const missing = [];
-
-    siteVersion = { version: (Number(siteVersion.version) || 0) + 1, updatedAt: new Date().toISOString() };
-    renderVersionInfo();
-
-    const versionRe = /\/\*SITE_VERSION_START\*\/[\s\S]*?\/\*SITE_VERSION_END\*\//;
-    if (versionRe.test(out)) {
-      out = out.replace(versionRe, '/*SITE_VERSION_START*/' + JSON.stringify(siteVersion, null, 2) + '/*SITE_VERSION_END*/');
-    } else {
-      missing.push('SITE_VERSION_START / SITE_VERSION_END');
-    }
-
-    const menuRe = /\/\*MENU_DATA_START\*\/[\s\S]*?\/\*MENU_DATA_END\*\//;
-    if (menuRe.test(out)) {
-      out = out.replace(menuRe, '/*MENU_DATA_START*/' + JSON.stringify(normalizeMenuData(menuData), null, 2) + '/*MENU_DATA_END*/');
-    } else {
-      missing.push('MENU_DATA_START / MENU_DATA_END');
-    }
-
-    const galleryRe = /\/\*GALLERY_DATA_START\*\/[\s\S]*?\/\*GALLERY_DATA_END\*\//;
-    if (galleryRe.test(out)) {
-      out = out.replace(galleryRe, '/*GALLERY_DATA_START*/' + JSON.stringify(galleryData, null, 2) + '/*GALLERY_DATA_END*/');
-    } else {
-      missing.push('GALLERY_DATA_START / GALLERY_DATA_END');
-    }
-
-
-    const announcementRe = /\/\*ANNOUNCEMENT_DATA_START\*\/[\s\S]*?\/\*ANNOUNCEMENT_DATA_END\*\//;
-    if (announcementRe.test(out)) {
-      out = out.replace(announcementRe, '/*ANNOUNCEMENT_DATA_START*/' + JSON.stringify(announcementData, null, 2) + '/*ANNOUNCEMENT_DATA_END*/');
-    } else {
-      missing.push('ANNOUNCEMENT_DATA_START / ANNOUNCEMENT_DATA_END');
-    }
-
-    const contactRe = /\/\*CONTACT_DATA_START\*\/[\s\S]*?\/\*CONTACT_DATA_END\*\//;
-    if (contactRe.test(out)) {
-      out = out.replace(contactRe, '/*CONTACT_DATA_START*/' + JSON.stringify(contactData, null, 2) + '/*CONTACT_DATA_END*/');
-    } else {
-      missing.push('CONTACT_DATA_START / CONTACT_DATA_END');
-    }
-
-    const siteSettingsRe = /\/\*SITE_SETTINGS_START\*\/[\s\S]*?\/\*SITE_SETTINGS_END\*\//;
-    if (siteSettingsRe.test(out)) {
-      out = out.replace(siteSettingsRe, '/*SITE_SETTINGS_START*/' + JSON.stringify(siteSettings, null, 2) + '/*SITE_SETTINGS_END*/');
-    } else {
-      missing.push('SITE_SETTINGS_START / SITE_SETTINGS_END');
-    }
-
-    const soundtrackRe = /\/\*SOUNDTRACK_DATA_START\*\/[\s\S]*?\/\*SOUNDTRACK_DATA_END\*\//;
-    if (soundtrackRe.test(out)) {
-      out = out.replace(soundtrackRe, '/*SOUNDTRACK_DATA_START*/' + JSON.stringify(soundtrackData, null, 2) + '/*SOUNDTRACK_DATA_END*/');
-    } else {
-      missing.push('SOUNDTRACK_DATA_START / SOUNDTRACK_DATA_END');
-    }
-
-    return { html: out, missing };
-  }
 
   document.getElementById('publishBtn').addEventListener('click', publishToGithub);
 
@@ -5291,23 +5239,18 @@ body.admin-mode .smart-menu-tools{display:none}
   });
 
   document.getElementById('downloadBtn').addEventListener('click', () => {
-    const raw = document.documentElement.outerHTML;
-    const { html, missing } = injectAllData(raw);
-    if (missing.length){
-      alert('Could not find these markers in this file: ' + missing.join('; ') + '. Download cancelled so nothing gets corrupted.');
-      return;
-    }
-    const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
+    const dataPayload = buildDataPayload();
+    const blob = new Blob([JSON.stringify(dataPayload, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'index.html';
+    a.download = 'data.json';
     document.body.appendChild(a);
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
-    logAudit('Downloaded site file', 'index.html');
-    alert('Downloaded index.html. Upload this file to your GitHub repo (replacing the current one) to publish these menu, gallery, and contact changes for every visitor.');
+    logAudit('Downloaded data file', 'data.json');
+    alert('Downloaded data.json. Upload this file to the root of your GitHub repo (alongside index.html — replacing it if one already exists there) to publish these menu, gallery, and contact changes for every visitor.');
   });
 
   // ---------- Light/Dark theme toggle (personal, saved on this device) ----------
@@ -5380,6 +5323,46 @@ body.admin-mode .smart-menu-tools{display:none}
       fetchWeather();
     }
   });
+
+  // ---------- Fetch published data.json ----------
+  // The page above already rendered instantly using whatever was baked into
+  // this file (or this device's own unpublished admin draft in localStorage).
+  // Now we quietly check data.json — the small file "Publish live" writes to
+  // — and if it has anything, re-render with that instead. This is what lets
+  // menu/gallery/announcement/contact/hours/soundtrack updates reach every
+  // visitor on refresh without needing the whole page rebuilt or redeployed.
+  async function fetchPublishedData(){
+    try{
+      const res = await fetch('data.json', { cache: 'no-store' });
+      if (!res.ok) return; // e.g. 404 — data.json hasn't been published yet, keep the baked-in defaults
+      const json = await res.json();
+      if (!json || typeof json !== 'object') return;
+
+      remoteData = json;
+      applyLoadedData();
+
+      if (isAdmin) document.body.classList.add('admin-mode');
+      applySkin();
+      renderMenu();
+      renderGallery();
+      applyContactLinks();
+      renderContactAdminFields();
+      renderSiteSettingsAdmin();
+      renderPaymentDisplay();
+      setSiteQrCode();
+      renderAnnouncementAdmin();
+      renderAnnouncement();
+      renderSoundtrackAdmin();
+      renderSoundtrack();
+      updateTimeline();
+      renderDashboard();
+      renderVersionInfo();
+    } catch(e){
+      // Offline, opened as a local file, or data.json not published yet —
+      // silently keep showing the baked-in defaults / local draft.
+    }
+  }
+  fetchPublishedData();
 </script>
 
 
