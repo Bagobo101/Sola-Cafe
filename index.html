@@ -1613,7 +1613,8 @@ body.admin-mode .announcement-admin{display:block}
   font-size:13px; font-weight:700; color:var(--caramel-deep); text-decoration:none;
 }
 .soundtrack-listen-link:hover{ text-decoration:underline; }
-.soundtrack-player{margin-top:14px; border-radius:10px; overflow:hidden; max-width:420px}
+.soundtrack-body{flex:1; min-width:0}
+.soundtrack-player{margin-top:14px; border-radius:10px; overflow:hidden; max-width:640px}
 .soundtrack-player iframe{display:block; width:100%; border:0}
 .soundtrack-player.player-spotify iframe{height:152px}
 .soundtrack-player.player-youtube{position:relative; aspect-ratio:16/9; height:auto}
@@ -1643,6 +1644,7 @@ body.admin-mode .soundtrack-admin{display:block}
 .soundtrack-station-btn.is-active{background:var(--caramel); color:#20160c; border-color:transparent}
 @media(max-width:700px){
   .soundtrack-card{flex-direction:column; align-items:flex-start; text-align:left}
+  .soundtrack-body{width:100%}
   .soundtrack-admin-grid{grid-template-columns:1fr}
   .soundtrack-admin-grid .full{grid-column:auto}
 }
@@ -2181,7 +2183,7 @@ body.admin-mode .smart-menu-tools{display:none}
     <div class="soundtrack-wrap">
       <div id="soundtrackCard" class="soundtrack-card" hidden="">
         <div class="soundtrack-note-icon" aria-hidden="true">🎵</div>
-        <div>
+        <div class="soundtrack-body">
           <div class="soundtrack-kicker"><span class="soundtrack-live-dot" aria-hidden="true"></span>Now Playing</div>
           <h3 id="soundtrackSong" class="soundtrack-song"></h3>
           <p id="soundtrackArtist" class="soundtrack-artist"></p>
