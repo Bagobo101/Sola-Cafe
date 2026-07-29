@@ -1634,6 +1634,13 @@ body.admin-mode .soundtrack-admin{display:block}
 .soundtrack-link-status{font-size:12px; margin-top:6px; color:var(--text-dim)}
 .soundtrack-link-status.is-success{color:#3a7d3a}
 .soundtrack-link-status.is-error{color:#a5433a}
+.soundtrack-station-row{display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 2px}
+.soundtrack-station-btn{
+  border:1px solid var(--panel-line); background:transparent; color:inherit;
+  border-radius:999px; padding:6px 14px; font-size:13px; cursor:pointer;
+}
+.soundtrack-station-btn:hover{background:rgba(244,231,211,0.08)}
+.soundtrack-station-btn.is-active{background:var(--caramel); color:#20160c; border-color:transparent}
 @media(max-width:700px){
   .soundtrack-card{flex-direction:column; align-items:flex-start; text-align:left}
   .soundtrack-admin-grid{grid-template-columns:1fr}
@@ -2223,6 +2230,10 @@ body.admin-mode .smart-menu-tools{display:none}
         <button type="button" id="soundtrackSuggestBtn" class="admin-toolbar-btn">🕒 Suggest vibe for right now</button>
         <span class="soundtrack-suggest-hint">Fills the vibe tag based on the time of day — review before saving.</span>
       </div>
+      <div class="soundtrack-suggest-row">
+        <span class="soundtrack-suggest-hint">Or pick a ready-made ambient station (no link needed):</span>
+      </div>
+      <div class="soundtrack-station-row" id="soundtrackStationRow"></div>
       <div class="soundtrack-admin-actions">
         <button type="button" id="saveSoundtrackBtn" class="admin-toolbar-btn admin-toolbar-btn-primary">Save now playing</button>
         <button type="button" id="clearSoundtrackBtn" class="admin-toolbar-btn">Clear / hide</button>
@@ -3364,7 +3375,72 @@ body.admin-mode .smart-menu-tools{display:none}
       };
     }
 
+    // Playlist-only links (no single video id) — used by the curated
+    // ambient stations below, since a playlist keeps playing even if one
+    // video in it gets taken down, unlike a single livestream link.
+    const ytPlaylistMatch = link.match(/[?&]list=([a-zA-Z0-9_-]+)/);
+    if (ytPlaylistMatch && link.includes('youtube.com')){
+      return {
+        type: 'youtube',
+        src: 'https://www.youtube.com/embed/videoseries?list=' + ytPlaylistMatch[1],
+        label: 'Open in YouTube'
+      };
+    }
+
     return null;
+  }
+
+  // Ready-made ambient stations the admin can pick with one tap instead of
+  // hunting down and pasting a link. These point at long-running, official
+  // 24/7 playlists (not single videos) so they stay playable even if
+  // individual tracks in them are ever taken down.
+  const CURATED_SOUNDTRACK_STATIONS = [
+    {
+      key: 'jazz',
+      label: '🎷 Jazz café',
+      vibe: '🌆 Jazz wind-down',
+      song: 'Live Jazz Radio',
+      artist: 'Cafe Music BGM Channel',
+      link: 'https://www.youtube.com/playlist?list=PLYyJCobshLZkNKdbhWzRMhtqe0S6shnB1'
+    },
+    {
+      key: 'lofi',
+      label: '🎧 Lo-fi beats',
+      vibe: '☀️ Lo-fi lunch',
+      song: 'Lo-fi Radio',
+      artist: 'Lofi Girl',
+      link: 'https://www.youtube.com/playlist?list=PL6NdkXsPL07Il2hEQGcLI4dg_LTg7xA2L'
+    }
+  ];
+
+  function applyCuratedStation(stationKey){
+    const station = CURATED_SOUNDTRACK_STATIONS.find(s => s.key === stationKey);
+    if (!station) return;
+
+    document.getElementById('soundtrackSongInput').value = station.song;
+    document.getElementById('soundtrackArtistInput').value = station.artist;
+    document.getElementById('soundtrackLinkInput').value = station.link;
+    document.getElementById('soundtrackVibeInput').value = station.vibe;
+
+    const statusEl = document.getElementById('soundtrackLinkStatus');
+    statusEl.textContent = '✓ Filled in the ' + station.label.replace(/^\S+\s/, '') + ' station — tap Save now playing to go live with it.';
+    statusEl.hidden = false;
+    statusEl.className = 'soundtrack-link-status is-success';
+
+    document.querySelectorAll('.soundtrack-station-btn').forEach(btn => {
+      btn.classList.toggle('is-active', btn.dataset.stationKey === stationKey);
+    });
+  }
+
+  function renderSoundtrackStationButtons(){
+    const row = document.getElementById('soundtrackStationRow');
+    if (!row) return;
+    row.innerHTML = CURATED_SOUNDTRACK_STATIONS.map(station =>
+      '<button type="button" class="soundtrack-station-btn" data-station-key="' + station.key + '">' + escapeHtml(station.label) + '</button>'
+    ).join('');
+    row.querySelectorAll('.soundtrack-station-btn').forEach(btn => {
+      btn.addEventListener('click', () => applyCuratedStation(btn.dataset.stationKey));
+    });
   }
 
   // Cleans up a raw YouTube video title so it's more usable as a song
@@ -3501,6 +3577,7 @@ body.admin-mode .smart-menu-tools{display:none}
     document.getElementById('soundtrackArtistInput').value = soundtrackData.artist || '';
     document.getElementById('soundtrackLinkInput').value = soundtrackData.link || '';
     document.getElementById('soundtrackVibeInput').value = soundtrackData.vibe || '';
+    renderSoundtrackStationButtons();
   }
 
   function renderSoundtrackDashboard(){
@@ -5327,17 +5404,37 @@ body.admin-mode .smart-menu-tools{display:none}
   // ---------- Fetch published data.json ----------
   // The page above already rendered instantly using whatever was baked into
   // this file (or this device's own unpublished admin draft in localStorage).
-  // Now we quietly check data.json — the small file "Publish live" writes to
-  // — and if it has anything, re-render with that instead. This is what lets
-  // menu/gallery/announcement/contact/hours/soundtrack updates reach every
-  // visitor on refresh without needing the whole page rebuilt or redeployed.
+  // Now we quietly check the latest published data and, if there's anything
+  // new, re-render with that instead.
+  //
+  // We try raw.githubusercontent.com FIRST, not the site's own domain. Here's
+  // why: fetching "data.json" from your own site goes through GitHub Pages'
+  // build + CDN pipeline, which can lag behind a commit by anywhere from
+  // several seconds to a couple of minutes. raw.githubusercontent.com serves
+  // straight from the repo's git storage — no separate "site build" step —
+  // so it reflects a new commit almost immediately. Appending a timestamp
+  // also guarantees we never get a cached copy of it.
   async function fetchPublishedData(){
-    try{
-      const res = await fetch('data.json', { cache: 'no-store' });
-      if (!res.ok) return; // e.g. 404 — data.json hasn't been published yet, keep the baked-in defaults
-      const json = await res.json();
-      if (!json || typeof json !== 'object') return;
+    const cacheBust = 't=' + Date.now();
+    const candidates = [
+      'https://raw.githubusercontent.com/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/main/' + DATA_FILE_PATH + '?' + cacheBust,
+      'https://raw.githubusercontent.com/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/master/' + DATA_FILE_PATH + '?' + cacheBust,
+      DATA_FILE_PATH // last resort: same-origin via GitHub Pages, in case the branch is named something else or raw.githubusercontent.com is unreachable
+    ];
 
+    let json = null;
+    for (const url of candidates){
+      try{
+        const res = await fetch(url, { cache: 'no-store' });
+        if (res.ok){
+          json = await res.json();
+          break;
+        }
+      }catch(e){ /* try the next candidate */ }
+    }
+    if (!json || typeof json !== 'object') return; // nothing published yet — keep the baked-in defaults
+
+    try{
       remoteData = json;
       applyLoadedData();
 
@@ -5358,8 +5455,8 @@ body.admin-mode .smart-menu-tools{display:none}
       renderDashboard();
       renderVersionInfo();
     } catch(e){
-      // Offline, opened as a local file, or data.json not published yet —
-      // silently keep showing the baked-in defaults / local draft.
+      // Fetched data was malformed somehow — silently keep showing the
+      // baked-in defaults / local draft rather than breaking the page.
     }
   }
   fetchPublishedData();
