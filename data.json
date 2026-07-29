@@ -1,7 +1,7 @@
 {
   "version": {
-    "version": 5,
-    "updatedAt": "2026-07-29T09:30:17.005Z"
+    "version": 6,
+    "updatedAt": "2026-07-29T09:36:53.656Z"
   },
   "menu": [
     {
@@ -380,7 +380,7 @@
     "feedbackMessageEntry": "198389755"
   },
   "soundtrack": {
-    "enabled": false,
+    "enabled": true,
     "song": "Live Jazz Radio",
     "artist": "Cafe Music BGM Channel",
     "link": "https://www.youtube.com/playlist?list=PLYyJCobshLZkNKdbhWzRMhtqe0S6shnB1",
