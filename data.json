@@ -1,7 +1,7 @@
 {
   "version": {
-    "version": 9,
-    "updatedAt": "2026-08-06T06:14:14.869Z"
+    "version": 10,
+    "updatedAt": "2026-08-06T06:17:02.258Z"
   },
   "menu": [
     {
@@ -33,7 +33,7 @@
           "name": "French Fries",
           "desc": "",
           "price": "20",
-          "status": "available",
+          "status": "coming-soon",
           "stock": null,
           "lowStockAt": 3,
           "studentPick": false,
