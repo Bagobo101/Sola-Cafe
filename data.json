@@ -1,7 +1,7 @@
 {
   "version": {
-    "version": 8,
-    "updatedAt": "2026-08-01T09:39:44.728Z"
+    "version": 9,
+    "updatedAt": "2026-08-06T06:14:14.869Z"
   },
   "menu": [
     {
@@ -28,6 +28,16 @@
           "lowStockAt": 3,
           "studentPick": false,
           "image": null
+        },
+        {
+          "name": "French Fries",
+          "desc": "",
+          "price": "20",
+          "status": "available",
+          "stock": null,
+          "lowStockAt": 3,
+          "studentPick": false,
+          "image": null
         }
       ],
       "category": "Snack"
@@ -41,7 +51,7 @@
           "desc": "",
           "price": "₱35",
           "studentPick": true,
-          "status": "available",
+          "status": "sold-out",
           "stock": null,
           "lowStockAt": 3,
           "image": null
