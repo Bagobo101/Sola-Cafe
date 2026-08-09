@@ -1,7 +1,7 @@
 {
   "version": {
-    "version": 10,
-    "updatedAt": "2026-08-06T06:17:02.258Z"
+    "version": 11,
+    "updatedAt": "2026-08-09T22:42:02.390Z"
   },
   "menu": [
     {
@@ -33,7 +33,7 @@
           "name": "French Fries",
           "desc": "",
           "price": "20",
-          "status": "coming-soon",
+          "status": "available",
           "stock": null,
           "lowStockAt": 3,
           "studentPick": false,
@@ -51,7 +51,7 @@
           "desc": "",
           "price": "₱35",
           "studentPick": true,
-          "status": "sold-out",
+          "status": "available",
           "stock": null,
           "lowStockAt": 3,
           "image": null
@@ -99,7 +99,7 @@
           "desc": "",
           "price": "₱39",
           "bestseller": false,
-          "status": "sold-out",
+          "status": "available",
           "stock": null,
           "lowStockAt": 3,
           "studentPick": false,
@@ -109,7 +109,7 @@
           "name": "Hotsilog",
           "desc": "",
           "price": "₱39",
-          "status": "sold-out",
+          "status": "available",
           "stock": null,
           "lowStockAt": 3,
           "studentPick": false,
@@ -119,7 +119,7 @@
           "name": "Cantonsilog",
           "desc": "",
           "price": "₱35",
-          "status": "sold-out",
+          "status": "available",
           "stock": null,
           "lowStockAt": 3,
           "studentPick": false,
